@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.workshop.gui.DonController">
+   <children>
+      <VBox layoutX="14.0" layoutY="14.0" prefHeight="472.0" prefWidth="774.0" spacing="10.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
+         <children>
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+               <children>
+                  <Label text="Dons pour l'événement:">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblEventTitle" text="Titre de l'événement">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox spacing="10.0">
+               <children>
+                  <Label text="Objectif:">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblGoalAmount" text="0.00" />
+                  <Label text="Total collecté:">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                  </Label>
+                  <Label fx:id="lblTotalDonations" text="0.00" />
+               </children>
+            </HBox>
+            <Separator prefWidth="200.0" />
+            <HBox prefHeight="372.0" prefWidth="774.0" spacing="10.0">
+               <children>
+                  <VBox prefHeight="372.0" prefWidth="450.0" spacing="5.0">
+                     <children>
+                        <Label text="Liste des dons">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <TableView fx:id="tableDons" prefHeight="342.0" prefWidth="450.0">
+                          <columns>
+                            <TableColumn fx:id="colId" prefWidth="40.0" text="ID" />
+                            <TableColumn fx:id="colDonationDate" prefWidth="120.0" text="Date" />
+                              <TableColumn fx:id="colAmount" prefWidth="80.0" text="Montant" />
+                              <TableColumn fx:id="colPaymentRef" prefWidth="100.0" text="Référence" />
+                              <TableColumn fx:id="colMessage" prefWidth="150.0" text="Message" />
+                              <TableColumn fx:id="colUserId" prefWidth="60.0" text="Utilisateur" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="372.0" prefWidth="312.0" spacing="5.0">
+                     <children>
+                        <Label text="Ajouter un don">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label text="Montant:" />
+                        <TextField fx:id="tfAmount" promptText="Montant du don" />
+                        <Label text="Référence de paiement:" />
+                        <TextField fx:id="tfPaymentRef" promptText="Référence du paiement" />
+                        <Label text="Message (optionnel):" />
+                        <TextArea fx:id="taMessage" prefHeight="147.0" prefWidth="312.0" promptText="Message à propos du don" wrapText="true" />
+                        <HBox alignment="CENTER" prefHeight="31.0" prefWidth="312.0" spacing="10.0">
+                           <children>
+                              <Button fx:id="btnAjouter" mnemonicParsing="false" onAction="#handleAjouter" prefHeight="26.0" prefWidth="95.0" text="Ajouter" />
+                              <Button fx:id="btnSupprimer" mnemonicParsing="false" onAction="#handleSupprimer" prefHeight="26.0" prefWidth="95.0" text="Supprimer" />
+                              <Button fx:id="btnClear" mnemonicParsing="false" onAction="#handleClear" prefHeight="26.0" prefWidth="95.0" text="Effacer" />
+                           </children>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane> 

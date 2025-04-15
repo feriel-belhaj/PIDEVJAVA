@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" 
+      fx:controller="tn.esprit.workshop.gui.CertificatViewController"
+      styleClass="certificate-container"
+      spacing="10" 
+      alignment="CENTER">
+    
+    <Label text="CERTIFICAT DE FORMATION" styleClass="title"/>
+    
+    <Label text="Ce certificat est décerné à" styleClass="subtitle"/>
+    
+    <Label fx:id="lblNomComplet" styleClass="name"/>
+    
+    <Label text="mezzi" styleClass="mezzi"/>
+    
+    <Label text="pour avoir suivi avec succès la formation" styleClass="subtitle"/>
+    
+    <Label fx:id="lblFormationTitre" styleClass="formation-title" wrapText="true"/>
+    
+    <HBox alignment="CENTER" spacing="5">
+        <Label text="de niveau" styleClass="subtitle"/>
+        <Label fx:id="lblNiveau" styleClass="level"/>
+    </HBox>
+    
+    <HBox alignment="CENTER" spacing="5">
+        <Label text="dispensée par" styleClass="subtitle"/>
+        <Label fx:id="lblOrganisme" styleClass="level"/>
+    </HBox>
+    
+    <Label fx:id="lblDate" styleClass="date"/>
+    
+    <HBox styleClass="signature-container">
+        <VBox styleClass="signature-box">
+            <Label text="Directeur de formation" styleClass="signature-label"/>
+            <ImageView fx:id="imgSignature1" fitHeight="60" fitWidth="120" preserveRatio="true"/>
+        </VBox>
+        
+        <VBox styleClass="signature-box">
+            <Label text="Responsable pédagogique" styleClass="signature-label"/>
+            <ImageView fx:id="imgSignature2" fitHeight="60" fitWidth="120" preserveRatio="true"/>
+        </VBox>
+    </HBox>
+    
+    <StackPane styleClass="cachet">
+        <ImageView fx:id="imgCachet" fitHeight="100" fitWidth="100" preserveRatio="true"/>
+    </StackPane>
+    
+    <Label text="Ce certificat est délivré par ArtiZina - Centre de Formation Professionnelle" styleClass="subtitle"/>
+    <Label text="Numéro d'enregistrement: #2" styleClass="subtitle"/>
+</VBox> 

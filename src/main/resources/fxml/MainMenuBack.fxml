@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" 
+      fx:controller="tn.esprit.workshop.gui.MainMenuBackController"
+      stylesheets="@../styles/front.css">
+    
+    <MenuBar>
+        <Menu text="Navigation">
+            <MenuItem text="Gestion des Formations" onAction="#showFormations"/>
+            <MenuItem text="Gestion des Certificats" onAction="#showCertificats"/>
+            <SeparatorMenuItem />
+            <MenuItem text="Partie Client" onAction="#showClientView"/>
+            <SeparatorMenuItem />
+            <MenuItem text="Quitter" onAction="#quit"/>
+        </Menu>
+    </MenuBar>
+
+    <!-- Contenu principal qui changera en fonction de la navigation -->
+    <StackPane fx:id="contentArea" VBox.vgrow="ALWAYS">
+        <padding>
+            <Insets top="10" right="10" bottom="10" left="10"/>
+        </padding>
+    </StackPane>
+</VBox> 

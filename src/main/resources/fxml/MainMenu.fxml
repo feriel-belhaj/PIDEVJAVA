@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" 
+      fx:controller="tn.esprit.workshop.gui.MainMenuController"
+      stylesheets="@../styles/front.css">
+    
+    <MenuBar>
+        <Menu text="Navigation">
+            <MenuItem text="Gestion des Formations" onAction="#showFormations"/>
+            <MenuItem text="Gestion des Certificats" onAction="#showCertificats"/>
+            <SeparatorMenuItem />
+            <MenuItem text="Partie Client" onAction="#showClientView"/>
+            <SeparatorMenuItem />
+            <MenuItem text="Quitter" onAction="#quit"/>
+        </Menu>
+    </MenuBar>
+
+    <!-- Barre de navigation -->
+    <HBox styleClass="nav-bar" alignment="CENTER">
+        <padding>
+            <Insets top="10" right="20" bottom="10" left="20"/>
+        </padding>
+        <ImageView fx:id="logoImage" fitHeight="50" fitWidth="150" preserveRatio="true"/>
+        <HBox HBox.hgrow="ALWAYS" alignment="CENTER" spacing="20">
+            <Button text="Accueil" styleClass="nav-button" onAction="#showAccueil"/>
+            <Button text="About" styleClass="nav-button" onAction="#showAbout"/>
+            <Button text="Formations" styleClass="nav-button" onAction="#showClientView"/>
+            <Button text="Partenariats" styleClass="nav-button" onAction="#showPartenariats"/>
+            <Button text="Événements" styleClass="nav-button" onAction="#showEvenements"/>
+            <Button text="Contact" styleClass="nav-button" onAction="#showContact"/>
+        </HBox>
+        <Button text="Se Connecter" styleClass="connect-btn"/>
+    </HBox>
+
+    <!-- Contenu principal qui changera en fonction de la navigation -->
+    <StackPane fx:id="contentArea" VBox.vgrow="ALWAYS">
+        <padding>
+            <Insets top="10" right="10" bottom="10" left="10"/>
+        </padding>
+    </StackPane>
+</VBox>

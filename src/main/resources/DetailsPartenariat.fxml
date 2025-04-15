@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="800.0" style="-fx-background-color: #F5F5F5;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.workshop.gui.DetailsPartenariatController">
+    <children>
+        <VBox layoutX="0.0" layoutY="0.0" prefHeight="700.0" prefWidth="800.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <!-- En-tête -->
+                <HBox alignment="CENTER_LEFT" prefHeight="80.0" style="-fx-background-color: white; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+                    <padding>
+                        <Insets left="30.0" right="30.0"/>
+                    </padding>
+                    <children>
+                        <!-- Logo -->
+                        <Label text="ArtiZina" style="-fx-font-family: 'Script MT Bold'; -fx-font-size: 24px; -fx-text-fill: #D4A76A;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <!-- Menu -->
+                        <HBox spacing="30.0" alignment="CENTER">
+                            <Label text="Accueil" style="-fx-font-size: 14px; -fx-text-fill: #666666;"/>
+                            <Label text="Formations" style="-fx-font-size: 14px; -fx-text-fill: #666666;"/>
+                            <Label text="Partenariats" style="-fx-font-size: 14px; -fx-text-fill: #D4A76A;"/>
+                            <Label text="Événements" style="-fx-font-size: 14px; -fx-text-fill: #666666;"/>
+                            <Label text="Produit" style="-fx-font-size: 14px; -fx-text-fill: #666666;"/>
+                            <Label text="Contact" style="-fx-font-size: 14px; -fx-text-fill: #666666;"/>
+                        </HBox>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <!-- Bouton Se Connecter -->
+                        <Button text="Se Connecter" style="-fx-background-color: #D4A76A; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8 20; -fx-background-radius: 20;"/>
+                    </children>
+                </HBox>
+
+                <!-- Contenu principal -->
+                <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-padding: 0;" VBox.vgrow="ALWAYS">
+                    <content>
+                        <VBox spacing="30.0" style="-fx-padding: 20 50 50 50; -fx-background-color: #F5F5F5;">
+                            <!-- Titre -->
+                            <Label text="Détails du Partenariat" style="-fx-font-family: 'Script MT Bold'; -fx-font-size: 32px; -fx-text-fill: #333333;" alignment="CENTER" maxWidth="Infinity"/>
+                            
+                            <!-- Carte de détails -->
+                            <StackPane style="-fx-background-color: white; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2); -fx-background-radius: 10;">
+                                <padding>
+                                    <Insets top="30.0" right="30.0" bottom="30.0" left="30.0"/>
+                                </padding>
+                                <children>
+                                    <VBox spacing="25.0">
+                                        <!-- Nom du partenariat -->
+                                        <Label fx:id="nomLabel" text="Artizina" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #D4A76A;" alignment="CENTER" maxWidth="Infinity"/>
+                                        
+                                        <!-- Image et informations principales -->
+                                        <HBox spacing="30.0">
+                                            <!-- Image avec statut et dates -->
+                                            <VBox alignment="TOP_CENTER" spacing="10" HBox.hgrow="NEVER">
+                                                <StackPane>
+                                                    <!-- Image principale -->
+                                                    <ImageView fx:id="imageView" fitWidth="300.0" fitHeight="200.0" preserveRatio="true"
+                                                              style="-fx-border-color: #E0E0E0; -fx-border-radius: 5;"/>
+                                                    
+                                                    <!-- Statut sur l'image en haut à droite -->
+                                                    <Label fx:id="statutLabel" text="en cours" 
+                                                          style="-fx-background-color: #FFC107; -fx-text-fill: white; -fx-padding: 5 10; -fx-background-radius: 5; -fx-font-weight: bold;"
+                                                          StackPane.alignment="TOP_RIGHT">
+                                                        <StackPane.margin>
+                                                            <Insets top="10" right="10"/>
+                                                        </StackPane.margin>
+                                                    </Label>
+                                                    
+                                                    <!-- Dates en bas à gauche de l'image -->
+                                                    <HBox StackPane.alignment="BOTTOM_LEFT" spacing="5" style="-fx-background-color: rgba(255,255,255,0.8); -fx-padding: 5; -fx-background-radius: 5;">
+                                                        <StackPane.margin>
+                                                            <Insets bottom="10" left="10"/>
+                                                        </StackPane.margin>
+                                                        <VBox spacing="3">
+                                                            <HBox spacing="5">
+                                                                <Label text="Début:" style="-fx-font-size: 10px; -fx-text-fill: #333333; -fx-font-weight: bold;"/>
+                                                                <Label fx:id="dateDebutLabel" text="2025-03-01" style="-fx-font-size: 10px; -fx-text-fill: #333333;"/>
+                                                            </HBox>
+                                                            <HBox spacing="5">
+                                                                <Label text="Fin:" style="-fx-font-size: 10px; -fx-text-fill: #333333; -fx-font-weight: bold;"/>
+                                                                <Label fx:id="dateFinLabel" text="2025-03-20" style="-fx-font-size: 10px; -fx-text-fill: #333333;"/>
+                                                            </HBox>
+                                                        </VBox>
+                                                    </HBox>
+                                                </StackPane>
+                                            </VBox>
+                                            
+                                            <!-- Informations détaillées -->
+                                            <VBox spacing="20" HBox.hgrow="ALWAYS">
+                                                <HBox alignment="CENTER_LEFT" spacing="10">
+                                                    <Label text="Type :" style="-fx-font-weight: bold; -fx-text-fill: #666666;"/>
+                                                    <Label fx:id="typeLabel" text="Chants" style="-fx-text-fill: #333333;"/>
+                                                </HBox>
+                                                
+                                                <VBox spacing="10">
+                                                    <Label text="Description :" style="-fx-font-weight: bold; -fx-text-fill: #666666;"/>
+                                                    <TextArea fx:id="descriptionLabel" text="Club de chants" wrapText="true" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #333333; -fx-border-color: transparent;"/>
+                                                </VBox>
+                                                
+                                                <!-- Boutons Postuler et Supprimer -->
+                                                <HBox spacing="15" alignment="CENTER_LEFT">
+                                                    <Button fx:id="btnPostuler" text="Postuler" onAction="#postuler" style="-fx-background-color: #D4A76A; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 20; -fx-background-radius: 20;"/>
+                                                    
+                                                    <!-- Bouton Supprimer avec icône -->
+                                                    <Button fx:id="btnSupprimer" style="-fx-background-color: transparent; -fx-padding: 0;">
+                                                        <graphic>
+                                                            <ImageView fitWidth="24.0" fitHeight="24.0" preserveRatio="true">
+                                                                <Image url="file:/C:/Users/MSI/IdeaProjects/WorkshopJdbc3A44/trash-icon.png"/>
+                                                            </ImageView>
+                                                        </graphic>
+                                                        <tooltip>
+                                                            <Tooltip text="Supprimer le partenariat"/>
+                                                        </tooltip>
+                                                    </Button>
+                                                </HBox>
+                                            </VBox>
+                                        </HBox>
+                                    </VBox>
+                                </children>
+                            </StackPane>
+                        </VBox>
+                    </content>
+                </ScrollPane>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

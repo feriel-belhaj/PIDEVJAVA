@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="800.0" style="-fx-background-color: #F5F5F5;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.workshop.gui.PostulerPartenariatController">
+    <children>
+        <VBox layoutX="0.0" layoutY="0.0" prefHeight="700.0" prefWidth="800.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <!-- En-tête -->
+                <HBox alignment="CENTER_LEFT" prefHeight="80.0" style="-fx-background-color: white; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+                    <padding>
+                        <Insets left="30.0" right="30.0"/>
+                    </padding>
+                    <children>
+                        <!-- Logo -->
+                        <Label text="ArtiZina" style="-fx-font-family: 'Script MT Bold'; -fx-font-size: 24px; -fx-text-fill: #D4A76A;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <!-- Menu -->
+                        <HBox spacing="30.0" alignment="CENTER">
+                            <Label text="Accueil" style="-fx-font-size: 14px; -fx-text-fill: #666666;"/>
+                            <Label text="Formations" style="-fx-font-size: 14px; -fx-text-fill: #666666;"/>
+                            <Label text="Partenariats" style="-fx-font-size: 14px; -fx-text-fill: #D4A76A;"/>
+                            <Label text="Événements" style="-fx-font-size: 14px; -fx-text-fill: #666666;"/>
+                            <Label text="Produit" style="-fx-font-size: 14px; -fx-text-fill: #666666;"/>
+                            <Label text="Contact" style="-fx-font-size: 14px; -fx-text-fill: #666666;"/>
+                        </HBox>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <!-- Bouton Se Connecter -->
+                        <Button text="Se Connecter" style="-fx-background-color: #D4A76A; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8 20; -fx-background-radius: 20;"/>
+                    </children>
+                </HBox>
+
+                <!-- Contenu principal -->
+                <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-padding: 0;" VBox.vgrow="ALWAYS">
+                    <content>
+                        <VBox spacing="30.0" style="-fx-padding: 20 50 50 50; -fx-background-color: #F5F5F5;">
+                            <!-- Titre -->
+                            <Label text="POSTULER POUR UN PARTENARIAT" style="-fx-font-family: 'Script MT Bold'; -fx-font-size: 24px; -fx-text-fill: #D4A76A;" alignment="CENTER" maxWidth="Infinity"/>
+
+                            <!-- Sous-titre -->
+                            <Label text="Entrez vos informations" style="-fx-font-size: 32px; -fx-font-family: 'Script MT Bold'; -fx-text-fill: #333333;" alignment="CENTER" maxWidth="Infinity"/>
+
+                            <!-- Détails du partenariat choisi -->
+                            <VBox style="-fx-background-color: white; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2); -fx-background-radius: 10; -fx-padding: 20;">
+                                <Label text="Détails du Partenariat Choisi" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #D4A76A;" alignment="CENTER" maxWidth="Infinity"/>
+
+                                <HBox spacing="20" alignment="CENTER" style="-fx-padding: 20 0;">
+                                    <VBox spacing="10" HBox.hgrow="ALWAYS">
+                                        <HBox spacing="10">
+                                            <Label text="Nom:" style="-fx-font-weight: bold;"/>
+                                            <Label fx:id="nomLabel"/>
+                                        </HBox>
+                                        <HBox spacing="10">
+                                            <Label text="Type:" style="-fx-font-weight: bold;"/>
+                                            <Label fx:id="typeLabel"/>
+                                        </HBox>
+                                        <HBox spacing="10" alignment="TOP_LEFT">
+                                            <Label text="Description:" style="-fx-font-weight: bold;"/>
+                                            <Label fx:id="descriptionLabel" wrapText="true"/>
+                                        </HBox>
+                                    </VBox>
+
+                                    <ImageView fx:id="imageView" fitWidth="150.0" fitHeight="100.0" preserveRatio="true"/>
+                                </HBox>
+                            </VBox>
+
+                            <!-- Formulaire de candidature -->
+                            <VBox spacing="15" style="-fx-background-color: white; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2); -fx-background-radius: 10; -fx-padding: 20;">
+                                <HBox spacing="20">
+                                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                                        <Label text="Date de Postulation" style="-fx-text-fill: #666666;"/>
+                                        <DatePicker fx:id="datePostulation" promptText="Date de postulation" style="-fx-background-color: white; -fx-border-color: #CCCCCC; -fx-border-radius: 5;"/>
+                                    </VBox>
+
+                                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                                        <Label text="Veuillez Mettre Votre CV *" style="-fx-text-fill: #666666;"/>
+                                        <HBox spacing="10">
+                                            <Button text="Choisir un fichier" onAction="#choisirCV" style="-fx-background-color: #F8F9FA; -fx-border-color: #CCCCCC; -fx-border-radius: 5;"/>
+                                            <Label fx:id="cvLabel" text="Aucun fichier choisi"/>
+                                        </HBox>
+                                    </VBox>
+                                </HBox>
+
+                                <HBox spacing="20">
+                                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                                        <Label text="Portfolio *" style="-fx-text-fill: #666666;"/>
+                                        <HBox spacing="10">
+                                            <Button text="Choisir un fichier" onAction="#choisirPortfolio" style="-fx-background-color: #F8F9FA; -fx-border-color: #CCCCCC; -fx-border-radius: 5;"/>
+                                            <Label fx:id="portfolioLabel" text="Aucun fichier choisi"/>
+                                        </HBox>
+                                    </VBox>
+
+                                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                                        <Label text="Type de Collaboration *" style="-fx-text-fill: #666666;"/>
+                                        <ComboBox fx:id="typeCollaboration" prefWidth="150.0" promptText="Choisir le type" style="-fx-background-color: white; -fx-border-color: #CCCCCC; -fx-border-radius: 5;"/>
+                                    </VBox>
+                                </HBox>
+
+                                <VBox spacing="5">
+                                    <Label text="Lettre de motivation *" style="-fx-text-fill: #666666;"/>
+                                    <TextArea fx:id="lettreMotivation" prefHeight="150.0" promptText="Votre lettre de motivation..." style="-fx-background-color: white; -fx-border-color: #CCCCCC; -fx-border-radius: 5;" wrapText="true"/>
+                                </VBox>
+
+                                <HBox alignment="CENTER">
+                                    <Button fx:id="btnEnregistrer" text="Enregistrer" onAction="#enregistrer" style="-fx-background-color: #D4A76A; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 20; -fx-background-radius: 20;">
+                                        <HBox.margin>
+                                            <Insets top="20.0"/>
+                                        </HBox.margin>
+                                    </Button>
+                                </HBox>
+                            </VBox>
+                        </VBox>
+                    </content>
+                </ScrollPane>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

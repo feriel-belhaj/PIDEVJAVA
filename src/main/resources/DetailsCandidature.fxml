@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="800.0" style="-fx-background-color: #F3F4F6;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.workshop.gui.DetailsCandidatureController">
+    <children>
+        <VBox layoutX="0.0" layoutY="0.0" prefHeight="700.0" prefWidth="800.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <!-- En-tête -->
+                <HBox alignment="CENTER_LEFT" prefHeight="80.0" style="-fx-background-color: #353A40; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 2);">
+                    <padding>
+                        <Insets left="30.0" right="30.0"/>
+                    </padding>
+                    <children>
+                        <!-- Logo -->
+                        <Label text="ArtiZina" style="-fx-font-family: 'Script MT Bold'; -fx-font-size: 24px; -fx-text-fill: #D4A76A;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <!-- Menu -->
+                        <HBox spacing="30.0" alignment="CENTER">
+                            <Label text="Accueil" style="-fx-font-size: 14px; -fx-text-fill: #FFFFFF;"/>
+                            <Label text="Formations" style="-fx-font-size: 14px; -fx-text-fill: #FFFFFF;"/>
+                            <Label text="Partenariats" style="-fx-font-size: 14px; -fx-text-fill: #D4A76A;"/>
+                            <Label text="Événements" style="-fx-font-size: 14px; -fx-text-fill: #FFFFFF;"/>
+                            <Label text="Produit" style="-fx-font-size: 14px; -fx-text-fill: #FFFFFF;"/>
+                            <Label text="Contact" style="-fx-font-size: 14px; -fx-text-fill: #FFFFFF;"/>
+                        </HBox>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <!-- Bouton Retour -->
+                        <Button fx:id="btnRetour" text="← Retour" onAction="#retourListeCandidatures" style="-fx-background-color: #4C5359; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8 20; -fx-background-radius: 20;"/>
+                    </children>
+                </HBox>
+
+                <!-- Contenu principal -->
+                <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-padding: 0;" VBox.vgrow="ALWAYS">
+                    <content>
+                        <VBox spacing="30.0" style="-fx-padding: 20 30 50 30; -fx-background-color: #F3F4F6;">
+                            <!-- Titre -->
+                            <HBox alignment="CENTER_LEFT" spacing="15.0">
+                                <Label text="Détails de la Candidature" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #353A40;"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+
+                            </HBox>
+
+                            <!-- Carte principale -->
+                            <HBox style="-fx-background-color: white; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2); -fx-background-radius: 10; -fx-padding: 20;" spacing="30">
+                                <!-- Image du partenariat -->
+                                <VBox spacing="10" alignment="TOP_CENTER" minWidth="300">
+                                    <StackPane>
+                                        <ImageView fx:id="partenariatImage" fitWidth="300.0" fitHeight="200.0" preserveRatio="true" style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 1);"/>
+                                    </StackPane>
+                                    <Button fx:id="btnTelechargerCV" text="Télécharger CV" onAction="#telechargerCV" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8 20; -fx-background-radius: 20;"/>
+                                </VBox>
+
+                                <!-- Informations de la candidature -->
+                                <VBox spacing="15" HBox.hgrow="ALWAYS">
+                                    <!-- Nom du partenariat -->
+                                    <Label fx:id="nomPartenariatLabel" text="Nom du Partenariat" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #353A40;"/>
+
+                                    <!-- Type de collaboration -->
+                                    <HBox spacing="10">
+                                        <Label text="Type de collaboration :" style="-fx-font-weight: bold;"/>
+                                        <Label fx:id="typeCollabLabel" text="Permanent"/>
+                                    </HBox>
+
+                                    <!-- Date de postulation -->
+                                    <HBox spacing="10">
+                                        <Label text="Date de postulation :" style="-fx-font-weight: bold;"/>
+                                        <Label fx:id="datePostulationLabel" text="01/01/2023"/>
+                                    </HBox>
+
+                                    <!-- Lettre de motivation -->
+                                    <VBox spacing="5">
+                                        <Label text="Lettre de motivation :" style="-fx-font-weight: bold;"/>
+                                        <TextArea fx:id="motivationTextArea" wrapText="true" editable="false" prefHeight="100" style="-fx-control-inner-background: #F8F9FA; -fx-border-color: #E9ECEF;"/>
+                                    </VBox>
+
+                                    <!-- Analyse du texte -->
+                                    <VBox spacing="5">
+                                        <Label text="Analyse du texte :" style="-fx-font-weight: bold;"/>
+                                        <TextArea fx:id="analyseTextArea" wrapText="true" editable="false" prefHeight="100" style="-fx-control-inner-background: #F8F9FA; -fx-border-color: #E9ECEF;"/>
+                                    </VBox>
+                                    
+                                    <!-- Scores et notes -->
+                                    <VBox spacing="10">
+                                        <Label text="Évaluation :" style="-fx-font-weight: bold;"/>
+                                        
+                                        <!-- Note artistique -->
+                                        <Label fx:id="noteLabel" text="Note artistique : 0/100" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #D4A76A;"/>
+                                        
+                                        <!-- Score NLP -->
+                                        <HBox spacing="10" alignment="CENTER_LEFT">
+                                            <Label text="Score NLP :" style="-fx-text-fill: #555;"/>
+                                            <ProgressBar fx:id="scoreNlpProgress" progress="0.0" prefWidth="200" style="-fx-accent: #3498db;"/>
+                                            <Label fx:id="scoreNlpLabel" text="0%" style="-fx-text-fill: #3498db;"/>
+                                        </HBox>
+                                        
+                                        <!-- Score Artistique -->
+                                        <HBox spacing="10" alignment="CENTER_LEFT">
+                                            <Label text="Score Artistique :" style="-fx-text-fill: #555;"/>
+                                            <ProgressBar fx:id="scoreArtistiqueProgress" progress="0.0" prefWidth="200" style="-fx-accent: #D4A76A;"/>
+                                            <Label fx:id="scoreArtistiqueLabel" text="0%" style="-fx-text-fill: #D4A76A;"/>
+                                        </HBox>
+                                    </VBox>
+
+                                    <!-- Boutons d'action -->
+                                    <HBox spacing="15" alignment="CENTER_LEFT">
+                                        <Button fx:id="btnVoirPortfolio" text="Voir Portfolio" onAction="#voirPortfolio" style="-fx-background-color: #D4A76A; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8 20; -fx-background-radius: 20;"/>
+                                        <!-- Bouton Supprimer avec icône -->
+                                        <Button fx:id="btnSupprimer" onAction="#supprimerCandidature" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8 20; -fx-background-radius: 20;" text="Supprimer"/>
+                                    </HBox>
+
+                                </VBox>
+                            </HBox>
+
+
+                        </VBox>
+                    </content>
+                </ScrollPane>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

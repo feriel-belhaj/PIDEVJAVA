@@ -3,7 +3,6 @@ package tn.esprit.workshop.services;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
-import javafx.scene.chart.XYChart;
 import tn.esprit.workshop.models.User;
 import tn.esprit.workshop.utils.MyDbConnexion;
 
@@ -184,93 +183,4 @@ public class ServiceUser implements CRUD<User>{
 
         return null;
     }
-    private ResultSet result;
-
-    public int homeTotalUsers() {
-
-        String sql = "SELECT COUNT(id) FROM utilisateur";
-
-        int countData = 0;
-        try {
-
-            PreparedStatement ps = cnx.prepareStatement(sql);
-            result = ps.executeQuery();
-
-            while (result.next()) {
-                countData = result.getInt("COUNT(id)");
-            }
-
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return countData;
-
-    }
-
-    public int homeTotalWomen() {
-
-        String sql = "SELECT COUNT(id) FROM utilisateur where sexe = ?";
-        int countData = 0;
-        try {
-
-            PreparedStatement ps = cnx.prepareStatement(sql);
-            ps.setString(1, "femelle");
-            result = ps.executeQuery();
-
-            while (result.next()) {
-                countData = result.getInt("COUNT(id)");
-            }
-
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return countData;
-
-    }
-    public int homeTotalMen() {
-
-        String sql = "SELECT COUNT(id) FROM utilisateur where sexe = ?";
-        int countData = 0;
-        try {
-
-            PreparedStatement ps = cnx.prepareStatement(sql);
-            ps.setString(1, "male");
-            result = ps.executeQuery();
-
-            while (result.next()) {
-                countData = result.getInt("COUNT(id)");
-            }
-
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return countData;
-
-    }
-    public XYChart.Series<String, Number> homeChart() {
-        XYChart.Series<String, Number> chart = new XYChart.Series<>();
-
-        String sql = "SELECT date_inscription, COUNT(id) FROM utilisateur GROUP BY date_inscription ORDER BY TIMESTAMP(date_inscription) ASC LIMIT 7";
-
-        try {
-            PreparedStatement ps = cnx.prepareStatement(sql);
-            result = ps.executeQuery();
-
-            while (result.next()) {
-                chart.getData().add(new XYChart.Data<>(result.getString(1), result.getInt(2)));
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return chart;
-    }
-
 }

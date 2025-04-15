@@ -20,15 +20,15 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="UserStackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="909.0" prefWidth="978.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.workshop.gui.UtilisateurDashboard">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.workshop.gui.UtilisateurDashboard">
    <children>
-      <AnchorPane fx:id="User_MainForm" prefHeight="918.0" prefWidth="996.0">
+      <AnchorPane fx:id="User_MainForm" prefHeight="200.0" prefWidth="200.0">
          <children>
             <BorderPane layoutX="141.0" layoutY="182.0" prefHeight="600.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <top>
                   <AnchorPane prefHeight="45.0" prefWidth="200.0" styleClass="semi-top-form" stylesheets="@dashboardDesign.css" BorderPane.alignment="CENTER">
                      <children>
-                        <AnchorPane layoutX="95.0" layoutY="-69.0" prefHeight="44.0" prefWidth="986.0" styleClass="top-form" stylesheets="@dashboardDesign.css" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane layoutX="95.0" layoutY="-69.0" prefHeight="35.0" prefWidth="1000.0" styleClass="top-form" stylesheets="@dashboardDesign.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <Button fx:id="close" layoutX="948.0" layoutY="10.0" mnemonicParsing="false" onAction="#close" prefHeight="25.0" prefWidth="38.0" styleClass="close" stylesheets="@dashboardDesign.css" text="X" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0" />
                               <Button fx:id="minimize" layoutX="914.0" layoutY="2.0" mnemonicParsing="false" onAction="#minimize" prefHeight="25.0" prefWidth="38.0" styleClass="close" stylesheets="@dashboardDesign.css" text="-" />
@@ -45,7 +45,7 @@
                            <children>
                               <ImageView fitHeight="123.0" fitWidth="173.0" layoutX="39.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../../../../../../../xampp/htdocs/img/1744746856779_users.png" />
+                                    <Image url="@UsersImage/users.png" />
                                  </image>
                               </ImageView>
                               <Label layoutX="44.0" layoutY="149.0" prefHeight="39.0" prefWidth="114.0" styleClass="h1" stylesheets="@dashboardDesign.css" text="Bienvenue" />
@@ -55,6 +55,7 @@
                               <Button fx:id="AddUser_btn" layoutX="11.0" layoutY="288.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="180.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Ajouter un utilisateur" />
                               <Button fx:id="RoleUpdate_btn" layoutX="11.0" layoutY="334.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="180.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Changer les roles" />
                               <Button fx:id="logout" layoutX="11.0" layoutY="516.0" mnemonicParsing="false" onAction="#logout" styleClass="logout" stylesheets="@dashboardDesign.css" text="Se Déconnecter" />
+                              <Button fx:id="Utilisateur_Front" layoutX="128.0" layoutY="515.0" mnemonicParsing="false" onAction="#User_BackToFront" prefHeight="18.0" prefWidth="51.0" styleClass="logout" text="Front" />
                            </children>
                         </AnchorPane>
                      </children>
@@ -63,7 +64,7 @@
                <center>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
-                        <AnchorPane fx:id="UserHome_form" prefHeight="555.0" prefWidth="799.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane fx:id="UserHome_form" prefHeight="555.0" prefWidth="799.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <AnchorPane layoutX="16.0" layoutY="12.0" prefHeight="531.0" prefWidth="768.0" styleClass="white-bg" stylesheets="@dashboardDesign.css">
                                  <children>
@@ -78,7 +79,7 @@
                                                 </Label>
                                                 <ImageView fitHeight="49.0" fitWidth="54.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
-                                                      <Image url="@../../../../../../../xampp/htdocs/img/1744746856779_users.png" />
+                                                      <Image url="@UsersImage/users.png" />
                                                    </image>
                                                 </ImageView>
                                                 <Label fx:id="UserHome_NbrTotal" layoutX="161.0" layoutY="22.0" prefHeight="27.0" prefWidth="37.0" text="0" textFill="WHITE">
@@ -97,7 +98,7 @@
                                                 </Label>
                                                 <ImageView fitHeight="49.0" fitWidth="54.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
-                                                      <Image url="@../../../../../../../xampp/htdocs/img/1744748570678_users.png" />
+                                                      <Image url="@UsersImage/users.png" />
                                                    </image>
                                                 </ImageView>
                                                 <Label fx:id="UserHome_NbrHomme" layoutX="161.0" layoutY="22.0" prefHeight="27.0" prefWidth="37.0" text="0" textFill="WHITE">
@@ -116,7 +117,7 @@
                                                 </Label>
                                                 <ImageView fitHeight="49.0" fitWidth="54.0" layoutX="8.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
-                                                      <Image url="@../../../../../../../xampp/htdocs/img/1744748570678_users.png" />
+                                                      <Image url="@UsersImage/users.png" />
                                                    </image>
                                                 </ImageView>
                                                 <Label fx:id="UserHome_NbrFemme" layoutX="155.0" layoutY="22.0" prefHeight="27.0" prefWidth="37.0" text="0" textFill="WHITE">
@@ -139,9 +140,9 @@
                                  </children>
                               </AnchorPane>
                            </children></AnchorPane>
-                        <AnchorPane fx:id="AddUser_form" layoutX="164.0" layoutY="131.0" prefHeight="555.0" prefWidth="799.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane fx:id="AddUser_form" layoutX="164.0" layoutY="131.0" prefHeight="555.0" prefWidth="799.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <AnchorPane layoutX="3.0" layoutY="14.0" prefHeight="857.0" prefWidth="774.0" stylesheets="@dashboardDesign.css">
+                              <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="532.0" prefWidth="774.0" stylesheets="@dashboardDesign.css">
                                  <children>
                                     <AnchorPane layoutX="1.0" layoutY="1.0" prefHeight="280.0" prefWidth="773.0" stylesheets="@dashboardDesign.css">
                                        <styleClass>
@@ -184,7 +185,7 @@
                                     <PasswordField fx:id="Utilisateur_pwd" layoutX="190.0" layoutY="417.0" promptText="Mot de passe" styleClass="textfield" stylesheets="@dashboardDesign.css" />
                                     <PasswordField id="Utilisateur_pwd2" fx:id="Utilisateur_pwd2" layoutX="190.0" layoutY="456.0" prefHeight="16.0" prefWidth="147.0" promptText="Confirmer le mot de passe" styleClass="textfield" stylesheets="@dashboardDesign.css" />
                                     <ComboBox fx:id="Utilisateur_role" layoutX="444.0" layoutY="373.0" prefWidth="150.0" promptText="Rôle" styleClass="textfield" stylesheets="@dashboardDesign.css" visibleRowCount="2" />
-                                    <Button id="Utilisateur_signUp" fx:id="AddUser_AddBtn" layoutX="551.0" layoutY="553.0" mnemonicParsing="false" onAction="#ajouetrUtilisateur" prefHeight="33.0" prefWidth="144.0" styleClass="add-btn" text="Créer un compte" />
+                                    <Button id="Utilisateur_signUp" fx:id="AddUser_AddBtn" layoutX="658.0" layoutY="485.0" mnemonicParsing="false" onAction="#ajouetrUtilisateur" prefHeight="33.0" prefWidth="108.0" styleClass="add-btn" text="Créer un compte" />
                                     <ComboBox fx:id="Utilisateur_sexe" layoutX="444.0" layoutY="303.0" prefWidth="150.0" promptText="Sexe" styleClass="textfield" stylesheets="@dashboardDesign.css" visibleRowCount="2" />
                                     <AnchorPane layoutX="645.0" layoutY="319.0" prefHeight="145.0" prefWidth="105.0" stylesheets="@dashboardDesign.css">
                                        <children>
@@ -196,9 +197,9 @@
                                           <String fx:value="shadow" />
                                        </styleClass>
                                     </AnchorPane>
-                                    <Button id="Utilisateur_signUp" fx:id="AddUser_MajBtn" layoutX="396.0" layoutY="553.0" mnemonicParsing="false" onAction="#UpdateUtilisateur" prefHeight="33.0" prefWidth="131.0" styleClass="update-btn" text="Mettre à jour" />
-                                    <Button id="Utilisateur_signUp" fx:id="AddUser_DeleteBtn" layoutX="267.0" layoutY="553.0" mnemonicParsing="false" onAction="#DeleteUtilisateur" prefHeight="33.0" prefWidth="112.0" styleClass="delete-btn" text="Supprimer" />
-                                    <Button id="Utilisateur_signUp" fx:id="AddUser_ResetBtn" layoutX="142.0" layoutY="553.0" mnemonicParsing="false" onMouseClicked="#addUserReset" prefHeight="33.0" prefWidth="108.0" styleClass="clear-btn" text="Réinitialiser" />
+                                    <Button id="Utilisateur_signUp" fx:id="AddUser_MajBtn" layoutX="555.0" layoutY="485.0" mnemonicParsing="false" onAction="#UpdateUtilisateur" prefHeight="33.0" prefWidth="89.0" styleClass="update-btn" text="Mettre à jour" />
+                                    <Button id="Utilisateur_signUp" fx:id="AddUser_DeleteBtn" layoutX="466.0" layoutY="485.0" mnemonicParsing="false" onAction="#DeleteUtilisateur" prefHeight="33.0" prefWidth="72.0" styleClass="delete-btn" text="Supprimer" />
+                                    <Button id="Utilisateur_signUp" fx:id="AddUser_ResetBtn" layoutX="374.0" layoutY="485.0" mnemonicParsing="false" onMouseClicked="#addUserReset" prefHeight="33.0" prefWidth="77.0" styleClass="clear-btn" text="Réinitialiser" />
                                  </children>
                                  <styleClass>
                                     <String fx:value="white-bg" />

@@ -65,7 +65,6 @@ public class Utilisateur {
                 if (loggedUser != null) {
                     UserGetData.nom=loggedUser.getNom();
                     UserGetData.prenom=loggedUser.getPrenom();
-                    UserGetData.id=loggedUser.getId();
 
                     System.out.println(loggedUser);
                     alert = new Alert(Alert.AlertType.INFORMATION);
@@ -76,7 +75,7 @@ public class Utilisateur {
                     User_login_btn.getScene().getWindow().hide();
 
                     try {
-                        Parent root  = FXMLLoader.load(getClass().getResource("/fxml/MainMenu.fxml"));
+                        Parent root  = FXMLLoader.load(getClass().getResource("/dashboardUser.fxml"));
                         Stage stage = new Stage();
                         Scene scene = new Scene(root);
                         root.setOnMousePressed((MouseEvent Mevent) ->{

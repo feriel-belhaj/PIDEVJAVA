@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.paint.Color?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/20.0.2"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tn.esprit.workshop.gui.ModifierProduit"
+            prefWidth="450" prefHeight="400">
+
+    <!-- Titre -->
+    <Label text="Modifier le produit" layoutX="150" layoutY="10" />
+
+    <!-- Champ Nom -->
+    <Label text="Nom:" layoutX="20" layoutY="50" />
+    <TextField fx:id="tfNom" layoutX="150" layoutY="50" prefWidth="250" />
+    <Label fx:id="errorNom" textFill="red" layoutX="150" layoutY="75" visible="false" />
+
+    <!-- Champ Description -->
+    <Label text="Description:" layoutX="20" layoutY="100" />
+    <TextField fx:id="tfDescription" layoutX="150" layoutY="100" prefWidth="250" />
+    <Label fx:id="errorDescription" textFill="red" layoutX="150" layoutY="125" visible="false" />
+
+    <!-- Champ Prix -->
+    <Label text="Prix:" layoutX="20" layoutY="150" />
+    <TextField fx:id="tfPrix" layoutX="150" layoutY="150" prefWidth="250" />
+    <Label fx:id="errorPrix" textFill="red" layoutX="150" layoutY="175" visible="false" />
+
+    <!-- Champ Quantité -->
+    <Label text="Quantité en stock:" layoutX="20" layoutY="200" />
+    <TextField fx:id="tfQuantiteStock" layoutX="150" layoutY="200" prefWidth="250" />
+    <Label fx:id="errorQuantite" textFill="red" layoutX="150" layoutY="225" visible="false" />
+
+    <!-- Champ Catégorie -->
+    <Label text="Catégorie:" layoutX="20" layoutY="250" />
+    <TextField fx:id="tfCategorie" layoutX="150" layoutY="250" prefWidth="250" />
+    <Label fx:id="errorCategorie" textFill="red" layoutX="150" layoutY="275" visible="false" />
+
+    <!-- Bouton Modifier -->
+    <Button fx:id="btnModifier" text="Modifier" layoutX="180" layoutY="320" onMouseClicked="#modifierProduit" />
+
+</AnchorPane>

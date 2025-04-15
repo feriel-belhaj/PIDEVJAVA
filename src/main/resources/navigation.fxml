@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/20.0.2"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="tn.esprit.workshop.gui.Navigation"
+      spacing="10" padding="10">
+
+    <!-- Zone de navigation avec les boutons -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Button text="Afficher mes produits" onAction="#goToAfficher" prefWidth="200"/>
+        <Button text="Accéder au Store" onAction="#goToStore" prefWidth="200"/>
+        <Button fx:id="btnVoirCommandes" text="Voir mes commandes" onAction="#goToCommandes" prefWidth="200" />
+        <Button text="Commandes (Artisan)" onAction="#goToCommandesArtisan" prefWidth="200"/>
+        <Button text="Quitter" onAction="#quit" prefWidth="100" />
+    </HBox>
+
+    <!-- Zone principale qui changera selon le bouton cliqué -->
+    <StackPane fx:id="contentArea" VBox.vgrow="ALWAYS">
+        <padding>
+            <Insets top="10" right="10" bottom="10" left="10"/>
+        </padding>
+    </StackPane>
+</VBox>

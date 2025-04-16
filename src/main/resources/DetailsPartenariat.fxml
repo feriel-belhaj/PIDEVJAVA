@@ -108,7 +108,7 @@
                                                     <Button fx:id="btnSupprimer" style="-fx-background-color: transparent; -fx-padding: 0;">
                                                         <graphic>
                                                             <ImageView fitWidth="24.0" fitHeight="24.0" preserveRatio="true">
-                                                                <Image url="file:/C:/Users/MSI/IdeaProjects/WorkshopJdbc3A44/trash-icon.png"/>
+                                                                <Image url="@trash-icon.png"/>
                                                             </ImageView>
                                                         </graphic>
                                                         <tooltip>

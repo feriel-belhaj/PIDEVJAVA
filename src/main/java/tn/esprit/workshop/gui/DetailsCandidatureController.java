@@ -33,23 +33,8 @@ public class DetailsCandidatureController {
     @FXML
     private TextArea motivationTextArea;
 
-    @FXML
-    private TextArea analyseTextArea;
 
-    @FXML
-    private Label noteLabel;
 
-    @FXML
-    private Label scoreNlpLabel;
-
-    @FXML
-    private Label scoreArtistiqueLabel;
-
-    @FXML
-    private ProgressBar scoreNlpProgress;
-
-    @FXML
-    private ProgressBar scoreArtistiqueProgress;
 
     @FXML
     private ImageView partenariatImage;
@@ -105,19 +90,8 @@ public class DetailsCandidatureController {
         datePostulationLabel.setText(dateFormat.format(candidature.getDatePostulation()));
         motivationTextArea.setText(candidature.getMotivation());
 
-        // Analyses et scores
-        analyseTextArea.setText(candidature.getAnalysisResult());
 
-        double scoreNlp = candidature.getScoreNlp() / 100.0;
-        double scoreArtistique = candidature.getScoreArtistique() / 100.0;
 
-        scoreNlpProgress.setProgress(scoreNlp);
-        scoreArtistiqueProgress.setProgress(scoreArtistique);
-
-        scoreNlpLabel.setText(Math.round(candidature.getScoreNlp()) + "%");
-        scoreArtistiqueLabel.setText(Math.round(candidature.getScoreArtistique()) + "%");
-
-        noteLabel.setText("Note artistique : " + Math.round(candidature.getScoreArtistique()) + "/100");
     }
 
     @FXML

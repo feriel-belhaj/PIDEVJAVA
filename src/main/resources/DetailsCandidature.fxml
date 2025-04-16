@@ -39,7 +39,7 @@
                     <content>
                         <VBox spacing="30.0" style="-fx-padding: 20 30 50 30; -fx-background-color: #F3F4F6;">
                             <!-- Titre -->
-                            <HBox alignment="CENTER_LEFT" spacing="15.0">
+                            <HBox alignment="CENTER" spacing="15.0">
                                 <Label text="Détails de la Candidature" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #353A40;"/>
                                 <Region HBox.hgrow="ALWAYS"/>
 
@@ -78,39 +78,19 @@
                                         <TextArea fx:id="motivationTextArea" wrapText="true" editable="false" prefHeight="100" style="-fx-control-inner-background: #F8F9FA; -fx-border-color: #E9ECEF;"/>
                                     </VBox>
 
-                                    <!-- Analyse du texte -->
-                                    <VBox spacing="5">
-                                        <Label text="Analyse du texte :" style="-fx-font-weight: bold;"/>
-                                        <TextArea fx:id="analyseTextArea" wrapText="true" editable="false" prefHeight="100" style="-fx-control-inner-background: #F8F9FA; -fx-border-color: #E9ECEF;"/>
-                                    </VBox>
-                                    
-                                    <!-- Scores et notes -->
-                                    <VBox spacing="10">
-                                        <Label text="Évaluation :" style="-fx-font-weight: bold;"/>
-                                        
-                                        <!-- Note artistique -->
-                                        <Label fx:id="noteLabel" text="Note artistique : 0/100" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #D4A76A;"/>
-                                        
-                                        <!-- Score NLP -->
-                                        <HBox spacing="10" alignment="CENTER_LEFT">
-                                            <Label text="Score NLP :" style="-fx-text-fill: #555;"/>
-                                            <ProgressBar fx:id="scoreNlpProgress" progress="0.0" prefWidth="200" style="-fx-accent: #3498db;"/>
-                                            <Label fx:id="scoreNlpLabel" text="0%" style="-fx-text-fill: #3498db;"/>
-                                        </HBox>
-                                        
-                                        <!-- Score Artistique -->
-                                        <HBox spacing="10" alignment="CENTER_LEFT">
-                                            <Label text="Score Artistique :" style="-fx-text-fill: #555;"/>
-                                            <ProgressBar fx:id="scoreArtistiqueProgress" progress="0.0" prefWidth="200" style="-fx-accent: #D4A76A;"/>
-                                            <Label fx:id="scoreArtistiqueLabel" text="0%" style="-fx-text-fill: #D4A76A;"/>
-                                        </HBox>
-                                    </VBox>
+
 
                                     <!-- Boutons d'action -->
                                     <HBox spacing="15" alignment="CENTER_LEFT">
                                         <Button fx:id="btnVoirPortfolio" text="Voir Portfolio" onAction="#voirPortfolio" style="-fx-background-color: #D4A76A; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8 20; -fx-background-radius: 20;"/>
                                         <!-- Bouton Supprimer avec icône -->
-                                        <Button fx:id="btnSupprimer" onAction="#supprimerCandidature" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8 20; -fx-background-radius: 20;" text="Supprimer"/>
+                                        <Button fx:id="btnSupprimer" onAction="#supprimerCandidature" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8 20; -fx-background-radius: 20;">
+                                            <graphic>
+                                                <ImageView fitHeight="20" fitWidth="20" preserveRatio="true">
+                                                    <Image url="file:/C:/Users/MSI/IdeaProjects/Artizina/trash-icon.png"/>
+                                                </ImageView>
+                                            </graphic>
+                                        </Button>
                                     </HBox>
 
                                 </VBox>

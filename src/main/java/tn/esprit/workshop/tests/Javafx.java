@@ -19,7 +19,7 @@ public class Javafx extends Application {
     public void start(Stage primaryStage) {
         try {
             // Obtenir l'URL du fichier FXML
-            URL fxmlUrl = getClass().getResource("/ListeCandidatures.fxml");
+            URL fxmlUrl = getClass().getResource("/Listepartenariats.fxml");
             if (fxmlUrl == null) {
                 System.err.println("Erreur: Impossible de trouver le fichier FXML");
                 return;

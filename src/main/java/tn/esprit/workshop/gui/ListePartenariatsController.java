@@ -217,22 +217,27 @@ public class ListePartenariatsController {
 
     private void modifierPartenariat(Partenariat partenariat) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AjouterPartenariat.fxml"));
-            Parent root = loader.load();
+            if (partenariat == null) {
+                afficherErreur("Erreur", "Le partenariat sélectionné est invalide");
+                return;
+            }
             
-            AjouterPartenariat controller = loader.getController();
-            // Pré-remplir le formulaire avec les données du partenariat
-            controller.preRemplirFormulaire(partenariat);
-
-            Stage stage = new Stage();
-            stage.setTitle("Modifier le Partenariat");
-            stage.setScene(new Scene(root));
-            stage.show();
+            System.out.println("Modification du partenariat: ID=" + partenariat.getId() + ", Nom=" + partenariat.getNom());
             
-            // Rafraîchir la liste après la fermeture de la fenêtre
-            stage.setOnHidden(e -> chargerPartenariats());
-        } catch (IOException e) {
-            afficherErreur("Erreur", "Impossible d'ouvrir la fenêtre de modification");
+            // Utiliser l'interface en code Java pur sans utiliser de FXML
+            ModifierPartenariatController controller = new ModifierPartenariatController(partenariat, aVoid -> {
+                // Rafraîchir la liste après fermeture
+                chargerPartenariats();
+            });
+            controller.afficher();
+        } catch (Exception e) {
+            System.err.println("Erreur détaillée lors de la création de l'interface: " + e.getMessage());
+            if (e.getCause() != null) {
+                System.err.println("Cause: " + e.getCause().getMessage());
+            }
+            e.printStackTrace();
+            afficherErreur("Erreur", "Impossible de créer l'interface de modification: " + 
+                          (e.getMessage() != null ? e.getMessage() : "Une erreur inattendue s'est produite"));
         }
     }
 

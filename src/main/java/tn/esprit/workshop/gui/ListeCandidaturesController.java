@@ -22,6 +22,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.awt.Desktop;
+import java.net.URL;
 
 public class ListeCandidaturesController {
 
@@ -124,16 +125,25 @@ public class ListeCandidaturesController {
         imageView.setPreserveRatio(true);
 
         // Chargement de l'image du partenariat
-        Partenariat partenariat = candidature.getPartenariat();
-        if (partenariat != null && partenariat.getImage() != null && !partenariat.getImage().isEmpty()) {
-            File imageFile = new File(partenariat.getImage());
-            if (imageFile.exists()) {
-                imageView.setImage(new Image(imageFile.toURI().toString()));
+        try {
+            Partenariat partenariat = candidature.getPartenariat();
+            if (partenariat != null && partenariat.getImage() != null && !partenariat.getImage().isEmpty()) {
+                File imageFile = new File(partenariat.getImage());
+                if (imageFile.exists()) {
+                    imageView.setImage(new Image(imageFile.toURI().toString()));
+                } else {
+                    imageView.setImage(new Image(getClass().getResourceAsStream("/images/default.PNG")));
+                }
             } else {
                 imageView.setImage(new Image(getClass().getResourceAsStream("/images/default.PNG")));
             }
-        } else {
-            imageView.setImage(new Image(getClass().getResourceAsStream("/images/default.PNG")));
+        } catch (Exception e) {
+            System.err.println("Erreur lors du chargement de l'image: " + e.getMessage());
+            try {
+                imageView.setImage(new Image(getClass().getResourceAsStream("/images/default.PNG")));
+            } catch (Exception ex) {
+                System.err.println("Impossible de charger l'image par défaut: " + ex.getMessage());
+            }
         }
 
         // Icônes superposées
@@ -145,13 +155,21 @@ public class ListeCandidaturesController {
         // Icône calendrier
         Button calendarBtn = createIconButton("/images/calendar-icon.png", "Date de postulation");
         Tooltip calendarTooltip = new Tooltip(
-                new SimpleDateFormat("dd/MM/yyyy").format(candidature.getDatePostulation())
+                candidature.getDatePostulation() != null ?
+                new SimpleDateFormat("dd/MM/yyyy").format(candidature.getDatePostulation()) :
+                "Date non disponible"
         );
         Tooltip.install(calendarBtn, calendarTooltip);
 
         // Icône CV
         Button cvBtn = createIconButton("/images/cv-icon.png", "Voir CV");
-        cvBtn.setOnAction(e -> ouvrirFichier(candidature.getCv()));
+        cvBtn.setOnAction(e -> {
+            if (candidature.getCv() != null && !candidature.getCv().isEmpty()) {
+                ouvrirFichier(candidature.getCv());
+            } else {
+                afficherErreur("CV non disponible", "Aucun CV n'est disponible pour cette candidature");
+            }
+        });
 
         iconsBox.getChildren().addAll(calendarBtn, cvBtn);
 
@@ -163,7 +181,7 @@ public class ListeCandidaturesController {
         infoBox.setAlignment(Pos.CENTER_LEFT);
 
         // Type (Stage, etc.)
-        Label typeLabel = new Label(candidature.getTypeCollab());
+        Label typeLabel = new Label(candidature.getTypeCollab() != null ? candidature.getTypeCollab() : "Type non spécifié");
         typeLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #3498db;");
 
         // Boutons d'action
@@ -176,7 +194,19 @@ public class ListeCandidaturesController {
 
         Button btnModifier = new Button("Modifier");
         styleButton(btnModifier, "#2ecc71");
-        btnModifier.setOnAction(e -> modifierCandidature(candidature));
+        btnModifier.setOnAction(e -> {
+            try {
+                if (candidature == null) {
+                    afficherErreur("Erreur", "Candidature invalide");
+                    return;
+                }
+                modifierAvecInterfaceAlternative(candidature);
+            } catch (Exception ex) {
+                System.err.println("Erreur lors du clic sur le bouton Modifier: " + ex.getMessage());
+                ex.printStackTrace();
+                afficherErreur("Erreur", "Impossible d'ouvrir l'interface de modification: " + ex.getMessage());
+            }
+        });
 
         buttonsBox.getChildren().addAll(btnDetails, btnModifier);
 
@@ -287,58 +317,96 @@ public class ListeCandidaturesController {
         }
     }
 
-    private void modifierCandidature(Candidature candidature) {
+    private void modifierAvecInterfaceAlternative(Candidature candidature) {
         try {
-            System.out.println("Ouverture du formulaire de modification pour la candidature ID: " + candidature.getId());
-
+            // Vérification que la candidature n'est pas null
+            if (candidature == null) {
+                afficherErreur("Erreur", "La candidature sélectionnée est invalide");
+                return;
+            }
+            
+            System.out.println("Tentative de modification de la candidature ID: " + candidature.getId());
+            System.out.println("Type: " + candidature.getTypeCollab());
+            System.out.println("Date: " + (candidature.getDatePostulation() != null ? candidature.getDatePostulation() : "null"));
+            System.out.println("CV: " + (candidature.getCv() != null ? candidature.getCv() : "non disponible"));
+            System.out.println("Portfolio: " + (candidature.getPortfolio() != null ? candidature.getPortfolio() : "non disponible"));
+            
             // Vérifier que le fichier FXML existe
             String fxmlPath = "/ModifierCandidature.fxml";
-            if (getClass().getResource(fxmlPath) == null) {
+            URL resource = getClass().getResource(fxmlPath);
+            if (resource == null) {
                 System.err.println("ERREUR: Impossible de trouver le fichier " + fxmlPath);
                 afficherErreur("Fichier manquant", "Le fichier FXML n'a pas été trouvé: " + fxmlPath);
                 return;
             }
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-            System.out.println("FXMLLoader créé pour la modification");
-
+            
+            System.out.println("Ressource FXML trouvée: " + resource);
+            
             try {
+                FXMLLoader loader = new FXMLLoader(resource);
                 Parent root = loader.load();
-                System.out.println("FXML de modification chargé avec succès");
-
+                System.out.println("FXML chargé avec succès");
+                
+                // Obtenir le contrôleur et initialiser les données
                 ModifierCandidatureController controller = loader.getController();
                 if (controller == null) {
-                    System.err.println("ERREUR: Le contrôleur de modification est null");
-                    afficherErreur("Erreur", "Impossible d'initialiser le contrôleur de modification");
+                    System.err.println("ERREUR: Le contrôleur est null");
+                    afficherErreur("Erreur", "Impossible d'initialiser le contrôleur");
                     return;
                 }
-
-                System.out.println("Initialisation des données dans le contrôleur de modification");
+                
+                System.out.println("Contrôleur obtenu, initialisation des données...");
                 controller.initData(candidature);
-
+                System.out.println("Données initialisées dans le contrôleur");
+                
                 Stage stage = new Stage();
-                stage.setTitle("Modifier la Candidature");
+                stage.setTitle("Modifier une Candidature");
                 stage.setScene(new Scene(root));
                 stage.initModality(Modality.APPLICATION_MODAL);
-                System.out.println("Affichage de la fenêtre de modification");
-
-                // La fenêtre actuelle ne devrait pas être fermée pour permettre
-                // à l'utilisateur de revenir à la liste après modification
-                // Stage currentStage = (Stage) candidaturesContainer.getScene().getWindow();
-                // currentStage.close();
-
+                
+                // Rafraîchir la liste après la fermeture de la fenêtre
+                stage.setOnHidden(e -> {
+                    System.out.println("Fenêtre de modification fermée, rafraîchissement de la liste...");
+                    chargerCandidatures();
+                });
+                
+                System.out.println("Affichage de la fenêtre de modification...");
                 stage.show();
-            } catch (Exception e) {
-                System.err.println("Exception lors du chargement ou de l'initialisation de la vue de modification: " + e.getMessage());
-                e.printStackTrace();
-                afficherErreur("Erreur", "Impossible de charger la vue de modification: " + e.getMessage());
+            } catch (IOException ex) {
+                System.err.println("Exception lors du chargement du FXML: " + ex.getMessage());
+                ex.printStackTrace();
+                afficherErreur("Erreur", "Impossible de charger l'interface: " + ex.getMessage());
             }
         } catch (Exception e) {
-            System.err.println("Exception générale lors de la modification: " + e.getMessage());
+            System.err.println("Erreur détaillée lors de la création de l'interface: " + e.getMessage());
+            if (e.getCause() != null) {
+                System.err.println("Cause: " + e.getCause().getMessage());
+            }
             e.printStackTrace();
-            afficherErreur("Erreur", "Une erreur s'est produite lors de la modification: " + e.getMessage());
+            afficherErreur("Erreur", "Impossible de créer l'interface de modification: " + 
+                          (e.getMessage() != null ? e.getMessage() : "Une erreur inattendue s'est produite"));
         }
     }
+
+    @FXML
+    void modifierCandidaturePartenariat() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ModifierCandidature.fxml"));
+            Parent root = loader.load();
+            
+            Stage stage = new Stage();
+            stage.setTitle("Créer une Candidature");
+            stage.setScene(new Scene(root));
+            stage.show();
+            
+            // Rafraîchir la liste après la fermeture de la fenêtre
+            stage.setOnHidden(e -> chargerCandidatures());
+        } catch (IOException e) {
+            e.printStackTrace();
+            afficherErreur("Erreur", "Impossible d'ouvrir la fenêtre de création de candidature: " + e.getMessage());
+        }
+    }
+
 
     @FXML
     private void voirStatistiques() {

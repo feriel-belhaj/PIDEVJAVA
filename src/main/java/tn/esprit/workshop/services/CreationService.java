@@ -26,6 +26,7 @@ public class CreationService {
             }
             return false;
         }
+        //yabaath req lel bd
         
         String query = "INSERT INTO creation (utilisateur_id, titre, description, image, categorie, date_public, statut, nb_like) " +
                       "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";

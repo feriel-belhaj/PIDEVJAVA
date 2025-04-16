@@ -23,6 +23,7 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class CommentaireController implements Initializable {
@@ -193,8 +194,69 @@ public class CommentaireController implements Initializable {
         Label contentLabel = new Label(commentaire.getContenu());
         contentLabel.setWrapText(true);
         
-        commentBox.getChildren().addAll(headerBox, contentLabel);
+        // Add action buttons
+        HBox actionBox = new HBox(10);
+        Button modifierBtn = new Button("Modifier");
+        modifierBtn.getStyleClass().add("update-btn");
+        modifierBtn.setOnAction(e -> handleModifierCommentaire(commentaire));
+        
+        actionBox.getChildren().add(modifierBtn);
+        
+        commentBox.getChildren().addAll(headerBox, contentLabel, actionBox);
         return commentBox;
+    }
+    
+    /**
+     * Handles the modification of a comment
+     * @param commentaire The comment to modify
+     */
+    private void handleModifierCommentaire(Commentaire commentaire) {
+        // Create a dialog for editing the comment
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Modifier le commentaire");
+        dialog.setHeaderText("Modifier votre commentaire");
+        
+        // Set the button types
+        ButtonType saveButtonType = new ButtonType("Sauvegarder", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
+        
+        // Create the text area and set its content
+        TextArea textArea = new TextArea(commentaire.getContenu());
+        textArea.setWrapText(true);
+        textArea.setPrefWidth(400);
+        textArea.setPrefHeight(200);
+        
+        dialog.getDialogPane().setContent(textArea);
+        
+        // Convert the result to the comment text when the save button is clicked
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == saveButtonType) {
+                return textArea.getText();
+            }
+            return null;
+        });
+        
+        // Show the dialog and process the result
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(content -> {
+            if (!content.trim().isEmpty()) {
+                try {
+                    // Update the comment with new content
+                    commentaire.setContenu(content.trim());
+                    boolean success = commentaireService.update(commentaire);
+                    if (success) {
+                        loadComments();
+                        showAlert(Alert.AlertType.INFORMATION, "Succès", "Le commentaire a été mis à jour avec succès!");
+                    } else {
+                        showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de mettre à jour le commentaire.");
+                    }
+                } catch (Exception e) {
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "Une erreur est survenue: " + e.getMessage());
+                }
+            } else {
+                showAlert(Alert.AlertType.WARNING, "Attention", "Le commentaire ne peut pas être vide.");
+            }
+        });
     }
     
     @FXML

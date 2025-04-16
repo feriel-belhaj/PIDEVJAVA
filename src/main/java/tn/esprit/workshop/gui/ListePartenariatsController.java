@@ -76,7 +76,7 @@ public class ListePartenariatsController {
         ImageView imageView = new ImageView();
         imageView.setFitWidth(300.0);
         imageView.setFitHeight(200.0);
-        imageView.setPreserveRatio(true);
+        imageView.setPreserveRatio(false); // Standardiser la taille des images
 
         // Chargement de l'image
         String imagePath = partenariat.getImage();
@@ -98,16 +98,16 @@ public class ListePartenariatsController {
         String styleStatut;
         switch (partenariat.getStatut()) {
             case "Actif":
-                styleStatut = "-fx-background-color: #28a745; -fx-text-fill: white;";
+                styleStatut = "-fx-background-color: #2ecc71; -fx-text-fill: white;";
                 break;
             case "EnCours":
-                styleStatut = "-fx-background-color: #007bff; -fx-text-fill: white;";
+                styleStatut = "-fx-background-color: #FFD700; -fx-text-fill: white;";
                 break;
-            case "Terminé":
-                styleStatut = "-fx-background-color: #dc3545; -fx-text-fill: white;";
+            case "Expiré":
+                styleStatut = "-fx-background-color: #e74c3c; -fx-text-fill: white;";
                 break;
             default:
-                styleStatut = "-fx-background-color: #6c757d; -fx-text-fill: white;";
+                styleStatut = "-fx-background-color: #95a5a6; -fx-text-fill: white;";
         }
         
         statutOverlay.setStyle(styleStatut + " -fx-padding: 5 10; -fx-background-radius: 5; -fx-font-weight: bold;");
@@ -162,6 +162,9 @@ public class ListePartenariatsController {
             
             DetailsPartenariatController controller = loader.getController();
             controller.initData(partenariat);
+            
+            // Ajouter un callback pour rafraîchir la liste après suppression
+            controller.setOnDeleteCallback(this::chargerPartenariats);
             
             Stage stage = new Stage();
             stage.setTitle("Détails du Partenariat");

@@ -74,35 +74,52 @@
                                     <VBox spacing="5" HBox.hgrow="ALWAYS">
                                         <Label text="Date de Postulation" style="-fx-text-fill: #666666;"/>
                                         <DatePicker fx:id="datePostulation" promptText="Date de postulation" style="-fx-background-color: white; -fx-border-color: #CCCCCC; -fx-border-radius: 5;"/>
+                                        <Label fx:id="errorDatePostulation" text="" style="-fx-text-fill: red;" visible="false"/>
                                     </VBox>
 
                                     <VBox spacing="5" HBox.hgrow="ALWAYS">
-                                        <Label text="Veuillez Mettre Votre CV *" style="-fx-text-fill: #666666;"/>
+                                        <TextFlow>
+                                            <Text text="Veuillez Mettre Votre CV " style="-fx-fill: #666666;"/>
+                                            <Text text="*" style="-fx-fill: red;"/>
+                                        </TextFlow>
                                         <HBox spacing="10">
                                             <Button text="Choisir un fichier" onAction="#choisirCV" style="-fx-background-color: #F8F9FA; -fx-border-color: #CCCCCC; -fx-border-radius: 5;"/>
                                             <Label fx:id="cvLabel" text="Aucun fichier choisi"/>
                                         </HBox>
+                                        <Label fx:id="errorCv" text="" style="-fx-text-fill: red;" visible="false"/>
                                     </VBox>
                                 </HBox>
 
                                 <HBox spacing="20">
                                     <VBox spacing="5" HBox.hgrow="ALWAYS">
-                                        <Label text="Portfolio *" style="-fx-text-fill: #666666;"/>
+                                        <TextFlow>
+                                            <Text text="Portfolio " style="-fx-fill: #666666;"/>
+                                            <Text text="*" style="-fx-fill: red;"/>
+                                        </TextFlow>
                                         <HBox spacing="10">
                                             <Button text="Choisir un fichier" onAction="#choisirPortfolio" style="-fx-background-color: #F8F9FA; -fx-border-color: #CCCCCC; -fx-border-radius: 5;"/>
                                             <Label fx:id="portfolioLabel" text="Aucun fichier choisi"/>
                                         </HBox>
+                                        <Label fx:id="errorPortfolio" text="" style="-fx-text-fill: red;" visible="false"/>
                                     </VBox>
 
                                     <VBox spacing="5" HBox.hgrow="ALWAYS">
-                                        <Label text="Type de Collaboration *" style="-fx-text-fill: #666666;"/>
+                                        <TextFlow>
+                                            <Text text="Type de Collaboration " style="-fx-fill: #666666;"/>
+                                            <Text text="*" style="-fx-fill: red;"/>
+                                        </TextFlow>
                                         <ComboBox fx:id="typeCollaboration" prefWidth="150.0" promptText="Choisir le type" style="-fx-background-color: white; -fx-border-color: #CCCCCC; -fx-border-radius: 5;"/>
+                                        <Label fx:id="errorTypeCollaboration" text="" style="-fx-text-fill: red;" visible="false"/>
                                     </VBox>
                                 </HBox>
 
                                 <VBox spacing="5">
-                                    <Label text="Lettre de motivation *" style="-fx-text-fill: #666666;"/>
+                                    <TextFlow>
+                                        <Text text="Lettre de motivation " style="-fx-fill: #666666;"/>
+                                        <Text text="*" style="-fx-fill: red;"/>
+                                    </TextFlow>
                                     <TextArea fx:id="lettreMotivation" prefHeight="150.0" promptText="Votre lettre de motivation..." style="-fx-background-color: white; -fx-border-color: #CCCCCC; -fx-border-radius: 5;" wrapText="true"/>
+                                    <Label fx:id="errorLettreMotivation" text="" style="-fx-text-fill: red;" visible="false"/>
                                 </VBox>
 
                                 <HBox alignment="CENTER">

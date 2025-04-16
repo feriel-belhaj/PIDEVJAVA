@@ -19,7 +19,6 @@ public class ServicePartenariat implements CRUDPartenariat<Partenariat> {
     public void insert(Partenariat partenariat) throws SQLException {
         String req = "INSERT INTO `partenariat`(`date_debut`, `date_fin`, `statut`, `description`, `nom`, `type`, `image`) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
-
         PreparedStatement ps = cnx.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
 
         ps.setDate(1, new java.sql.Date(partenariat.getDateDebut().getTime()));
@@ -44,7 +43,6 @@ public class ServicePartenariat implements CRUDPartenariat<Partenariat> {
     @Override
     public void update(Partenariat partenariat) throws SQLException {
         String req = "UPDATE `partenariat` SET `date_debut`=?, `date_fin`=?, `statut`=?, `description`=?, `nom`=?, `type`=?, `image`=? WHERE `id`=?";
-
         PreparedStatement ps = cnx.prepareStatement(req);
 
         ps.setDate(1, new java.sql.Date(partenariat.getDateDebut().getTime()));

@@ -5,105 +5,112 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="700.0" style="-fx-background-color: #F3F4F6;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.workshop.gui.ModifierCandidatureController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="700.0" style="-fx-background-color: #F3F4F6;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.workshop.gui.ModifierCandidatureController">
     <children>
         <VBox spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <!-- En-tête -->
-                <HBox alignment="CENTER_RIGHT">
-                    <children>
-                        <Button fx:id="btnFermer" onAction="#fermer" style="-fx-background-color: transparent;" text="✕" />
-                    </children>
-                    <padding>
-                        <Insets bottom="5.0" left="10.0" right="10.0" top="10.0" />
-                    </padding>
-                </HBox>
 
-                <!-- Titre -->
-                <Label alignment="CENTER" maxWidth="1.7976931348623157E308" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Mise à Jour de la Candidature" />
 
-                <!-- Formulaire -->
-                <VBox spacing="15.0">
-                    <padding>
-                        <Insets left="40.0" right="40.0" top="20.0" />
-                    </padding>
-                    <children>
-                        <!-- Type Collaboration -->
-                        <VBox spacing="5.0">
+                <!-- Contenu défilant -->
+                <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-padding: 0;" VBox.vgrow="ALWAYS">
+                    <content>
+                        <VBox spacing="15.0">
                             <children>
-                                <Label text="Type De Collaboration" />
-                                <ComboBox fx:id="typeCollabCombo" prefWidth="250.0" promptText="Stage" />
-                            </children>
-                        </VBox>
+                                <!-- Titre -->
+                                <Label alignment="CENTER" maxWidth="1.7976931348623157E308" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Mise à Jour de la Candidature" />
 
-                        <!-- Motivation -->
-                        <VBox spacing="5.0">
-                            <children>
-                                <Label text="Motivation" />
-                                <TextArea fx:id="motivationTextArea" prefHeight="100.0" wrapText="true" />
-                            </children>
-                        </VBox>
-
-                        <!-- Date -->
-                        <VBox spacing="5.0">
-                            <children>
-                                <Label text="Date postulation" />
-                                <DatePicker fx:id="datePostulation" prefWidth="250.0" />
-                            </children>
-                        </VBox>
-
-                        <!-- CV -->
-                        <VBox spacing="5.0">
-                            <children>
-                                <Label text="Mettre Votre CV" />
-                                <HBox spacing="10.0">
-                                    <children>
-                                        <Button onAction="#choisirCV" text="Choisir un fichier" />
-                                        <Label fx:id="cvLabel" text="Aucun fichier n'a été sélectionné" />
-                                    </children>
-                                </HBox>
-                                <Button onAction="#voirCV" style="-fx-background-color: transparent; -fx-text-fill: blue;" text="Voir le CV actuel" />
-                            </children>
-                        </VBox>
-
-                        <!-- Portfolio -->
-                        <VBox spacing="5.0">
-                            <children>
-                                <Label text="Portfolio" />
-                                <HBox spacing="10.0">
-                                    <children>
-                                        <Button onAction="#choisirPortfolio" text="Choisir un fichier" />
-                                        <Label fx:id="portfolioLabel" text="Aucun fichier n'a été sélectionné" />
-                                    </children>
-                                </HBox>
-                                <Button onAction="#voirPortfolio" style="-fx-background-color: transparent; -fx-text-fill: blue;" text="Voir le Portfolio actuel" />
-                            </children>
-                        </VBox>
-
-                        <!-- Bouton Mettre à jour -->
-                        <HBox alignment="CENTER">
-                            <children>
-                                <Button fx:id="btnMettreAJour" onAction="#mettreAJour" style="-fx-background-color: #007bff; -fx-text-fill: white;" text="Mettre à jour">
+                                <!-- Formulaire -->
+                                <VBox spacing="15.0">
                                     <padding>
-                                        <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
+                                        <Insets left="40.0" right="40.0" top="20.0" />
                                     </padding>
-                                </Button>
+                                    <children>
+                                        <!-- Type Collaboration -->
+                                        <VBox spacing="5.0">
+                                            <children>
+                                                <Label text="Type De Collaboration" />
+                                                <ComboBox fx:id="typeCollabCombo" prefWidth="250.0" promptText="Stage" />
+                                                <Label fx:id="errorTypeCollaboration" style="-fx-text-fill: red;" text="" visible="false" />
+                                            </children>
+                                        </VBox>
+
+                                        <!-- Motivation -->
+                                        <VBox spacing="5.0">
+                                            <children>
+                                                <Label text="Motivation" />
+                                                <TextArea fx:id="motivationTextArea" prefHeight="100.0" wrapText="true" />
+                                                <Label fx:id="errorMotivation" style="-fx-text-fill: red;" text="" visible="false" />
+                                            </children>
+                                        </VBox>
+
+                                        <!-- Date -->
+                                        <VBox spacing="5.0">
+                                            <children>
+                                                <Label text="Date postulation" />
+                                                <DatePicker fx:id="datePostulation" prefWidth="250.0" />
+                                                <Label fx:id="errorDatePostulation" style="-fx-text-fill: red;" text="" visible="false" />
+                                            </children>
+                                        </VBox>
+
+                                        <!-- CV -->
+                                        <VBox spacing="5.0">
+                                            <children>
+                                                <Label text="Mettre Votre CV" />
+                                                <HBox spacing="10.0">
+                                                    <children>
+                                                        <Button onAction="#choisirCV" text="Choisir un fichier" />
+                                                        <Label fx:id="cvLabel" text="Aucun fichier n'a été sélectionné" />
+                                                    </children>
+                                                </HBox>
+                                                <Label fx:id="errorCv" style="-fx-text-fill: red;" text="" visible="false" />
+                                                <Button onAction="#voirCV" style="-fx-background-color: transparent; -fx-text-fill: blue;" text="Voir le CV actuel" />
+                                            </children>
+                                        </VBox>
+
+                                        <!-- Portfolio (Images uniquement) -->
+                                        <VBox spacing="5.0">
+                                            <children>
+                                                <Label text="Portfolio" />
+                                                <HBox spacing="10.0">
+                                                    <children>
+                                                        <Button onAction="#choisirPortfolio" text="Choisir un fichier" />
+                                                        <Label fx:id="portfolioLabel" text="Aucun fichier n'a été sélectionné" />
+                                                    </children>
+                                                </HBox>
+                                                <Label fx:id="errorPortfolio" style="-fx-text-fill: red;" text="" visible="false" />
+                                                <Button onAction="#voirPortfolio" style="-fx-background-color: transparent; -fx-text-fill: blue;" text="Voir le Portfolio actuel" />
+                                            </children>
+                                        </VBox>
+
+                                        <!-- Bouton Mettre à jour -->
+                                        <HBox alignment="CENTER">
+                                            <children>
+                                                <Button fx:id="btnMettreAJour" onAction="#mettreAJour" style="-fx-background-color: #007bff; -fx-text-fill: white;" text="Mettre à jour">
+                                                    <padding>
+                                                        <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
+                                                    </padding>
+                                                </Button>
+                                            </children>
+                                            <padding>
+                                                <Insets top="20.0" />
+                                            </padding>
+                                        </HBox>
+                                    </children>
+                                </VBox>
                             </children>
                             <padding>
-                                <Insets top="20.0" />
+                                <Insets bottom="20.0" left="20.0" right="20.0" top="10.0" />
                             </padding>
-                        </HBox>
-                    </children>
-                </VBox>
+                        </VBox>
+                    </content>
+                </ScrollPane>
             </children>
-            <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="10.0" />
-            </padding>
         </VBox>
     </children>
 </AnchorPane>

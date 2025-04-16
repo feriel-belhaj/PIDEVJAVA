@@ -32,16 +32,25 @@ public class ModifierPartenariatController {
     private final Consumer<Void> onCloseCallback;
     private String nouveauCheminImage;
 
+    // Error labels for validation
+    private Label errorNom;
+    private Label errorType;
+    private Label errorDescription;
+    private Label errorStatut;
+    private Label errorDateDebut;
+    private Label errorDateFin;
+    private Label errorImage;
+
     public ModifierPartenariatController(Partenariat partenariat, Consumer<Void> onCloseCallback) {
         if (partenariat == null) {
             throw new IllegalArgumentException("Le partenariat ne peut pas être null");
         }
-        
+
         this.partenariat = partenariat;
         this.servicePartenariat = new ServicePartenariat();
         this.onCloseCallback = onCloseCallback;
         this.nouveauCheminImage = partenariat.getImage();
-        
+
         System.out.println("ModifierPartenariatController initialisé pour le partenariat ID: " + partenariat.getId());
         System.out.println("Nom: " + partenariat.getNom());
         System.out.println("Type: " + partenariat.getType());
@@ -51,7 +60,7 @@ public class ModifierPartenariatController {
     public void afficher() {
         try {
             System.out.println("Démarrage de la création de l'interface de modification...");
-            
+
             // Création de la scène manuellement
             VBox root = new VBox(15);
             root.setPadding(new Insets(20));
@@ -69,7 +78,10 @@ public class ModifierPartenariatController {
             nomLabel.setStyle("-fx-text-fill: #555555;");
             TextField nomField = new TextField(partenariat.getNom() != null ? partenariat.getNom() : "");
             nomField.setPrefWidth(400);
-            nomBox.getChildren().addAll(nomLabel, nomField);
+            errorNom = new Label();
+            errorNom.setStyle("-fx-text-fill: red;");
+            errorNom.setVisible(false);
+            nomBox.getChildren().addAll(nomLabel, nomField, errorNom);
 
             // Type
             VBox typeBox = new VBox(5);
@@ -77,7 +89,10 @@ public class ModifierPartenariatController {
             typeLabel.setStyle("-fx-text-fill: #555555;");
             TextField typeField = new TextField(partenariat.getType() != null ? partenariat.getType() : "");
             typeField.setPrefWidth(400);
-            typeBox.getChildren().addAll(typeLabel, typeField);
+            errorType = new Label();
+            errorType.setStyle("-fx-text-fill: red;");
+            errorType.setVisible(false);
+            typeBox.getChildren().addAll(typeLabel, typeField, errorType);
 
             // Description
             VBox descriptionBox = new VBox(5);
@@ -86,7 +101,10 @@ public class ModifierPartenariatController {
             TextArea descriptionArea = new TextArea(partenariat.getDescription() != null ? partenariat.getDescription() : "");
             descriptionArea.setPrefHeight(100);
             descriptionArea.setWrapText(true);
-            descriptionBox.getChildren().addAll(descriptionLabel, descriptionArea);
+            errorDescription = new Label();
+            errorDescription.setStyle("-fx-text-fill: red;");
+            errorDescription.setVisible(false);
+            descriptionBox.getChildren().addAll(descriptionLabel, descriptionArea, errorDescription);
 
             // Date début
             VBox dateDebutBox = new VBox(5);
@@ -109,7 +127,10 @@ public class ModifierPartenariatController {
                 dateDebutPicker.setValue(LocalDate.now());
                 System.out.println("Date de début définie par défaut après erreur: " + LocalDate.now());
             }
-            dateDebutBox.getChildren().addAll(dateDebutLabel, dateDebutPicker);
+            errorDateDebut = new Label();
+            errorDateDebut.setStyle("-fx-text-fill: red;");
+            errorDateDebut.setVisible(false);
+            dateDebutBox.getChildren().addAll(dateDebutLabel, dateDebutPicker, errorDateDebut);
 
             // Date fin
             VBox dateFinBox = new VBox(5);
@@ -131,16 +152,22 @@ public class ModifierPartenariatController {
                 dateFinPicker.setValue(LocalDate.now());
                 System.out.println("Date de fin définie par défaut après erreur: " + LocalDate.now());
             }
-            dateFinBox.getChildren().addAll(dateFinLabel, dateFinPicker);
+            errorDateFin = new Label();
+            errorDateFin.setStyle("-fx-text-fill: red;");
+            errorDateFin.setVisible(false);
+            dateFinBox.getChildren().addAll(dateFinLabel, dateFinPicker, errorDateFin);
 
             // Statut
             VBox statutBox = new VBox(5);
             Label statutLabel = new Label("Statut");
             statutLabel.setStyle("-fx-text-fill: #555555;");
             ComboBox<String> statutCombo = new ComboBox<>();
-            statutCombo.getItems().addAll("En cours", "Terminé", "En attente", "Annulé");
+            statutCombo.getItems().addAll("Actif", "En Cours", "Expiré");
             statutCombo.setValue(partenariat.getStatut() != null ? partenariat.getStatut() : "En attente");
-            statutBox.getChildren().addAll(statutLabel, statutCombo);
+            errorStatut = new Label();
+            errorStatut.setStyle("-fx-text-fill: red;");
+            errorStatut.setVisible(false);
+            statutBox.getChildren().addAll(statutLabel, statutCombo, errorStatut);
 
             // Image du Partenariat
             VBox imageBox = new VBox(10);
@@ -152,7 +179,7 @@ public class ModifierPartenariatController {
             Button choisirImageBtn = new Button("Choisir un fichier");
             choisirImageBtn.setStyle("-fx-background-color: #F8F9FA; -fx-border-color: #CCCCCC; -fx-border-radius: 3;");
             Label imagePathLabel = new Label("Aucun fichier n'a été sélectionné");
-            
+
             if (partenariat.getImage() != null && !partenariat.getImage().isEmpty()) {
                 try {
                     File imageFile = new File(partenariat.getImage());
@@ -161,7 +188,9 @@ public class ModifierPartenariatController {
                     System.err.println("Erreur lors de l'accès au fichier image: " + e.getMessage());
                 }
             }
-            
+            errorImage = new Label();
+            errorImage.setStyle("-fx-text-fill: red;");
+            errorImage.setVisible(false);
             fileSelectBox.getChildren().addAll(choisirImageBtn, imagePathLabel);
 
             // Aperçu de l'image
@@ -186,7 +215,7 @@ public class ModifierPartenariatController {
                 }
             }
 
-            imageBox.getChildren().addAll(imageTitleLabel, fileSelectBox, imagePreview);
+            imageBox.getChildren().addAll(imageTitleLabel, fileSelectBox, errorImage, imagePreview);
 
             // Bouton Mettre à jour
             HBox updateBtnBox = new HBox();
@@ -208,23 +237,121 @@ public class ModifierPartenariatController {
                     imageBox,
                     updateBtnBox
             );
-            
+
             System.out.println("Interface créée, configuration de la scène...");
 
+            // Ajouter un ScrollPane pour rendre la fenêtre scrollable
+            ScrollPane scrollPane = new ScrollPane(root);
+            scrollPane.setFitToWidth(true); // Ajuster la largeur au contenu
+            scrollPane.setStyle("-fx-background-color: #F5F5F5;"); // Aligner le style avec le fond
+
             // Créer la scène et la fenêtre
-            Scene scene = new Scene(root, 600, 750);
+            Scene scene = new Scene(scrollPane, 600, 750);
             Stage stage = new Stage();
             stage.setTitle("Modifier un Partenariat");
             stage.setScene(scene);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setMinWidth(600);
             stage.setMinHeight(750);
-            
+
             System.out.println("Configuration des événements...");
 
             // Action du bouton de mise à jour
             updateBtn.setOnAction(e -> {
                 try {
+                    // Reset styles and errors
+                    resetStyle(nomField, typeField, descriptionArea, dateDebutPicker, dateFinPicker, statutCombo);
+                    resetErrors();
+
+                    boolean hasError = false;
+
+                    // Validation du nom (si non vide)
+                    String nomText = nomField.getText();
+                    if (!nomText.isEmpty()) {
+                        if (nomText.length() > 50) {
+                            nomField.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
+                            errorNom.setText("Le nom ne peut pas dépasser 50 caractères.");
+                            errorNom.setVisible(true);
+                            hasError = true;
+                        } else if (!nomText.matches("^[A-ZÀ-ÿ][a-zA-ZÀ-ÿéèêëàâäçôùûîï]+( [a-zA-ZÀ-ÿéèêëàâäçôùûîï]+)*$")) {
+                            nomField.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
+                            errorNom.setText("Le nom doit commencer par une majuscule et peut contenir des lettres accentuées et des espaces.");
+                            errorNom.setVisible(true);
+                            hasError = true;
+                        }
+                    }
+
+                    // Validation du type (si non vide)
+                    String typeText = typeField.getText();
+                    if (!typeText.isEmpty()) {
+                        if (typeText.length() > 50) {
+                            typeField.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
+                            errorType.setText("Le type ne peut pas dépasser 50 caractères.");
+                            errorType.setVisible(true);
+                            hasError = true;
+                        } else if (!typeText.matches("^[A-ZÀ-ÿ][a-zA-ZÀ-ÿéèêëàâäçôùûîï]+( [a-zA-ZÀ-ÿéèêëàâäçôùûîï]+)*$")) {
+                            typeField.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
+                            errorType.setText("Le type doit commencer par une majuscule et peut contenir des lettres accentuées et des espaces.");
+                            errorType.setVisible(true);
+                            hasError = true;
+                        }
+                    }
+
+                    // Validation de la description (si non vide)
+                    String descriptionText = descriptionArea.getText();
+                    if (!descriptionText.isEmpty()) {
+                        if (descriptionText.length() < 10) {
+                            descriptionArea.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
+                            errorDescription.setText("La description doit contenir au moins 10 caractères.");
+                            errorDescription.setVisible(true);
+                            hasError = true;
+                        } else if (descriptionText.length() > 255) {
+                            descriptionArea.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
+                            errorDescription.setText("La description ne peut pas dépasser 255 caractères.");
+                            errorDescription.setVisible(true);
+                            hasError = true;
+                        } else if (!descriptionText.matches("^[A-ZÀ-ÿ][a-zA-ZÀ-ÿéèêëàâäçôùûîï ,;.:'\"!?-]*$")) {
+                            descriptionArea.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
+                            errorDescription.setText("La description doit commencer par une majuscule et contenir uniquement des lettres accentuées, des espaces et des signes de ponctuation.");
+                            errorDescription.setVisible(true);
+                            hasError = true;
+                        }
+                    }
+
+                    // Validation du statut (si sélectionné)
+                    String statutValue = statutCombo.getValue();
+                    // No required check for statut
+
+                    // Validation des dates (si les deux sont remplies)
+                    LocalDate dateDebutValue = dateDebutPicker.getValue();
+                    LocalDate dateFinValue = dateFinPicker.getValue();
+                    if (dateDebutValue != null && dateFinValue != null && dateFinValue.isBefore(dateDebutValue)) {
+                        dateFinPicker.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
+                        errorDateFin.setText("La date de fin doit être postérieure à la date de début.");
+                        errorDateFin.setVisible(true);
+                        hasError = true;
+                    }
+
+                    // Validation de l'image (si sélectionnée)
+                    if (nouveauCheminImage != null && !nouveauCheminImage.isEmpty()) {
+                        String lowerCasePath = nouveauCheminImage.toLowerCase();
+                        if (!lowerCasePath.endsWith(".png") && !lowerCasePath.endsWith(".jpg") && !lowerCasePath.endsWith(".jpeg")) {
+                            imagePathLabel.setTextFill(javafx.scene.paint.Color.RED);
+                            errorImage.setText("Veuillez sélectionner une image au format PNG, JPEG ou JPG.");
+                            errorImage.setVisible(true);
+                            hasError = true;
+                        }
+                    }
+
+                    if (hasError) {
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Erreur de validation");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Veuillez corriger les erreurs en rouge !");
+                        alert.showAndWait();
+                        return;
+                    }
+
                     // Mettre à jour les données du partenariat
                     partenariat.setNom(nomField.getText());
                     partenariat.setType(typeField.getText());
@@ -242,6 +369,8 @@ public class ModifierPartenariatController {
                                 dateDebutPicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()
                         );
                         partenariat.setDateDebut(dateDebut);
+                    } else {
+                        partenariat.setDateDebut(null); // Allow null if not set
                     }
 
                     if (dateFinPicker.getValue() != null) {
@@ -249,6 +378,8 @@ public class ModifierPartenariatController {
                                 dateFinPicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()
                         );
                         partenariat.setDateFin(dateFin);
+                    } else {
+                        partenariat.setDateFin(null); // Allow null if not set
                     }
 
                     // Sauvegarder les modifications
@@ -287,6 +418,7 @@ public class ModifierPartenariatController {
                     if (selectedFile != null) {
                         nouveauCheminImage = selectedFile.getAbsolutePath();
                         imagePathLabel.setText(selectedFile.getName());
+                        imagePathLabel.setTextFill(javafx.scene.paint.Color.BLACK); // Reset color
 
                         // Mettre à jour l'aperçu
                         try {
@@ -309,7 +441,7 @@ public class ModifierPartenariatController {
                     onCloseCallback.accept(null);
                 }
             });
-            
+
             System.out.println("Affichage de la fenêtre...");
 
             // Afficher la fenêtre
@@ -321,9 +453,25 @@ public class ModifierPartenariatController {
                 System.err.println("Cause: " + e.getCause().getMessage());
             }
             e.printStackTrace();
-            afficherErreur("Erreur", "Impossible de créer l'interface de modification: " + 
-                          (e.getMessage() != null ? e.getMessage() : "Une erreur inattendue s'est produite"));
+            afficherErreur("Erreur", "Impossible de créer l'interface de modification: " +
+                    (e.getMessage() != null ? e.getMessage() : "Une erreur inattendue s'est produite"));
         }
+    }
+
+    private void resetStyle(Control... controls) {
+        for (Control control : controls) {
+            control.setStyle("-fx-border-color: #CCCCCC; -fx-border-radius: 5;");
+        }
+    }
+
+    private void resetErrors() {
+        errorNom.setVisible(false);
+        errorType.setVisible(false);
+        errorDescription.setVisible(false);
+        errorStatut.setVisible(false);
+        errorDateDebut.setVisible(false);
+        errorDateFin.setVisible(false);
+        errorImage.setVisible(false);
     }
 
     private void afficherErreur(String titre, String message) {

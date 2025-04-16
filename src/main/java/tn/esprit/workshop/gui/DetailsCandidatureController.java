@@ -33,9 +33,6 @@ public class DetailsCandidatureController {
     @FXML
     private TextArea motivationTextArea;
 
-
-
-
     @FXML
     private ImageView partenariatImage;
 
@@ -56,14 +53,16 @@ public class DetailsCandidatureController {
 
     private Candidature candidature;
     private ServiceCandidature serviceCandidature;
+    private ListeCandidaturesController listeController;
 
     @FXML
     public void initialize() {
         serviceCandidature = new ServiceCandidature();
     }
 
-    public void initData(Candidature candidature) {
+    public void initData(Candidature candidature, ListeCandidaturesController listeController) {
         this.candidature = candidature;
+        this.listeController = listeController;
 
         // Formatage des dates
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -89,9 +88,6 @@ public class DetailsCandidatureController {
         typeCollabLabel.setText(candidature.getTypeCollab());
         datePostulationLabel.setText(dateFormat.format(candidature.getDatePostulation()));
         motivationTextArea.setText(candidature.getMotivation());
-
-
-
     }
 
     @FXML
@@ -133,12 +129,14 @@ public class DetailsCandidatureController {
                 successAlert.setContentText("La candidature a été supprimée avec succès !");
                 successAlert.showAndWait();
 
+                // Rafraîchir la liste des candidatures dans ListeCandidaturesController
+                if (listeController != null) {
+                    listeController.chargerCandidatures();
+                }
+
                 // Fermer la fenêtre de détails
                 Stage currentStage = (Stage) btnSupprimer.getScene().getWindow();
                 currentStage.close();
-
-                // Retourner à la liste des candidatures
-                retourListeCandidatures();
 
             } catch (SQLException e) {
                 afficherErreur("Erreur", "Impossible de supprimer la candidature: " + e.getMessage());

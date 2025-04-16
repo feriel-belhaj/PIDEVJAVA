@@ -69,6 +69,9 @@ public class AjouterPartenariat {
     private Label errorDateFin;
 
     @FXML
+    private Label errorImage;
+
+    @FXML
     private Button btnAjouter;
 
     private String selectedImagePath;
@@ -77,15 +80,54 @@ public class AjouterPartenariat {
     @FXML
     public void initialize() {
         servicePartenariat = new ServicePartenariat();
-        dateDebut.setValue(LocalDate.now());
-        dateFin.setValue(LocalDate.now());
+        // Laisser les dates vides
+        dateDebut.setValue(null);
+        dateFin.setValue(null);
         
         // Initialiser les valeurs du ComboBox
         ObservableList<String> statutOptions = FXCollections.observableArrayList(
-            "Actif", "EnCours", "Terminé"
+            "Actif", "EnCours"
         );
         statut.setItems(statutOptions);
-        statut.setValue("Actif"); // Valeur par défaut
+        statut.setValue(null); // Aucune valeur par défaut sélectionnée
+        
+        // Configurer la cellule factory pour le ComboBox pour mettre "EnCours" en jaune
+        statut.setCellFactory(listView -> new javafx.scene.control.ListCell<String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    setText(item);
+                    if ("EnCours".equals(item)) {
+                        setStyle("-fx-text-fill: #D4A76A;");
+                    } else {
+                        setStyle("");
+                    }
+                }
+            }
+        });
+        
+        // Configurer l'affichage de l'élément sélectionné
+        statut.setButtonCell(new javafx.scene.control.ListCell<String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    setText(item);
+                    if ("EnCours".equals(item)) {
+                        setStyle("-fx-text-fill: #D4A76A;");
+                    } else {
+                        setStyle("");
+                    }
+                }
+            }
+        });
     }
 
     private void resetErrors() {
@@ -128,27 +170,66 @@ public class AjouterPartenariat {
 
         boolean hasError = false;
 
+        // Validation du nom (max 50 caractères, commence par majuscule, lettres accentuées et espaces)
         if (nomPartenariat.isEmpty()) {
             nom.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
             errorNom.setText("Le nom est requis.");
             errorNom.setVisible(true);
             hasError = true;
-        }
-
-        if (descriptionPartenariat.isEmpty() || descriptionPartenariat.length() < 10) {
-            description.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
-            errorDescription.setText("La description doit contenir au moins 10 caractères.");
-            errorDescription.setVisible(true);
+        } else if (nomPartenariat.length() > 50) {
+            nom.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
+            errorNom.setText("Le nom ne peut pas dépasser 50 caractères.");
+            errorNom.setVisible(true);
+            hasError = true;
+        } else if (!nomPartenariat.matches("^[A-ZÀ-ÿ][a-zA-ZÀ-ÿéèêëàâäçôùûîï]+( [a-zA-ZÀ-ÿéèêëàâäçôùûîï]+)*$")) {
+            nom.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
+            errorNom.setText("Le nom doit commencer par une majuscule et peut contenir des lettres accentuées et des espaces.");
+            errorNom.setVisible(true);
             hasError = true;
         }
 
+        // Validation du type (max 50 caractères, commence par majuscule, lettres accentuées et espaces)
         if (typePartenariat.isEmpty()) {
             type.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
             errorType.setText("Le type est requis.");
             errorType.setVisible(true);
             hasError = true;
+        } else if (typePartenariat.length() > 50) {
+            type.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
+            errorType.setText("Le type ne peut pas dépasser 50 caractères.");
+            errorType.setVisible(true);
+            hasError = true;
+        } else if (!typePartenariat.matches("^[A-ZÀ-ÿ][a-zA-ZÀ-ÿéèêëàâäçôùûîï]+( [a-zA-ZÀ-ÿéèêëàâäçôùûîï]+)*$")) {
+            type.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
+            errorType.setText("Le type doit commencer par une majuscule et peut contenir des lettres accentuées et des espaces.");
+            errorType.setVisible(true);
+            hasError = true;
         }
 
+        // Validation de la description (min 10, max 255, commence par majuscule, lettres et ponctuations)
+        if (descriptionPartenariat.isEmpty()) {
+            description.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
+            errorDescription.setText("La description est requise.");
+            errorDescription.setVisible(true);
+            hasError = true;
+        } else if (descriptionPartenariat.length() < 10) {
+            description.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
+            errorDescription.setText("La description doit contenir au moins 10 caractères.");
+            errorDescription.setVisible(true);
+            hasError = true;
+        } else if (descriptionPartenariat.length() > 255) {
+            description.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
+            errorDescription.setText("La description ne peut pas dépasser 255 caractères.");
+            errorDescription.setVisible(true);
+            hasError = true;
+        } else if (!descriptionPartenariat.matches("^[A-ZÀ-ÿ][a-zA-ZÀ-ÿéèêëàâäçôùûîï ,;.:'\"!?-]*$")) {
+            description.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
+            errorDescription.setText("La description doit commencer par une majuscule et contenir uniquement des lettres accentuées, des espaces et des signes de ponctuation.");
+            errorDescription.setVisible(true);
+            hasError = true;
+        }
+
+        // Validation du statut
         if (statutPartenariat == null) {
             statut.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
             errorStatut.setText("Le statut est requis.");
@@ -156,6 +237,7 @@ public class AjouterPartenariat {
             hasError = true;
         }
 
+        // Validation des dates
         if (dateDebutValue == null) {
             dateDebut.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
             errorDateDebut.setText("La date de début est requise.");
@@ -173,6 +255,27 @@ public class AjouterPartenariat {
             errorDateFin.setText("La date de fin doit être postérieure à la date de début.");
             errorDateFin.setVisible(true);
             hasError = true;
+        }
+        
+        // Validation de l'image (vérification du format)
+        if (selectedImagePath == null || selectedImagePath.isEmpty()) {
+            imageLabel.setTextFill(javafx.scene.paint.Color.RED);
+            if (errorImage != null) {
+                errorImage.setText("L'image est requise.");
+                errorImage.setVisible(true);
+            }
+            hasError = true;
+        } else {
+            // Vérification du format de l'image
+            String lowerCasePath = selectedImagePath.toLowerCase();
+            if (!lowerCasePath.endsWith(".png") && !lowerCasePath.endsWith(".jpg") && !lowerCasePath.endsWith(".jpeg")) {
+                imageLabel.setTextFill(javafx.scene.paint.Color.RED);
+                if (errorImage != null) {
+                    errorImage.setText("Veuillez télécharger une image au format PNG, JPEG ou JPG.");
+                    errorImage.setVisible(true);
+                }
+                hasError = true;
+            }
         }
 
         if (hasError) {
@@ -207,8 +310,8 @@ public class AjouterPartenariat {
             Stage stage = (Stage) btnAjouter.getScene().getWindow();
             stage.close();
             
-            // Ouvrir la fenêtre ListePartenariats
-            ouvrirListePartenariats();
+            // Ne pas ouvrir la fenêtre ListePartenariats
+            // ouvrirListePartenariats();
 
         } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);

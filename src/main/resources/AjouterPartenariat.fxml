@@ -15,7 +15,7 @@
                     </padding>
                     <children>
                         <!-- Titre -->
-                        <Label text="Ajouter un Partenariat" style="-fx-font-size: 24px; -fx-font-family: 'Script MT Bold';">
+                        <Label text="Ajouter un Partenariat" style="-fx-font-size: 24px; -fx-font-family: 'Script MT Bold';" alignment="CENTER" textAlignment="CENTER" maxWidth="Infinity">
                             <VBox.margin>
                                 <Insets bottom="20.0"/>
                             </VBox.margin>
@@ -44,32 +44,33 @@
 
                         <!-- Date début -->
                         <VBox spacing="5.0">
-                            <Label text="Date debut" style="-fx-text-fill: #666666;"/>
-                            <DatePicker fx:id="dateDebut" style="-fx-background-color: white; -fx-border-color: #CCCCCC; -fx-border-radius: 5;"/>
+                            <Label text="Date debut *" style="-fx-text-fill: #666666;"/>
+                            <DatePicker fx:id="dateDebut" promptText="Date Debut" style="-fx-background-color: white; -fx-border-color: #CCCCCC; -fx-border-radius: 5;"/>
                             <Label fx:id="errorDateDebut" textFill="RED" visible="false"/>
                         </VBox>
 
                         <!-- Date fin -->
                         <VBox spacing="5.0">
-                            <Label text="Date fin" style="-fx-text-fill: #666666;"/>
-                            <DatePicker fx:id="dateFin" style="-fx-background-color: white; -fx-border-color: #CCCCCC; -fx-border-radius: 5;"/>
+                            <Label text="Date fin *" style="-fx-text-fill: #666666;"/>
+                            <DatePicker fx:id="dateFin" promptText="Date fin" style="-fx-background-color: white; -fx-border-color: #CCCCCC; -fx-border-radius: 5;"/>
                             <Label fx:id="errorDateFin" textFill="RED" visible="false"/>
                         </VBox>
 
                         <!-- Statut (ComboBox au lieu de TextField) -->
                         <VBox spacing="5.0">
-                            <Label text="Statut" style="-fx-text-fill: #666666;"/>
+                            <Label text="Statut *" style="-fx-text-fill: #666666;"/>
                             <ComboBox fx:id="statut" prefWidth="150.0" promptText="Choisir un statut" style="-fx-background-color: white; -fx-border-color: #CCCCCC; -fx-border-radius: 5;"/>
                             <Label fx:id="errorStatut" textFill="RED" visible="false"/>
                         </VBox>
 
                         <!-- Image -->
                         <VBox spacing="5.0">
-                            <Label text="Image du Partenariat" style="-fx-text-fill: #666666;"/>
+                            <Label text="Image du Partenariat *" style="-fx-text-fill: #666666;"/>
                             <HBox spacing="10.0" alignment="CENTER_LEFT">
                                 <Button text="Choisir un fichier" onAction="#choisirImage" style="-fx-background-color: #F8F9FA; -fx-border-color: #CCCCCC; -fx-border-radius: 5;"/>
                                 <Label fx:id="imageLabel" text="Aucun fichier choisi" style="-fx-text-fill: #666666;"/>
                             </HBox>
+                            <Label fx:id="errorImage" textFill="RED" visible="false"/>
                         </VBox>
 
                         <!-- Bouton Ajouter -->

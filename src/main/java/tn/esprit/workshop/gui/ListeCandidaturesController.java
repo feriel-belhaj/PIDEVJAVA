@@ -71,7 +71,7 @@ public class ListeCandidaturesController {
         }
     }
 
-    private void chargerCandidatures() {
+    public void chargerCandidatures() {
         try {
             List<Candidature> candidatures = serviceCandidature.showAll();
             candidaturesContainer.getChildren().clear();
@@ -88,7 +88,9 @@ public class ListeCandidaturesController {
 
             System.out.println("Nombre de candidatures récupérées: " + candidatures.size());
 
-            for (Candidature candidature : candidatures) {
+            // Parcourir la liste en ordre inverse pour afficher la dernière candidature en premier
+            for (int i = candidatures.size() - 1; i >= 0; i--) {
+                Candidature candidature = candidatures.get(i);
                 System.out.println("Traitement de la candidature ID: " + candidature.getId());
                 StackPane card = creerCarteCandidature(candidature);
                 candidaturesContainer.getChildren().add(card);
@@ -156,8 +158,8 @@ public class ListeCandidaturesController {
         Button calendarBtn = createIconButton("/images/calendar-icon.png", "Date de postulation");
         Tooltip calendarTooltip = new Tooltip(
                 candidature.getDatePostulation() != null ?
-                new SimpleDateFormat("dd/MM/yyyy").format(candidature.getDatePostulation()) :
-                "Date non disponible"
+                        new SimpleDateFormat("dd/MM/yyyy").format(candidature.getDatePostulation()) :
+                        "Date non disponible"
         );
         Tooltip.install(calendarBtn, calendarTooltip);
 
@@ -269,7 +271,6 @@ public class ListeCandidaturesController {
         }
     }
 
-
     private void ouvrirDetailsCandidature(Candidature candidature) {
         try {
             System.out.println("Ouverture des détails pour la candidature ID: " + candidature.getId());
@@ -285,35 +286,29 @@ public class ListeCandidaturesController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             System.out.println("FXMLLoader créé");
 
-            try {
-                Parent root = loader.load();
-                System.out.println("FXML chargé avec succès");
+            Parent root = loader.load();
+            System.out.println("FXML chargé avec succès");
 
-                DetailsCandidatureController controller = loader.getController();
-                if (controller == null) {
-                    System.err.println("ERREUR: Le contrôleur est null");
-                    afficherErreur("Erreur", "Impossible d'initialiser le contrôleur");
-                    return;
-                }
-
-                System.out.println("Initialisation des données dans le contrôleur");
-                controller.initData(candidature);
-
-                Stage stage = new Stage();
-                stage.setTitle("Détails de la Candidature");
-                stage.setScene(new Scene(root));
-                stage.initModality(Modality.APPLICATION_MODAL);
-                System.out.println("Affichage de la fenêtre de détails");
-                stage.show();
-            } catch (Exception e) {
-                System.err.println("Exception lors du chargement ou de l'initialisation: " + e.getMessage());
-                e.printStackTrace();
-                afficherErreur("Erreur", "Impossible de charger la vue des détails: " + e.getMessage());
+            DetailsCandidatureController controller = loader.getController();
+            if (controller == null) {
+                System.err.println("ERREUR: Le contrôleur est null");
+                afficherErreur("Erreur", "Impossible d'initialiser le contrôleur");
+                return;
             }
+
+            System.out.println("Initialisation des données dans le contrôleur");
+            controller.initData(candidature, this); // Passer la référence de ListeCandidaturesController
+
+            Stage stage = new Stage();
+            stage.setTitle("Détails de la Candidature");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            System.out.println("Affichage de la fenêtre de détails");
+            stage.show();
         } catch (Exception e) {
-            System.err.println("Exception générale: " + e.getMessage());
+            System.err.println("Exception lors du chargement ou de l'initialisation: " + e.getMessage());
             e.printStackTrace();
-            afficherErreur("Erreur", "Une erreur s'est produite: " + e.getMessage());
+            afficherErreur("Erreur", "Impossible de charger la vue des détails: " + e.getMessage());
         }
     }
 
@@ -324,13 +319,13 @@ public class ListeCandidaturesController {
                 afficherErreur("Erreur", "La candidature sélectionnée est invalide");
                 return;
             }
-            
+
             System.out.println("Tentative de modification de la candidature ID: " + candidature.getId());
             System.out.println("Type: " + candidature.getTypeCollab());
             System.out.println("Date: " + (candidature.getDatePostulation() != null ? candidature.getDatePostulation() : "null"));
             System.out.println("CV: " + (candidature.getCv() != null ? candidature.getCv() : "non disponible"));
             System.out.println("Portfolio: " + (candidature.getPortfolio() != null ? candidature.getPortfolio() : "non disponible"));
-            
+
             // Vérifier que le fichier FXML existe
             String fxmlPath = "/ModifierCandidature.fxml";
             URL resource = getClass().getResource(fxmlPath);
@@ -339,14 +334,14 @@ public class ListeCandidaturesController {
                 afficherErreur("Fichier manquant", "Le fichier FXML n'a pas été trouvé: " + fxmlPath);
                 return;
             }
-            
+
             System.out.println("Ressource FXML trouvée: " + resource);
-            
+
             try {
                 FXMLLoader loader = new FXMLLoader(resource);
                 Parent root = loader.load();
                 System.out.println("FXML chargé avec succès");
-                
+
                 // Obtenir le contrôleur et initialiser les données
                 ModifierCandidatureController controller = loader.getController();
                 if (controller == null) {
@@ -354,22 +349,22 @@ public class ListeCandidaturesController {
                     afficherErreur("Erreur", "Impossible d'initialiser le contrôleur");
                     return;
                 }
-                
+
                 System.out.println("Contrôleur obtenu, initialisation des données...");
                 controller.initData(candidature);
                 System.out.println("Données initialisées dans le contrôleur");
-                
+
                 Stage stage = new Stage();
                 stage.setTitle("Modifier une Candidature");
                 stage.setScene(new Scene(root));
                 stage.initModality(Modality.APPLICATION_MODAL);
-                
+
                 // Rafraîchir la liste après la fermeture de la fenêtre
                 stage.setOnHidden(e -> {
                     System.out.println("Fenêtre de modification fermée, rafraîchissement de la liste...");
                     chargerCandidatures();
                 });
-                
+
                 System.out.println("Affichage de la fenêtre de modification...");
                 stage.show();
             } catch (IOException ex) {
@@ -383,8 +378,8 @@ public class ListeCandidaturesController {
                 System.err.println("Cause: " + e.getCause().getMessage());
             }
             e.printStackTrace();
-            afficherErreur("Erreur", "Impossible de créer l'interface de modification: " + 
-                          (e.getMessage() != null ? e.getMessage() : "Une erreur inattendue s'est produite"));
+            afficherErreur("Erreur", "Impossible de créer l'interface de modification: " +
+                    (e.getMessage() != null ? e.getMessage() : "Une erreur inattendue s'est produite"));
         }
     }
 
@@ -393,12 +388,12 @@ public class ListeCandidaturesController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ModifierCandidature.fxml"));
             Parent root = loader.load();
-            
+
             Stage stage = new Stage();
             stage.setTitle("Créer une Candidature");
             stage.setScene(new Scene(root));
             stage.show();
-            
+
             // Rafraîchir la liste après la fermeture de la fenêtre
             stage.setOnHidden(e -> chargerCandidatures());
         } catch (IOException e) {
@@ -407,11 +402,10 @@ public class ListeCandidaturesController {
         }
     }
 
-
     @FXML
     private void voirStatistiques() {
         // TODO: Implémenter la vue des statistiques
-        afficherInfo("Information", "La fonctionnalité des statistiques n'est pas encore implémentée.");
+        afficherErreur("Information", "La fonctionnalité des statistiques n'est pas encore implémentée.");
     }
 
     @FXML

@@ -53,52 +53,71 @@ public class DetailsPartenariatController {
 
     private Partenariat partenariat;
     private ServicePartenariat servicePartenariat;
+    private Runnable onDeleteCallback; // Callback pour après suppression
 
     @FXML
     public void initialize() {
         servicePartenariat = new ServicePartenariat();
     }
 
+    // Méthode pour définir le callback
+    public void setOnDeleteCallback(Runnable callback) {
+        this.onDeleteCallback = callback;
+    }
+
     public void initData(Partenariat partenariat) {
         this.partenariat = partenariat;
 
-        // Formatage des dates
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-        // Mise à jour de l'interface avec les données du partenariat
+        // Mettre à jour l'interface avec les données du partenariat
         nomLabel.setText(partenariat.getNom());
         typeLabel.setText(partenariat.getType());
         descriptionLabel.setText(partenariat.getDescription());
+        statutLabel.setText(partenariat.getStatut());
+
+        // Mettre à jour les dates
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateDebutLabel.setText(dateFormat.format(partenariat.getDateDebut()));
         dateFinLabel.setText(dateFormat.format(partenariat.getDateFin()));
 
-        // Gérer le statut avec une couleur spécifique
-        statutLabel.setText(partenariat.getStatut());
+        // Colorer le statut en fonction de sa valeur
         switch (partenariat.getStatut()) {
-            case "Actif":
-                statutLabel.setStyle("-fx-background-color: #28a745; -fx-text-fill: white; -fx-padding: 5 10; -fx-background-radius: 5; -fx-font-weight: bold;");
-                break;
             case "EnCours":
-                statutLabel.setStyle("-fx-background-color: #FFC107; -fx-text-fill: white; -fx-padding: 5 10; -fx-background-radius: 5; -fx-font-weight: bold;");
+                statutLabel.setStyle("-fx-background-color: #FFD700; -fx-text-fill: white; -fx-padding: 5 10; -fx-background-radius: 5; -fx-font-weight: bold;");
                 break;
-            case "Terminé":
-                statutLabel.setStyle("-fx-background-color: #dc3545; -fx-text-fill: white; -fx-padding: 5 10; -fx-background-radius: 5; -fx-font-weight: bold;");
-                btnPostuler.setDisable(true); // Désactiver le bouton postuler si terminé
+            case "Actif":
+                statutLabel.setStyle("-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-padding: 5 10; -fx-background-radius: 5; -fx-font-weight: bold;");
+                break;
+            case "Expiré":
+                statutLabel.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-padding: 5 10; -fx-background-radius: 5; -fx-font-weight: bold;");
+                btnPostuler.setDisable(true); // Désactiver le bouton postuler si expiré
                 break;
             default:
-                statutLabel.setStyle("-fx-background-color: #6c757d; -fx-text-fill: white; -fx-padding: 5 10; -fx-background-radius: 5; -fx-font-weight: bold;");
+                statutLabel.setStyle("-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-padding: 5 10; -fx-background-radius: 5; -fx-font-weight: bold;");
         }
 
-        // Chargement de l'image
-        String imagePath = partenariat.getImage();
-        if (imagePath != null && !imagePath.isEmpty()) {
-            File imageFile = new File(imagePath);
-            if (imageFile.exists()) {
-                imageView.setImage(new Image(imageFile.toURI().toString()));
-            } else {
+        // Charger l'image du partenariat
+        if (partenariat.getImage() != null && !partenariat.getImage().isEmpty()) {
+            try {
+                File imageFile = new File(partenariat.getImage());
+                if (imageFile.exists()) {
+                    Image image = new Image(imageFile.toURI().toString());
+                    imageView.setImage(image);
+
+                    // Dimension standardisée
+                    imageView.setFitWidth(300.0);
+                    imageView.setFitHeight(200.0);
+                    imageView.setPreserveRatio(false); // Forcer l'image à respecter les dimensions
+                } else {
+                    // Image par défaut si le fichier n'existe pas
+                    imageView.setImage(new Image(getClass().getResourceAsStream("/images/default.png")));
+                }
+            } catch (Exception e) {
+                System.err.println("Erreur lors du chargement de l'image: " + e.getMessage());
+                // Image par défaut en cas d'erreur
                 imageView.setImage(new Image(getClass().getResourceAsStream("/images/default.png")));
             }
         } else {
+            // Image par défaut si aucune image n'est spécifiée
             imageView.setImage(new Image(getClass().getResourceAsStream("/images/default.png")));
         }
 
@@ -109,27 +128,29 @@ public class DetailsPartenariatController {
             alert.setTitle("Confirmation de suppression");
             alert.setHeaderText("Supprimer le partenariat");
             alert.setContentText("Êtes-vous sûr de vouloir supprimer ce partenariat ? Cette action est irréversible.");
-            
+
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 try {
                     // Supprimer le partenariat
                     servicePartenariat.delete(partenariat);
-                    
+
                     // Afficher un message de succès
                     Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                     successAlert.setTitle("Succès");
                     successAlert.setHeaderText(null);
                     successAlert.setContentText("Le partenariat a été supprimé avec succès!");
                     successAlert.showAndWait();
-                    
+
                     // Fermer la fenêtre de détails
                     Stage currentStage = (Stage) btnSupprimer.getScene().getWindow();
                     currentStage.close();
-                    
-                    // Ouvrir la liste des partenariats
-                    ouvrirListePartenariats();
-                    
+
+                    // Exécuter le callback après suppression
+                    if (onDeleteCallback != null) {
+                        onDeleteCallback.run();
+                    }
+
                 } catch (SQLException e) {
                     afficherErreur("Erreur", "Impossible de supprimer le partenariat: " + e.getMessage());
                     e.printStackTrace();
@@ -143,14 +164,14 @@ public class DetailsPartenariatController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/PostulerPartenariat.fxml"));
             Parent root = loader.load();
-            
+
             PostulerPartenariatController controller = loader.getController();
             controller.initData(partenariat);
-            
+
             // Fermer la fenêtre de détails
             Stage currentStage = (Stage) btnPostuler.getScene().getWindow();
             currentStage.close();
-            
+
             // Ouvrir la fenêtre de postulation
             Stage stage = new Stage();
             stage.setTitle("Postuler pour un partenariat");
@@ -167,7 +188,7 @@ public class DetailsPartenariatController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ListePartenariats.fxml"));
             Parent root = loader.load();
-            
+
             Stage stage = new Stage();
             stage.setTitle("Liste des Partenariats");
             stage.setScene(new Scene(root));

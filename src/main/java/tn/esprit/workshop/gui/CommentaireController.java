@@ -12,8 +12,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import tn.esprit.workshop.entities.Commentaire;
-import tn.esprit.workshop.entities.Creation;
+import tn.esprit.workshop.models.Commentaire;
+import tn.esprit.workshop.models.Creation;
 import tn.esprit.workshop.services.CommentaireService;
 import tn.esprit.workshop.services.UtilisateurService;
 
@@ -340,16 +340,64 @@ public class CommentaireController implements Initializable {
     @FXML
     private void handleRetourAction() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Creation.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-            Stage stage = (Stage) creationThumbnail.getScene().getWindow();
-            stage.setScene(scene);
-            stage.setTitle("Gestion des Créations");
-            stage.show();
+            if (previousView != null) {
+                // Instead of reusing the previousView (which might be attached to another scene)
+                // Get the current stage and load a fresh instance of the view
+                Stage stage = (Stage) creationThumbnail.getScene().getWindow();
+                stage.setScene(new Scene(clonePreviousView()));
+                stage.setTitle("Gestion des Créations");
+                stage.show();
+            } else {
+                // Fallback if previousView is somehow null
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Creation.fxml"));
+                Parent root = loader.load();
+                Scene scene = new Scene(root);
+                Stage stage = (Stage) creationThumbnail.getScene().getWindow();
+                stage.setScene(scene);
+                stage.setTitle("Gestion des Créations");
+                stage.show();
+            }
         } catch (IOException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors du retour à la page des créations: " + e.getMessage());
+            e.printStackTrace();
         }
+    }
+    
+    /**
+     * Creates a fresh copy of the previous view to avoid reusing nodes
+     * that are already attached to another scene
+     */
+    private Parent clonePreviousView() throws IOException {
+        if (previousView == null) {
+            return null;
+        }
+        
+        // Instead of directly using previousView, get its source FXML and reload it
+        String fxmlPath = "/fxml/Creation.fxml"; // Default fallback
+        
+        // Try to determine the actual FXML path from the class name if possible
+        if (previousView.getId() != null) {
+            fxmlPath = "/fxml/" + previousView.getId() + ".fxml";
+        } else {
+            // Could also check the class name if ID isn't set
+            String className = previousView.getClass().getSimpleName();
+            if (className.contains("BorderPane") || className.contains("AnchorPane")) {
+                // This is a generic container, look for a controller
+                Object controller = null;
+                try {
+                    // Reflection might be used here, but for simplicity:
+                    if (className.toLowerCase().contains("creation")) {
+                        fxmlPath = "/fxml/Creation.fxml";
+                    }
+                } catch (Exception e) {
+                    // Keep the default
+                }
+            }
+        }
+        
+        // Load a fresh instance
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+        return loader.load();
     }
     
     private void showAlert(Alert.AlertType type, String title, String content) {

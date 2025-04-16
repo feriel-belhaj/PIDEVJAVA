@@ -1,6 +1,6 @@
 package tn.esprit.workshop.services;
 
-import tn.esprit.workshop.entities.Commentaire;
+import tn.esprit.workshop.models.Commentaire;
 import tn.esprit.workshop.utils.MyDbConnexion;
 
 import java.sql.*;

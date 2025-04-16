@@ -2,9 +2,10 @@ package tn.esprit.workshop.main;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Scanner;
 
-import tn.esprit.workshop.entities.Commentaire;
-import tn.esprit.workshop.entities.Creation;
+import tn.esprit.workshop.models.Commentaire;
+import tn.esprit.workshop.models.Creation;
 import tn.esprit.workshop.services.CommentaireService;
 import tn.esprit.workshop.services.CreationService;
 import tn.esprit.workshop.services.UtilisateurService;

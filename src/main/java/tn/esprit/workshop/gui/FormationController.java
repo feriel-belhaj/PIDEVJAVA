@@ -7,7 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import tn.esprit.workshop.entities.Formation;
+import tn.esprit.workshop.models.Formation;
 import tn.esprit.workshop.services.FormationService;
 
 import java.io.File;
@@ -246,4 +246,4 @@ public class FormationController implements Initializable {
         alert.setContentText(content);
         alert.showAndWait();
     }
-} 
+}

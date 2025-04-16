@@ -1,6 +1,6 @@
 package tn.esprit.workshop.services;
 
-import tn.esprit.workshop.entities.Utilisateur;
+import tn.esprit.workshop.models.Utilisateur;
 import tn.esprit.workshop.utils.MyDbConnexion;
 
 import java.sql.*;

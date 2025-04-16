@@ -11,7 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import tn.esprit.workshop.entities.Formation;
+import tn.esprit.workshop.models.Formation;
 import tn.esprit.workshop.services.FormationReserveeService;
 import tn.esprit.workshop.services.UtilisateurService;
 
@@ -159,4 +159,4 @@ public class FormationDetailsController implements Initializable {
         alert.setContentText(content);
         alert.showAndWait();
     }
-} 
+}

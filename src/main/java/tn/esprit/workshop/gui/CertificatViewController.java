@@ -4,8 +4,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import tn.esprit.workshop.entities.Certificat;
-import tn.esprit.workshop.entities.Formation;
+import tn.esprit.workshop.models.Certificat;
+import tn.esprit.workshop.models.Formation;
 
 import java.time.format.DateTimeFormatter;
 
@@ -45,4 +45,4 @@ public class CertificatViewController {
             System.err.println("Erreur lors du chargement des images: " + e.getMessage());
         }
     }
-} 
+}

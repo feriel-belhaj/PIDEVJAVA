@@ -3,8 +3,8 @@ package tn.esprit.workshop.gui;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import tn.esprit.workshop.entities.Certificat;
-import tn.esprit.workshop.entities.Formation;
+import tn.esprit.workshop.models.Certificat;
+import tn.esprit.workshop.models.Formation;
 import tn.esprit.workshop.services.CertificatService;
 import tn.esprit.workshop.services.FormationService;
 
@@ -243,4 +243,4 @@ public class CertificatController implements Initializable {
         alert.setContentText(content);
         alert.showAndWait();
     }
-} 
+}

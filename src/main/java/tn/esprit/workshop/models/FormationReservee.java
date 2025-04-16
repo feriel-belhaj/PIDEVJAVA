@@ -1,4 +1,4 @@
-package tn.esprit.workshop.entities;
+package tn.esprit.workshop.models;
 
 import java.time.LocalDateTime;
 
@@ -81,4 +81,4 @@ public class FormationReservee {
     public void setDateReservation(LocalDateTime dateReservation) {
         this.dateReservation = dateReservation;
     }
-} 
+}

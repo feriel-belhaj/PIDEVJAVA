@@ -16,7 +16,7 @@ import javafx.geometry.Insets;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import tn.esprit.workshop.entities.Creation;
+import tn.esprit.workshop.models.Creation;
 import tn.esprit.workshop.services.CreationService;
 import tn.esprit.workshop.services.UtilisateurService;
 
@@ -336,11 +336,20 @@ public class CreationController implements Initializable {
                 File selectedFile = fileChooser.showOpenDialog(txtImage.getScene().getWindow());
                 if (selectedFile != null) {
                     try {
+                        // Store the old image path for deletion after successful update
+                        String oldImagePath = txtImage.getText();
+                        
+                        // Generate new filename and copy the file
                         String fileName = System.currentTimeMillis() + "_" + selectedFile.getName();
                         Path targetPath = Paths.get(UPLOAD_DIR, fileName);
                         
                         Files.copy(selectedFile.toPath(), targetPath, StandardCopyOption.REPLACE_EXISTING);
                         txtImage.setText("uploads/images/" + fileName);
+                        
+                        // Delete the old image file
+                        if (oldImagePath != null && !oldImagePath.isEmpty()) {
+                            Files.deleteIfExists(Paths.get("src/main/resources/", oldImagePath));
+                        }
                     } catch (IOException ex) {
                         showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la copie de l'image: " + ex.getMessage());
                     }

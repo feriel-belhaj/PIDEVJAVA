@@ -6,32 +6,32 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="tn.esprit.workshop.gui.CreationController">
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="tn.esprit.workshop.gui.CreationController" stylesheets="@../styles/dashboardDesign.css">
     <top>
-        <HBox spacing="10" alignment="CENTER_LEFT">
+        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="top-form">
             <padding>
                 <Insets top="15" right="15" bottom="15" left="15"/>
             </padding>
-            <Label text="Gestion des Créations" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+            <Label text="Gestion des Créations" styleClass="h1"/>
             <Region HBox.hgrow="ALWAYS" />
-            <Button text="Nouvelle Création" onAction="#showAddCreationForm" styleClass="action-button"/>
+            <Button text="Nouvelle Création" onAction="#showAddCreationForm" styleClass="add-btn"/>
         </HBox>
     </top>
     
     <center>
         <SplitPane dividerPositions="0.7">
-            <VBox spacing="10">
+            <VBox spacing="10" styleClass="white-bg">
                 <padding>
                     <Insets top="10" right="10" bottom="10" left="10"/>
                 </padding>
                 
                 <HBox spacing="10" alignment="CENTER_LEFT">
-                    <TextField fx:id="searchField" promptText="Rechercher..." HBox.hgrow="ALWAYS"/>
+                    <TextField fx:id="searchField" promptText="Rechercher..." HBox.hgrow="ALWAYS" styleClass="search"/>
                     <ComboBox fx:id="categorieFilter" promptText="Catégorie"/>
-                    <Button text="Rechercher" onAction="#handleSearchAction" />
+                    <Button text="Rechercher" onAction="#handleSearchAction" styleClass="add-btn"/>
                 </HBox>
                 
-                <TableView fx:id="creationsTable" VBox.vgrow="ALWAYS">
+                <TableView fx:id="creationsTable" VBox.vgrow="ALWAYS" styleClass="table-view">
                     <columns>
                         <TableColumn fx:id="idColumn" text="ID" />
                         <TableColumn fx:id="titreColumn" text="Titre" />
@@ -43,25 +43,25 @@
                 </TableView>
                 
                 <HBox spacing="10" alignment="CENTER_RIGHT">
-                    <Button text="Modifier" onAction="#handleEditAction" />
-                    <Button text="Supprimer" onAction="#handleDeleteAction" />
-                    <Button text="Actualiser" onAction="#refreshTable" />
+                    <Button text="Modifier" onAction="#handleEditAction" styleClass="update-btn"/>
+                    <Button text="Supprimer" onAction="#handleDeleteAction" styleClass="delete-btn"/>
+                    <Button text="Actualiser" onAction="#refreshTable" styleClass="import-btn"/>
                 </HBox>
             </VBox>
             
             <ScrollPane fitToWidth="true">
                 <content>
-                    <VBox fx:id="creationDetailsPane" spacing="15">
+                    <VBox fx:id="creationDetailsPane" spacing="15" styleClass="white-bg">
                         <padding>
                             <Insets top="10" right="10" bottom="10" left="10"/>
                         </padding>
                         
-                        <ImageView fx:id="creationImage" fitWidth="300" fitHeight="200" preserveRatio="true">
+                        <ImageView fx:id="creationImage" fitWidth="300" fitHeight="200" preserveRatio="true" styleClass="shadow">
                             <Image url="@../images/dot-pattern.png" />
                         </ImageView>
                         
-                        <Label fx:id="creationTitle" styleClass="details-title" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
-                        <Label fx:id="creationDate" styleClass="details-date" style="-fx-font-style: italic;"/>
+                        <Label fx:id="creationTitle" styleClass="h2"/>
+                        <Label fx:id="creationDate" styleClass="h3" />
                         
                         <GridPane hgap="10" vgap="10">
                             <columnConstraints>
@@ -69,24 +69,24 @@
                                 <ColumnConstraints hgrow="ALWAYS" />
                             </columnConstraints>
                             
-                            <Label text="Catégorie:" styleClass="details-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-                            <Label fx:id="categorieLabel" styleClass="details-value" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                            <Label text="Catégorie:" styleClass="label-info" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                            <Label fx:id="categorieLabel" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
                             
-                            <Label text="Créateur:" styleClass="details-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                            <Label fx:id="createurLabel" styleClass="details-value" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                            <Label text="Créateur:" styleClass="label-info" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                            <Label fx:id="createurLabel" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
                             
-                            <Label text="Statut:" styleClass="details-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                            <Label fx:id="statutLabel" styleClass="details-value" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                            <Label text="Statut:" styleClass="label-info" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                            <Label fx:id="statutLabel" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
                             
-                            <Label text="Likes:" styleClass="details-label" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-                            <Label fx:id="likesLabel" styleClass="details-value" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                            <Label text="Likes:" styleClass="label-info" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                            <Label fx:id="likesLabel" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
                         </GridPane>
                         
-                        <Label text="Description:" styleClass="details-label" />
-                        <TextArea fx:id="descriptionArea" editable="false" wrapText="true" prefHeight="100" />
+                        <Label text="Description:" styleClass="label-info"/>
+                        <TextArea fx:id="descriptionArea" editable="false" wrapText="true" prefHeight="100" styleClass="textfield"/>
                         
-                        <Button text="Voir les commentaires" onAction="#showCommentaires" />
-                        <Button text="Ajouter un like" onAction="#handleAddLike" />
+                        <Button text="Voir les commentaires" onAction="#showCommentaires" styleClass="add-btn"/>
+                        <Button text="Ajouter un like" onAction="#handleAddLike" styleClass="update-btn"/>
                     </VBox>
                 </content>
             </ScrollPane>

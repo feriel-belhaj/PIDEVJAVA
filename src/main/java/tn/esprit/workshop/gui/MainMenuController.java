@@ -32,7 +32,7 @@ public class MainMenuController implements Initializable {
     }
 
     @FXML
-    private void showClientView() {
+    public void showClientView() {
         loadPage("/fxml/ClientView.fxml");
     }
 
@@ -51,4 +51,4 @@ public class MainMenuController implements Initializable {
             e.printStackTrace();
         }
     }
-} 
+}

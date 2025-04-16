@@ -6,19 +6,19 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="tn.esprit.workshop.gui.CommentaireController">
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="tn.esprit.workshop.gui.CommentaireController" stylesheets="@../styles/dashboardDesign.css">
     <top>
-        <HBox spacing="10" alignment="CENTER_LEFT">
+        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="top-form">
             <padding>
                 <Insets top="15" right="15" bottom="15" left="15"/>
             </padding>
-            <Button text="Retour" onAction="#handleRetourAction" styleClass="action-button"/>
-            <Label text="Commentaires" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+            <Button text="Retour" onAction="#handleRetourAction" styleClass="logout"/>
+            <Label text="Commentaires" styleClass="h1"/>
         </HBox>
     </top>
     
     <center>
-        <VBox spacing="15">
+        <VBox spacing="15" styleClass="white-bg">
             <padding>
                 <Insets top="10" right="15" bottom="10" left="15"/>
             </padding>
@@ -27,13 +27,13 @@
             <TitledPane text="Détails de la création" expanded="true">
                 <VBox spacing="10">
                     <HBox spacing="15" alignment="CENTER_LEFT">
-                        <ImageView fx:id="creationThumbnail" fitWidth="120" fitHeight="80" preserveRatio="true">
+                        <ImageView fx:id="creationThumbnail" fitWidth="120" fitHeight="80" preserveRatio="true" styleClass="shadow">
                             <Image url="@../images/dot-pattern.png" />
                         </ImageView>
                         <VBox spacing="5">
-                            <Label fx:id="creationTitreLabel" styleClass="details-title" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
-                            <Label fx:id="creationCategorieLabel" styleClass="details-value"/>
-                            <Label fx:id="creationDateLabel" styleClass="details-date" style="-fx-font-style: italic;"/>
+                            <Label fx:id="creationTitreLabel" styleClass="h2"/>
+                            <Label fx:id="creationCategorieLabel" styleClass="label-info"/>
+                            <Label fx:id="creationDateLabel" styleClass="h3"/>
                         </VBox>
                     </HBox>
                 </VBox>
@@ -44,7 +44,7 @@
                 <content>
                     <ScrollPane fitToWidth="true" fitToHeight="true" VBox.vgrow="ALWAYS">
                         <content>
-                            <VBox fx:id="commentairesContainer" spacing="15" VBox.vgrow="ALWAYS">
+                            <VBox fx:id="commentairesContainer" spacing="15" VBox.vgrow="ALWAYS" styleClass="white-bg">
                                 <!-- Les commentaires seront ajoutés ici dynamiquement -->
                             </VBox>
                         </content>
@@ -53,13 +53,16 @@
             </TitledPane>
             
             <!-- Ajout d'un nouveau commentaire -->
-            <VBox spacing="10">
-                <Label text="Ajouter un commentaire" style="-fx-font-weight: bold;"/>
-                <TextArea fx:id="nouveauCommentaireArea" promptText="Écrivez votre commentaire ici..." prefHeight="80" wrapText="true"/>
+            <VBox spacing="10" styleClass="card">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+                <Label text="Ajouter un commentaire" styleClass="h2" style="-fx-text-fill: white;"/>
+                <TextArea fx:id="nouveauCommentaireArea" promptText="Écrivez votre commentaire ici..." prefHeight="80" wrapText="true" styleClass="textfield"/>
                 <HBox spacing="10" alignment="CENTER_RIGHT">
-                    <CheckBox fx:id="isAnonymousCheckbox" text="Commenter anonymement" />
+                    <CheckBox fx:id="isAnonymousCheckbox" text="Commenter anonymement" style="-fx-text-fill: white;"/>
                     <Region HBox.hgrow="ALWAYS" />
-                    <Button text="Publier" onAction="#handlePublierCommentaire" styleClass="action-button"/>
+                    <Button text="Publier" onAction="#handlePublierCommentaire" styleClass="add-btn"/>
                 </HBox>
             </VBox>
             
@@ -68,10 +71,10 @@
                 <VBox spacing="10">
                     <HBox spacing="10" alignment="CENTER_LEFT">
                         <ComboBox fx:id="commentFilterComboBox" promptText="Filtrer par statut" HBox.hgrow="ALWAYS"/>
-                        <Button text="Tout afficher" onAction="#handleAfficherTout"/>
+                        <Button text="Tout afficher" onAction="#handleAfficherTout" styleClass="import-btn"/>
                     </HBox>
                     
-                    <TableView fx:id="commentairesTable" VBox.vgrow="ALWAYS">
+                    <TableView fx:id="commentairesTable" VBox.vgrow="ALWAYS" styleClass="table-view">
                         <columns>
                             <TableColumn fx:id="commentIdColumn" text="ID" prefWidth="50"/>
                             <TableColumn fx:id="commentUtilisateurColumn" text="Utilisateur" prefWidth="100"/>
@@ -82,9 +85,9 @@
                     </TableView>
                     
                     <HBox spacing="10" alignment="CENTER_RIGHT">
-                        <Button text="Approuver" onAction="#handleApprouverCommentaire"/>
-                        <Button text="Signaler" onAction="#handleSignalerCommentaire"/>
-                        <Button text="Supprimer" onAction="#handleSupprimerCommentaire"/>
+                        <Button text="Approuver" onAction="#handleApprouverCommentaire" styleClass="update-btn"/>
+                        <Button text="Signaler" onAction="#handleSignalerCommentaire" styleClass="clear-btn"/>
+                        <Button text="Supprimer" onAction="#handleSupprimerCommentaire" styleClass="delete-btn"/>
                     </HBox>
                 </VBox>
             </TitledPane>

@@ -1,0 +1,74 @@
+.client-container {
+    -fx-background-color: #f5f5f5;
+}
+
+.title-label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.formation-card {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);
+    -fx-padding: 15;
+}
+
+.formation-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.formation-description {
+    -fx-font-size: 14px;
+    -fx-text-fill: #666666;
+}
+
+.formation-level {
+    -fx-font-size: 14px;
+    -fx-text-fill: #666666;
+}
+
+.formation-price {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2ecc71;
+}
+
+.details-button {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-padding: 8 15;
+}
+
+.details-button:hover {
+    -fx-background-color: #2980b9;
+}
+
+/* Styles pour la vue des détails */
+.details-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.details-description {
+    -fx-font-size: 16px;
+    -fx-text-fill: #666666;
+    -fx-padding: 10 0;
+}
+
+.details-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.details-value {
+    -fx-font-size: 14px;
+    -fx-text-fill: #666666;
+} 

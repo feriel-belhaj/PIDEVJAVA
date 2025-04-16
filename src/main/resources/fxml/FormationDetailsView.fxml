@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="root" spacing="5.0" style="-fx-background-color: white;" styleClass="details-container" stylesheets="@../styles/front.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.workshop.gui.FormationDetailsController">
+
+    <padding>
+        <Insets bottom="40" left="40" right="40" top="40" />
+    </padding>
+
+    <!-- En-tête avec le badge FORMATION -->
+    <VBox alignment="CENTER" spacing="2.0">
+        <Label styleClass="formation-badge" text="FORMATION" />
+        
+        <!-- Image de la formation -->
+        <StackPane styleClass="image-container">
+            <ImageView fx:id="formationImage" fitHeight="250" fitWidth="400" preserveRatio="true" />
+        </StackPane>
+        
+        <Label fx:id="lblTitre" styleClass="formation-title" />
+        <Label fx:id="lblDescription" prefHeight="0.0" prefWidth="431.0" styleClass="formation-description" wrapText="true" />
+    </VBox>
+
+    <!-- Grille d'informations -->
+    <GridPane alignment="CENTER" hgap="10.0" vgap="5.0">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="150" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="250" />
+        </columnConstraints>
+
+        <!-- Organisateur -->
+        <HBox alignment="CENTER_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="0">
+            <Label styleClass="info-icon" text="👤" />
+            <Label styleClass="info-label" text="Organisateur:" />
+        </HBox>
+        <Label fx:id="lblFormateur" styleClass="info-value" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+        <!-- Dates -->
+        <HBox alignment="CENTER_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="1">
+            <Label styleClass="info-icon" text="📅" />
+            <Label styleClass="info-label" text="Dates:" />
+        </HBox>
+        <Label fx:id="lblDateDebut" styleClass="info-value" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+        <!-- Date de fin -->
+        <HBox alignment="CENTER_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="2">
+            <Label styleClass="info-icon" text="📅" />
+            <Label styleClass="info-label" text="Date de fin:" />
+        </HBox>
+        <Label fx:id="lblDateFin" styleClass="info-value" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+        <!-- Durée -->
+        <HBox alignment="CENTER_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="3">
+            <Label styleClass="info-icon" text="⏱" />
+            <Label styleClass="info-label" text="Durée:" />
+        </HBox>
+        <Label fx:id="lblDuree" styleClass="info-value" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+        <!-- Emplacement -->
+        <HBox alignment="CENTER_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="4">
+            <Label styleClass="info-icon" text="📍" />
+            <Label styleClass="info-label" text="Emplacement:" />
+        </HBox>
+        <Label fx:id="lblLieu" styleClass="info-value" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+        <!-- Prix -->
+        <HBox alignment="CENTER_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="5">
+            <Label styleClass="info-icon" text="💰" />
+            <Label styleClass="info-label" text="Prix:" />
+        </HBox>
+        <Label fx:id="lblPrix" styleClass="info-value" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+
+        <!-- Niveau -->
+        <HBox alignment="CENTER_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="6">
+            <Label styleClass="info-icon" text="📊" />
+            <Label styleClass="info-label" text="Niveau:" />
+        </HBox>
+        <Label fx:id="lblNiveau" styleClass="info-value" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+
+        <!-- Places restantes -->
+        <HBox alignment="CENTER_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="7">
+            <Label styleClass="info-icon" text="👥" />
+            <Label styleClass="info-label" text="Places restantes:" />
+        </HBox>
+        <Label fx:id="lblPlaces" styleClass="info-value" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+      <rowConstraints>
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+      </rowConstraints>
+    </GridPane>
+
+    <!-- Boutons -->
+    <HBox alignment="CENTER" spacing="20">
+        <Button onAction="#handleReserver" styleClass="reserver-btn" text="Réserver maintenant ➜" />
+        <Button onAction="#handleRetour" styleClass="retour-btn" text="Retour à la liste" />
+    </HBox>
+
+</VBox>

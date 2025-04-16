@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="800.0" style="-fx-background-color: #F3F4F6;" stylesheets="@dashboardDesign.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.workshop.gui.DetailsCandidatureController">
+    <children>
+        <VBox layoutX="0.0" layoutY="0.0" prefHeight="700.0" prefWidth="800.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+
+                <!-- Contenu principal -->
+                <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-padding: 0;" stylesheets="@dashboardDesign.css" VBox.vgrow="ALWAYS">
+                    <content>
+                        <VBox spacing="30.0" style="-fx-padding: 20 30 50 30; -fx-background-color: #F3F4F6;">
+                            <!-- Titre -->
+                            <HBox alignment="CENTER" spacing="15.0">
+                                <Label styleClass="h1" text="Détails de la Candidature" />
+                            </HBox>
+
+                            <!-- Carte principale -->
+                            <HBox spacing="30" style="-fx-background-color: white; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2); -fx-background-radius: 10; -fx-padding: 20;">
+                                <!-- Image du partenariat -->
+                                <VBox alignment="TOP_CENTER" minWidth="300" spacing="10">
+                                    <StackPane>
+                                        <ImageView fx:id="partenariatImage" fitHeight="200.0" fitWidth="300.0" preserveRatio="true" style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 1);" />
+                                    </StackPane>
+                                    <Button fx:id="btnTelechargerCV" onAction="#telechargerCV" styleClass="logout" text="Télécharger CV">
+                              <font>
+                                 <Font size="15.0" />
+                              </font></Button>
+                                </VBox>
+
+                                <!-- Informations de la candidature -->
+                                <VBox spacing="15" HBox.hgrow="ALWAYS">
+                                    <!-- Nom du partenariat -->
+                                    <Label fx:id="nomPartenariatLabel" styleClass="h2" text="Nom du Partenariat" />
+
+                                    <!-- Type de collaboration -->
+                                    <HBox spacing="10">
+                                        <Label styleClass="h3" text="Type de collaboration :" />
+                                        <Label fx:id="typeCollabLabel" text="Permanent" />
+                                    </HBox>
+
+                                    <!-- Date de postulation -->
+                                    <HBox spacing="10">
+                                        <Label styleClass="h3" text="Date de postulation :" />
+                                        <Label fx:id="datePostulationLabel" text="01/01/2023" />
+                                    </HBox>
+
+                                    <!-- Lettre de motivation -->
+                                    <VBox spacing="5">
+                                        <Label styleClass="h3" text="Lettre de motivation :" />
+                                        <TextArea fx:id="motivationTextArea" editable="false" prefHeight="100" styleClass="textfield" wrapText="true" />
+                                    </VBox>
+
+                                    <!-- Boutons d'action -->
+                                    <HBox alignment="CENTER_LEFT" spacing="15">
+                                        <Button fx:id="btnVoirPortfolio" onAction="#voirPortfolio" styleClass="logout" text="Voir Portfolio">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font></Button>
+                                        <!-- Bouton Supprimer avec uniquement l'icône, sans fond rouge -->
+                                        <Button fx:id="btnSupprimer" onAction="#supprimerCandidature" style="-fx-background-color: transparent; -fx-padding: 8; -fx-background-radius: 20;">
+                                            <graphic>
+                                                <ImageView fitHeight="20" fitWidth="20" preserveRatio="true">
+                                                    <Image url="@/images/trash-icon.png" />                                                </ImageView>
+                                            </graphic>
+                                        </Button>
+                                    </HBox>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                    </content>
+                </ScrollPane>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

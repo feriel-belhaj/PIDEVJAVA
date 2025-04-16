@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+
+<VBox spacing="20" xmlns:fx="http://javafx.com/fxml" fx:controller="tn.esprit.workshop.gui.FormationDetailsController">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <ScrollPane fitToWidth="true">
+        <content>
+            <VBox spacing="20">
+                <ImageView fx:id="formationImage" fitWidth="600" fitHeight="300" preserveRatio="true"/>
+                
+                <Label fx:id="titreLabel" styleClass="details-title"/>
+                <Label fx:id="descriptionLabel" styleClass="details-description" wrapText="true"/>
+                
+                <GridPane hgap="10" vgap="10">
+                    <Label text="Niveau:" styleClass="details-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <Label fx:id="niveauLabel" styleClass="details-value" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                    
+                    <Label text="Prix:" styleClass="details-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                    <Label fx:id="prixLabel" styleClass="details-value" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                    
+                    <Label text="Date de début:" styleClass="details-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                    <Label fx:id="dateDebutLabel" styleClass="details-value" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                    
+                    <Label text="Date de fin:" styleClass="details-label" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                    <Label fx:id="dateFinLabel" styleClass="details-value" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                    
+                    <Label text="Emplacement:" styleClass="details-label" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                    <Label fx:id="emplacementLabel" styleClass="details-value" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                    
+                    <Label text="Nombre de places:" styleClass="details-label" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                    <Label fx:id="nbPlacesLabel" styleClass="details-value" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                    
+                    <Label text="Organisateur:" styleClass="details-label" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+                    <Label fx:id="organisateurLabel" styleClass="details-value" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+                    
+                    <Label text="Durée:" styleClass="details-label" GridPane.columnIndex="0" GridPane.rowIndex="7"/>
+                    <Label fx:id="dureeLabel" styleClass="details-value" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+                </GridPane>
+            </VBox>
+        </content>
+    </ScrollPane>
+</VBox> 

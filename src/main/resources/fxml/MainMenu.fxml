@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox stylesheets="@../styles/front.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.workshop.gui.MainMenuController">
+    
+    <MenuBar>
+        <Menu text="Navigation">
+
+            <MenuItem onAction="#ShowDashboard" text="Back Office" />
+            <SeparatorMenuItem />
+            <MenuItem onAction="#showClientView" text="Partie Client" />
+            <SeparatorMenuItem />
+            <MenuItem onAction="#quit" text="Quitter" />
+        </Menu>
+    </MenuBar>
+
+    <!-- Barre de navigation -->
+    <HBox alignment="CENTER" styleClass="nav-bar">
+        <padding>
+            <Insets bottom="10" left="20" right="20" top="10" />
+        </padding>
+        <ImageView fx:id="logoImage" fitHeight="50" fitWidth="150" preserveRatio="true" />
+        <HBox alignment="CENTER" spacing="20" HBox.hgrow="ALWAYS">
+            <Button onAction="#showAccueil" styleClass="nav-button" text="Accueil" />
+            <Button onAction="#showAbout" styleClass="nav-button" text="About" />
+            <Button onAction="#showClientView" styleClass="nav-button" text="Formations" />
+            <Button onAction="#showPartenariats" styleClass="nav-button" text="Partenariats" />
+            <Button onAction="#showEvenements" styleClass="nav-button" text="Événements" />
+            <Button onAction="#showProduits" styleClass="nav-button" text="Produit" />
+            <Button onAction="#showCommande" styleClass="nav-button" text="Panier" />
+        </HBox>
+        <Button fx:id="logout" onAction="#logout" styleClass="logout" stylesheets="@../dashboardDesign.css" text="Se déconnecter" />
+    </HBox>
+
+    <!-- Contenu principal qui changera en fonction de la navigation -->
+    <StackPane fx:id="contentArea" VBox.vgrow="ALWAYS">
+        <padding>
+            <Insets bottom="10" left="10" right="10" top="10" />
+        </padding>
+    </StackPane>
+</VBox>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" spacing="10" styleClass="certificate-container" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="tn.esprit.workshop.gui.CertificatViewController">
+    
+    <Label styleClass="h2" stylesheets="@../dashboardDesign.css" text="CERTIFICAT DE FORMATION" />
+    
+    <Label styleClass="h2" stylesheets="@../dashboardDesign.css" text="Ce certificat est décerné à" />
+    
+    <Label fx:id="lblNomComplet" styleClass="name" />
+    
+    <Label styleClass="h2" stylesheets="@../dashboardDesign.css" text="mezzi" />
+    
+    <Label styleClass="h3" stylesheets="@../dashboardDesign.css" text="pour avoir suivi avec succès la formation" />
+    
+    <Label fx:id="lblFormationTitre" styleClass="formation-title" wrapText="true" />
+    
+    <HBox alignment="CENTER" spacing="5">
+        <Label styleClass="h3" stylesheets="@../dashboardDesign.css" text="de niveau" />
+        <Label fx:id="lblNiveau" styleClass="level" />
+    </HBox>
+    
+    <HBox alignment="CENTER" spacing="5">
+        <Label styleClass="h3" stylesheets="@../dashboardDesign.css" text="dispensée par" />
+        <Label fx:id="lblOrganisme" styleClass="level" />
+    </HBox>
+    
+    <Label fx:id="lblDate" styleClass="date" />
+    
+    <HBox styleClass="signature-container">
+        <VBox styleClass="signature-box">
+            <Label styleClass="h3" stylesheets="@../dashboardDesign.css" text="Directeur de formation" />
+            <ImageView fx:id="imgSignature1" fitHeight="60" fitWidth="120" preserveRatio="true" />
+        </VBox>
+        
+        <VBox styleClass="signature-box">
+            <Label styleClass="h3" stylesheets="@../dashboardDesign.css" text="Responsable pédagogique" />
+            <ImageView fx:id="imgSignature2" fitHeight="60" fitWidth="120" preserveRatio="true" />
+        </VBox>
+    </HBox>
+    
+    <StackPane styleClass="cachet">
+        <ImageView fx:id="imgCachet" fitHeight="100" fitWidth="100" preserveRatio="true" />
+    </StackPane>
+    
+    <Label styleClass="h3" stylesheets="@../dashboardDesign.css" text="Ce certificat est délivré par ArtiZina - Centre de Formation Professionnelle" />
+    <Label styleClass="h3" stylesheets="@../dashboardDesign.css" text="Numéro d'enregistrement: #2" />
+</VBox>

@@ -1,0 +1,382 @@
+/* Styles généraux */
+.root {
+    -fx-background-color: #f5f5f5;
+    -fx-font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* Barre de navigation */
+.nav-bar {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 2);
+    -fx-padding: 10px 20px;
+}
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #333333;
+    -fx-font-size: 14px;
+    -fx-padding: 8px 16px;
+    -fx-cursor: hand;
+}
+
+.nav-button:hover {
+    -fx-text-fill: #007bff;
+}
+
+/* Conteneur de recherche */
+.search-container {
+    -fx-background-color: white;
+    -fx-padding: 20px;
+    -fx-spacing: 10px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);
+}
+
+.search-field {
+    -fx-background-color: #f8f9fa;
+    -fx-border-color: #dee2e6;
+    -fx-border-radius: 4px;
+    -fx-padding: 8px;
+}
+
+.search-button {
+    -fx-background-color: #007bff;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 16px;
+    -fx-cursor: hand;
+}
+
+.search-button:hover {
+    -fx-background-color: #0056b3;
+}
+
+/* Carte de formation */
+.formation-card {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 2);
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-padding: 0;
+    -fx-pref-width: 300px;
+    -fx-spacing: 10px;
+}
+
+.formation-card:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 15, 0, 0, 5);
+    -fx-translate-y: -2px;
+    -fx-transition: all 0.3s ease;
+}
+
+.formation-card ImageView {
+    -fx-background-radius: 8px 8px 0 0;
+    -fx-fit-width: 300px;
+    -fx-fit-height: 200px;
+}
+
+.formation-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-padding: 10px 15px 5px 15px;
+}
+
+.formation-description {
+    -fx-font-size: 14px;
+    -fx-text-fill: #666666;
+    -fx-padding: 0 15px;
+    -fx-max-height: 60px;
+}
+
+.formation-info {
+    -fx-padding: 10px 15px;
+    -fx-spacing: 5px;
+}
+
+.info-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: #555555;
+}
+
+.voir-plus-btn {
+    -fx-background-color: #bc9a58;
+    -fx-text-fill: white;
+    -fx-background-radius: 5px;
+    -fx-padding: 8px 20px;
+    -fx-cursor: hand;
+    -fx-margin: 10px 15px 15px 15px;
+}
+
+.voir-plus-btn:hover {
+    -fx-background-color: #a88544;
+}
+
+/* Label pour pas d'image */
+.no-image-label {
+    -fx-text-fill: #666666;
+    -fx-font-size: 14px;
+    -fx-background-color: #f8f9fa;
+    -fx-padding: 10px;
+    -fx-alignment: center;
+}
+
+/* Conteneur de formations */
+.formations-container {
+    -fx-padding: 20px;
+    -fx-hgap: 20px;
+    -fx-vgap: 20px;
+}
+
+/* Titre de section */
+.section-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-padding: 20px;
+}
+
+/* ScrollPane personnalisé */
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #007bff;
+    -fx-background-radius: 5px;
+}
+
+/* Filtres */
+.filter-box {
+    -fx-spacing: 10px;
+    -fx-padding: 10px;
+}
+
+.filter-combo-box {
+    -fx-background-color: white;
+    -fx-border-color: #dee2e6;
+    -fx-border-radius: 4px;
+}
+
+/* Animation pour les transitions */
+.formation-card {
+    -fx-transition: all 0.3s ease;
+}
+
+/* Barre de recherche */
+.search-container {
+    -fx-padding: 20px;
+    -fx-spacing: 10px;
+}
+
+.search-field {
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 5px;
+    -fx-padding: 8px 15px;
+    -fx-font-size: 14px;
+    -fx-pref-width: 300px;
+}
+
+.search-button {
+    -fx-background-color: #bc9a58;
+    -fx-text-fill: white;
+    -fx-background-radius: 5px;
+    -fx-padding: 8px 20px;
+    -fx-cursor: hand;
+}
+
+.search-button:hover {
+    -fx-background-color: #a88544;
+}
+
+/* Cartes de formation */
+.formation-card {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);
+    -fx-background-radius: 8px;
+    -fx-padding: 0;
+    -fx-pref-width: 300px;
+    -fx-max-width: 300px;
+    -fx-min-height: 400px;
+}
+
+.formation-card:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 15, 0, 0, 0);
+    -fx-translate-y: -2px;
+}
+
+.formation-card ImageView {
+    -fx-background-radius: 8px 8px 0 0;
+    -fx-fit-width: 300px;
+    -fx-fit-height: 200px;
+}
+
+.formation-title {
+    -fx-font-family: 'Playfair Display', serif;
+    -fx-font-size: 20px;
+    -fx-padding: 15px 15px 5px 15px;
+    -fx-text-fill: #333333;
+    -fx-font-style: italic;
+}
+
+.formation-description {
+    -fx-font-size: 14px;
+    -fx-padding: 0 15px;
+    -fx-text-fill: #666666;
+    -fx-wrap-text: true;
+}
+
+.formation-info {
+    -fx-padding: 10px 15px;
+    -fx-font-size: 13px;
+    -fx-text-fill: #666666;
+}
+
+.formation-info Label {
+    -fx-text-fill: #666666;
+}
+
+.reserver-btn {
+    -fx-background-color: #bc9a58;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 30px;
+    -fx-background-radius: 25px;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+}
+
+.reserver-btn:hover {
+    -fx-background-color: #a88544;
+}
+
+.retour-btn {
+    -fx-background-color: #bc9a58;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 30px;
+    -fx-background-radius: 25px;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+}
+
+.retour-btn:hover {
+    -fx-background-color: #a88544;
+}
+
+/* Conteneur des formations */
+.formations-container {
+    -fx-padding: 20px;
+    -fx-hgap: 20px;
+    -fx-vgap: 20px;
+    -fx-alignment: center;
+}
+
+/* Filtres */
+.filter-combo {
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px 10px;
+    -fx-font-size: 14px;
+}
+
+.filter-combo:hover {
+    -fx-border-color: #bc9a58;
+}
+
+/* Titre de la section */
+.section-title {
+    -fx-font-family: 'Playfair Display', serif;
+    -fx-font-size: 28px;
+    -fx-text-fill: #333333;
+    -fx-padding: 20px;
+    -fx-font-style: italic;
+}
+
+/* Styles pour la vue des détails de formation */
+.details-container {
+    -fx-background-color: white;
+}
+
+.formation-badge {
+    -fx-background-color: white;
+    -fx-border-color: #bc9a58;
+    -fx-border-radius: 20px;
+    -fx-padding: 5px 15px;
+    -fx-font-size: 14px;
+    -fx-text-fill: #bc9a58;
+}
+
+.formation-title {
+    -fx-font-family: 'Playfair Display', serif;
+    -fx-font-size: 36px;
+    -fx-font-style: italic;
+    -fx-text-fill: #333333;
+}
+
+.formation-description {
+    -fx-font-size: 16px;
+    -fx-text-fill: #666666;
+    -fx-wrap-text: true;
+    -fx-max-width: 800px;
+    -fx-text-alignment: center;
+}
+
+.info-icon {
+    -fx-font-size: 16px;
+}
+
+.info-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #666666;
+}
+
+.info-value {
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+}
+
+.reserver-btn {
+    -fx-background-color: #bc9a58;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 20px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+}
+
+.reserver-btn:hover {
+    -fx-background-color: #a88544;
+}
+
+.retour-btn {
+    -fx-background-color: #f5f5f5;
+    -fx-text-fill: #666666;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 20px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+}
+
+.retour-btn:hover {
+    -fx-background-color: #e0e0e0;
+}
+
+.image-container {
+    -fx-background-color: #ffffff;
+    -fx-padding: 10px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);
+    -fx-background-radius: 5px;
+    -fx-min-width: 400px;
+    -fx-min-height: 250px;
+    -fx-alignment: center;
+} 

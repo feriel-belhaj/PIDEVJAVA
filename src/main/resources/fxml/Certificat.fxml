@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="10" styleClass="white-bg" stylesheets="@../styles/dashboardDesign.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="tn.esprit.workshop.gui.CertificatController">
+    <padding>
+        <Insets bottom="10" left="10" right="10" top="10" />
+    </padding>
+
+    <GridPane hgap="10" styleClass="textfield" vgap="10">
+        <padding>
+            <Insets bottom="10" left="10" right="10" top="10" />
+        </padding>
+
+        <Label styleClass="h3" text="Nom:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+        <TextField fx:id="txtNom" styleClass="textfield" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+        <Label styleClass="h3" text="Prénom:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <TextField fx:id="txtPrenom" styleClass="textfield" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+        <Label styleClass="h3" text="Date d'obtention:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+        <DatePicker fx:id="dateObt" styleClass="textfield" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+        <Label styleClass="h3" text="Niveau:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+        <ComboBox fx:id="comboNiveau" styleClass="textfield" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+        <Label styleClass="h3" text="Nom de l'organisme:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+        <TextField fx:id="txtNomOrganisme" styleClass="textfield" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+      <columnConstraints>
+         <ColumnConstraints />
+         <ColumnConstraints />
+      </columnConstraints>
+      <rowConstraints>
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+      </rowConstraints>
+    </GridPane>
+
+    <HBox spacing="10">
+        <Button onAction="#handleAjouter" styleClass="add-btn" text="Ajouter" />
+        <Button onAction="#handleModifier" styleClass="update-btn" text="Modifier" />
+        <Button onAction="#handleSupprimer" styleClass="delete-btn" text="Supprimer" />
+        <Button onAction="#handleVisualiserCertificat" styleClass="clear-btn" text="👁️ Visualiser Certificat" />
+    </HBox>
+
+    <TableView fx:id="tableCertificats" styleClass="table-view" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="nomCol" prefWidth="150" text="Nom" />
+            <TableColumn fx:id="prenomCol" prefWidth="150" text="Prénom" />
+            <TableColumn fx:id="dateCol" prefWidth="150" text="Date d'obtention" />
+            <TableColumn fx:id="niveauCol" prefWidth="100" text="Niveau" />
+            <TableColumn fx:id="nomOrganismeCol" prefWidth="150" text="Organisme" />
+            <TableColumn fx:id="formationTitreCol" prefWidth="200" text="Formation" />
+        </columns>
+    </TableView>
+</VBox>

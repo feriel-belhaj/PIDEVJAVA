@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="978.0" prefWidth="1075.0" style="-fx-background-color: white;" stylesheets="@dashboardDesign.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.workshop.gui.AjouterPartenariat">
+    <children>
+        <ScrollPane fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <content>
+                <VBox layoutX="50.0" layoutY="30.0" prefHeight="1120.0" prefWidth="795.0" spacing="20.0" style="-fx-background-color: white;">
+                    <padding>
+                        <Insets bottom="30.0" left="50.0" right="50.0" top="30.0" />
+                    </padding>
+                    <children>
+                        <!-- Titre -->
+                        <Label alignment="CENTER" maxWidth="Infinity" styleClass="h1" text="Ajouter un Partenariat" textAlignment="CENTER">
+                            <VBox.margin>
+                                <Insets bottom="20.0" />
+                            </VBox.margin>
+                        </Label>
+
+                        <!-- Nom -->
+                        <VBox spacing="5.0">
+                            <Label styleClass="h2" text="Nom" />
+                            <TextField fx:id="nom" promptText="Nom du Partenariat" styleClass="textfield" />
+                            <Label fx:id="errorNom" textFill="RED" visible="false" />
+                        </VBox>
+
+                        <!-- Type -->
+                        <VBox spacing="5.0">
+                            <Label styleClass="h2" text="Type" />
+                            <TextField fx:id="type" promptText="Type de Partenariat" styleClass="textfield" />
+                            <Label fx:id="errorType" textFill="RED" visible="false" />
+                        </VBox>
+
+                        <!-- Description -->
+                        <VBox spacing="5.0">
+                            <Label styleClass="h2" text="Description" />
+                            <TextArea fx:id="description" prefHeight="100.0" promptText="Description du Partenariat" styleClass="textfield" wrapText="true" />
+                            <Label fx:id="errorDescription" textFill="RED" visible="false" />
+                        </VBox>
+
+                        <!-- Date début -->
+                        <VBox spacing="5.0">
+                            <Label styleClass="h2" text="Date debut *" />
+                            <DatePicker fx:id="dateDebut" promptText="Date Debut" styleClass="textfield" />
+                            <Label fx:id="errorDateDebut" textFill="RED" visible="false" />
+                        </VBox>
+
+                        <!-- Date fin -->
+                        <VBox spacing="5.0">
+                            <Label styleClass="h2" text="Date fin *" />
+                            <DatePicker fx:id="dateFin" promptText="Date fin" styleClass="textfield" />
+                            <Label fx:id="errorDateFin" textFill="RED" visible="false" />
+                        </VBox>
+
+                        <!-- Statut (ComboBox au lieu de TextField) -->
+                        <VBox spacing="5.0">
+                            <Label styleClass="h2" text="Statut *" />
+                            <ComboBox fx:id="statut" prefWidth="150.0" promptText="Choisir un statut" styleClass="textfield" />
+                            <Label fx:id="errorStatut" textFill="RED" visible="false" />
+                        </VBox>
+
+                        <!-- Image -->
+                        <VBox spacing="5.0">
+                            <Label styleClass="h2" text="Image du Partenariat *" />
+                            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                <Button onAction="#choisirImage" styleClass="textfield" text="Choisir un fichier" />
+                                <Label fx:id="imageLabel" styleClass="h3" text="Aucun fichier choisi" />
+                            </HBox>
+                            <Label fx:id="errorImage" textFill="RED" visible="false" />
+                        </VBox>
+
+                        <!-- Bouton Ajouter -->
+                        <Button fx:id="btnAjouter" onAction="#ajouterPartenariat" styleClass="add-btn" text="Ajouter">
+                            <VBox.margin>
+                                <Insets top="20.0" />
+                            </VBox.margin>
+                        </Button>
+                    </children>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </children>
+</AnchorPane>

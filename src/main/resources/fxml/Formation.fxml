@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="10" styleClass="white-bg" stylesheets="@../styles/dashboardDesign.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="tn.esprit.workshop.gui.FormationController">
+    <padding>
+        <Insets bottom="10" left="10" right="10" top="10" />
+    </padding>
+
+    <GridPane hgap="10" styleClass="textfield" vgap="10">
+        <padding>
+            <Insets bottom="10" left="10" right="10" top="10" />
+        </padding>
+
+        <Label prefHeight="21.0" prefWidth="45.0" styleClass="h3" text="Titre:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+        <TextField fx:id="txtTitre" styleClass="textfield" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+        <Label styleClass="h3" text="Description:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <TextArea fx:id="txtDescription" prefRowCount="2" styleClass="textfield" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+        <Label styleClass="h3" text="Date début:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+        <DatePicker fx:id="dateDebut" styleClass="textfield" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+        <Label styleClass="h3" text="Date fin:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+        <DatePicker fx:id="dateFin" styleClass="textfield" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+        <Label styleClass="h3" text="Niveau:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+        <ComboBox fx:id="comboNiveau" styleClass="textfield" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+        <Label styleClass="h3" text="Prix:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+        <TextField fx:id="txtPrix" styleClass="textfield" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+
+        <Label styleClass="h3" text="Emplacement:" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+        <TextField fx:id="txtEmplacement" styleClass="textfield" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+
+        <Label styleClass="h3" text="Nombre de places:" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+        <TextField fx:id="txtNbPlace" styleClass="textfield" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+
+        <Label styleClass="h3" text="Nombre de participants:" GridPane.columnIndex="0" GridPane.rowIndex="8" />
+        <TextField fx:id="txtNbParticipant" styleClass="textfield" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+
+        <Label styleClass="h3" text="Organisateur:" GridPane.columnIndex="0" GridPane.rowIndex="9" />
+        <TextField fx:id="txtOrganisateur" styleClass="textfield" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+
+        <Label styleClass="h3" text="Durée:" GridPane.columnIndex="0" GridPane.rowIndex="10" />
+        <TextField fx:id="txtDuree" styleClass="textfield" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+
+        <Label styleClass="h3" text="Image:" GridPane.columnIndex="0" GridPane.rowIndex="11" />
+        <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="11">
+            <TextField fx:id="txtImage" styleClass="textfield" HBox.hgrow="ALWAYS" />
+            <Button onAction="#handleChooseImage" styleClass="import-btn" text="Parcourir..." />
+        </HBox>
+      <columnConstraints>
+         <ColumnConstraints />
+         <ColumnConstraints />
+      </columnConstraints>
+      <rowConstraints>
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+      </rowConstraints>
+    </GridPane>
+
+    <HBox spacing="10">
+        <Button onAction="#handleAjouter" styleClass="add-btn" text="Ajouter" />
+        <Button onAction="#handleModifier" styleClass="update-btn" text="Modifier" />
+        <Button onAction="#handleSupprimer" styleClass="delete-btn" text="Supprimer" />
+        <Button onAction="#handleGererCertificats" styleClass="clear-btn" text="Gérer les Certificats" />
+    </HBox>
+
+    <TableView fx:id="tableFormations" styleClass="table-view" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="titreCol" text="Titre" />
+            <TableColumn fx:id="descriptionCol" text="Description" />
+            <TableColumn fx:id="dateDebutCol" text="Date début" />
+            <TableColumn fx:id="dateFinCol" text="Date fin" />
+            <TableColumn fx:id="niveauCol" text="Niveau" />
+            <TableColumn fx:id="prixCol" text="Prix" />
+            <TableColumn fx:id="emplacementCol" text="Emplacement" />
+            <TableColumn fx:id="nbPlaceCol" text="Nombre de places" />
+            <TableColumn fx:id="nbParticipantCol" text="Nombre de participants" />
+            <TableColumn fx:id="organisateurCol" text="Organisateur" />
+            <TableColumn fx:id="dureeCol" text="Durée" />
+            <TableColumn fx:id="imageCol" text="Image" />
+        </columns>
+    </TableView>
+</VBox>

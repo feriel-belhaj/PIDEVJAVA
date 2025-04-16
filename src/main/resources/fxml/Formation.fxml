@@ -4,67 +4,64 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox spacing="10" xmlns:fx="http://javafx.com/fxml" 
-      fx:controller="tn.esprit.workshop.gui.FormationController"
-      stylesheets="@../styles/dashboardDesign.css"
-      styleClass="white-bg">
+<VBox spacing="10" xmlns:fx="http://javafx.com/fxml" fx:controller="tn.esprit.workshop.gui.FormationController">
     <padding>
         <Insets top="10" right="10" bottom="10" left="10"/>
     </padding>
 
-    <GridPane hgap="10" vgap="10" styleClass="textfield">
+    <GridPane hgap="10" vgap="10">
         <padding>
             <Insets top="10" right="10" bottom="10" left="10"/>
         </padding>
 
         <Label text="Titre:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-        <TextField fx:id="txtTitre" GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="textfield"/>
+        <TextField fx:id="txtTitre" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
         <Label text="Description:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-        <TextArea fx:id="txtDescription" prefRowCount="2" GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="textfield"/>
+        <TextArea fx:id="txtDescription" prefRowCount="2" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
         <Label text="Date début:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-        <DatePicker fx:id="dateDebut" GridPane.columnIndex="1" GridPane.rowIndex="2" styleClass="textfield"/>
+        <DatePicker fx:id="dateDebut" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
         <Label text="Date fin:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-        <DatePicker fx:id="dateFin" GridPane.columnIndex="1" GridPane.rowIndex="3" styleClass="textfield"/>
+        <DatePicker fx:id="dateFin" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
 
         <Label text="Niveau:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-        <ComboBox fx:id="comboNiveau" GridPane.columnIndex="1" GridPane.rowIndex="4" styleClass="textfield"/>
+        <ComboBox fx:id="comboNiveau" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
 
         <Label text="Prix:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
-        <TextField fx:id="txtPrix" GridPane.columnIndex="1" GridPane.rowIndex="5" styleClass="textfield"/>
+        <TextField fx:id="txtPrix" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
 
         <Label text="Emplacement:" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
-        <TextField fx:id="txtEmplacement" GridPane.columnIndex="1" GridPane.rowIndex="6" styleClass="textfield"/>
+        <TextField fx:id="txtEmplacement" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
 
         <Label text="Nombre de places:" GridPane.columnIndex="0" GridPane.rowIndex="7"/>
-        <TextField fx:id="txtNbPlace" GridPane.columnIndex="1" GridPane.rowIndex="7" styleClass="textfield"/>
+        <TextField fx:id="txtNbPlace" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
 
         <Label text="Nombre de participants:" GridPane.columnIndex="0" GridPane.rowIndex="8"/>
-        <TextField fx:id="txtNbParticipant" GridPane.columnIndex="1" GridPane.rowIndex="8" styleClass="textfield"/>
+        <TextField fx:id="txtNbParticipant" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
 
         <Label text="Organisateur:" GridPane.columnIndex="0" GridPane.rowIndex="9"/>
-        <TextField fx:id="txtOrganisateur" GridPane.columnIndex="1" GridPane.rowIndex="9" styleClass="textfield"/>
+        <TextField fx:id="txtOrganisateur" GridPane.columnIndex="1" GridPane.rowIndex="9"/>
 
         <Label text="Durée:" GridPane.columnIndex="0" GridPane.rowIndex="10"/>
-        <TextField fx:id="txtDuree" GridPane.columnIndex="1" GridPane.rowIndex="10" styleClass="textfield"/>
+        <TextField fx:id="txtDuree" GridPane.columnIndex="1" GridPane.rowIndex="10"/>
 
         <Label text="Image:" GridPane.columnIndex="0" GridPane.rowIndex="11"/>
         <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="11">
-            <TextField fx:id="txtImage" HBox.hgrow="ALWAYS" styleClass="textfield"/>
-            <Button text="Parcourir..." onAction="#handleChooseImage" styleClass="import-btn"/>
+            <TextField fx:id="txtImage" HBox.hgrow="ALWAYS"/>
+            <Button text="Parcourir..." onAction="#handleChooseImage"/>
         </HBox>
     </GridPane>
 
     <HBox spacing="10">
-        <Button text="Ajouter" onAction="#handleAjouter" styleClass="add-btn"/>
-        <Button text="Modifier" onAction="#handleModifier" styleClass="update-btn"/>
-        <Button text="Supprimer" onAction="#handleSupprimer" styleClass="delete-btn"/>
-        <Button text="Gérer les Certificats" onAction="#handleGererCertificats" styleClass="clear-btn"/>
+        <Button text="Ajouter" onAction="#handleAjouter"/>
+        <Button text="Modifier" onAction="#handleModifier"/>
+        <Button text="Supprimer" onAction="#handleSupprimer"/>
+        <Button text="Gérer les Certificats" onAction="#handleGererCertificats"/>
     </HBox>
 
-    <TableView fx:id="tableFormations" VBox.vgrow="ALWAYS" styleClass="table-view">
+    <TableView fx:id="tableFormations" VBox.vgrow="ALWAYS">
         <columns>
             <TableColumn fx:id="titreCol" text="Titre"/>
             <TableColumn fx:id="descriptionCol" text="Description"/>

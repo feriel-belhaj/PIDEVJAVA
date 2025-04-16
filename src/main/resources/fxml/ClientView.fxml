@@ -9,30 +9,27 @@
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="tn.esprit.workshop.gui.ClientController"
-      stylesheets="@../styles/front.css"
-      spacing="0"
-      prefWidth="1200"
-      prefHeight="800">
+      stylesheets="@../styles/client.css"
+      spacing="20"
+      prefWidth="800"
+      prefHeight="600">
 
-    <!-- Barre de recherche et filtres -->
-    <VBox styleClass="search-container" alignment="CENTER">
-        <HBox spacing="10" alignment="CENTER">
-            <TextField promptText="Rechercher une formation..." styleClass="search-field"/>
-            <ComboBox fx:id="niveauFilter" promptText="Tous les niveaux" styleClass="filter-combo"/>
-            <Button text="Rechercher" styleClass="search-button"/>
-        </HBox>
-    </VBox>
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
 
-    <!-- Titre de la section -->
-    <Label text="Nos Formations" styleClass="section-title"/>
+    <Label text="Nos Formations" styleClass="title-label"/>
 
-    <!-- Conteneur des formations -->
-    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="transparent">
-        <FlowPane fx:id="formationsContainer" 
-                 styleClass="formations-container"
-                 hgap="20" 
-                 vgap="20">
-        </FlowPane>
-    </ScrollPane>
+    <StackPane fx:id="contentArea">
+        <ScrollPane fitToWidth="true" fitToHeight="true">
+            <FlowPane fx:id="formationsContainer" 
+                     hgap="20" 
+                     vgap="20">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+            </FlowPane>
+        </ScrollPane>
+    </StackPane>
 
 </VBox> 

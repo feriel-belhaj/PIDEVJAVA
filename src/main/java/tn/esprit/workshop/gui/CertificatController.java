@@ -1,10 +1,8 @@
 package tn.esprit.workshop.gui;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import tn.esprit.workshop.entities.Certificat;
 import tn.esprit.workshop.entities.Formation;
 import tn.esprit.workshop.services.CertificatService;
@@ -13,8 +11,6 @@ import tn.esprit.workshop.services.FormationService;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.io.IOException;
 import javafx.fxml.FXMLLoader;
@@ -32,7 +28,6 @@ public class CertificatController implements Initializable {
     @FXML private TableView<Certificat> tableCertificats;
     @FXML private TableColumn<Certificat, String> nomCol;
     @FXML private TableColumn<Certificat, String> prenomCol;
-    @FXML private TableColumn<Certificat, LocalDate> dateCol;
     @FXML private TableColumn<Certificat, String> niveauCol;
     @FXML private TableColumn<Certificat, String> nomOrganismeCol;
     @FXML private TableColumn<Certificat, String> formationTitreCol;
@@ -49,12 +44,11 @@ public class CertificatController implements Initializable {
         comboNiveau.getItems().addAll("Débutant", "Intermédiaire", "Avancé");
         
         // Configuration des colonnes
-        nomCol.setCellValueFactory(new PropertyValueFactory<>("nom"));
-        prenomCol.setCellValueFactory(new PropertyValueFactory<>("prenom"));
-        dateCol.setCellValueFactory(new PropertyValueFactory<>("dateobt"));
-        niveauCol.setCellValueFactory(new PropertyValueFactory<>("niveau"));
-        nomOrganismeCol.setCellValueFactory(new PropertyValueFactory<>("nomorganisme"));
-        formationTitreCol.setCellValueFactory(new PropertyValueFactory<>("formationTitre"));
+        nomCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getNom()));
+        prenomCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getPrenom()));
+        niveauCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getNiveau()));
+        nomOrganismeCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getNomorganisme()));
+        formationTitreCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getFormationTitre()));
         
         // Gestion de la sélection
         tableCertificats.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
@@ -71,84 +65,8 @@ public class CertificatController implements Initializable {
             }
         });
 
-        // Ajout des listeners de validation
-        setupValidation();
-
         // Chargement initial de tous les certificats
         refreshTable();
-    }
-
-    private void setupValidation() {
-        // Validation du nom (au moins 2 caractères, lettres uniquement)
-        txtNom.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                if (!newValue.matches("[a-zA-Z\\s]{2,}")) {
-                    txtNom.setStyle("-fx-border-color: red;");
-                } else {
-                    txtNom.setStyle("");
-                }
-            }
-        });
-
-        // Validation du prénom (au moins 2 caractères, lettres uniquement)
-        txtPrenom.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                if (!newValue.matches("[a-zA-Z\\s]{2,}")) {
-                    txtPrenom.setStyle("-fx-border-color: red;");
-                } else {
-                    txtPrenom.setStyle("");
-                }
-            }
-        });
-
-        // Validation de l'organisme (au moins 2 caractères)
-        txtNomOrganisme.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                if (newValue.length() < 2) {
-                    txtNomOrganisme.setStyle("-fx-border-color: red;");
-                } else {
-                    txtNomOrganisme.setStyle("");
-                }
-            }
-        });
-    }
-
-    private List<String> validateForm() {
-        List<String> errors = new ArrayList<>();
-
-        // Validation du nom
-        if (txtNom.getText() == null || !txtNom.getText().matches("[a-zA-Z\\s]{2,}")) {
-            errors.add("Le nom doit contenir au moins 2 caractères et ne contenir que des lettres");
-        }
-
-        // Validation du prénom
-        if (txtPrenom.getText() == null || !txtPrenom.getText().matches("[a-zA-Z\\s]{2,}")) {
-            errors.add("Le prénom doit contenir au moins 2 caractères et ne contenir que des lettres");
-        }
-
-        // Validation de la date d'obtention
-        if (dateObt.getValue() == null) {
-            errors.add("La date d'obtention est obligatoire");
-        } else {
-            if (dateObt.getValue().isAfter(LocalDate.now())) {
-                errors.add("La date d'obtention ne peut pas être dans le futur");
-            }
-            if (formation != null && dateObt.getValue().isBefore(formation.getDateDeb())) {
-                errors.add("La date d'obtention ne peut pas être antérieure à la date de début de la formation");
-            }
-        }
-
-        // Validation du niveau
-        if (comboNiveau.getValue() == null) {
-            errors.add("Le niveau est obligatoire");
-        }
-
-        // Validation de l'organisme
-        if (txtNomOrganisme.getText() == null || txtNomOrganisme.getText().trim().length() < 2) {
-            errors.add("Le nom de l'organisme doit contenir au moins 2 caractères");
-        }
-
-        return errors;
     }
 
     public void setFormation(Formation formation) {
@@ -164,13 +82,6 @@ public class CertificatController implements Initializable {
 
     @FXML
     private void handleAjouter() {
-        List<String> errors = validateForm();
-        if (!errors.isEmpty()) {
-            String errorMessage = String.join("\n", errors);
-            showAlert(Alert.AlertType.ERROR, "Erreur de validation", errorMessage);
-            return;
-        }
-
         try {
             Certificat certificat = getCertificatFromForm();
             certificat.setFormationId(formation.getId());
@@ -187,13 +98,6 @@ public class CertificatController implements Initializable {
     private void handleModifier() {
         if (selectedCertificat == null) {
             showAlert(Alert.AlertType.WARNING, "Attention", "Veuillez sélectionner un certificat à modifier");
-            return;
-        }
-
-        List<String> errors = validateForm();
-        if (!errors.isEmpty()) {
-            String errorMessage = String.join("\n", errors);
-            showAlert(Alert.AlertType.ERROR, "Erreur de validation", errorMessage);
             return;
         }
         

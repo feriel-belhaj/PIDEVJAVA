@@ -25,6 +25,7 @@ import java.util.ResourceBundle;
 
 public class ClientController implements Initializable {
     @FXML private FlowPane formationsContainer;
+    @FXML private StackPane contentArea;
     private FormationService formationService;
 
     @Override
@@ -38,66 +39,89 @@ public class ClientController implements Initializable {
             formationsContainer.getChildren().clear();
             List<Formation> formations = formationService.getAll();
             
+            System.out.println("\n=== Formations chargées depuis la base de données ===");
             for (Formation formation : formations) {
+                System.out.println("Formation: " + formation.getTitre());
+                System.out.println("Image path: " + formation.getImage());
+                System.out.println("------------------------");
+                
                 VBox card = createFormationCard(formation);
                 formationsContainer.getChildren().add(card);
             }
+            System.out.println("=== Fin du chargement des formations ===\n");
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors du chargement des formations: " + e.getMessage());
         }
     }
 
     private VBox createFormationCard(Formation formation) {
-        VBox card = new VBox(0);
+        VBox card = new VBox(10);
         card.getStyleClass().add("formation-card");
+        card.setPrefWidth(250);
+        card.setPrefHeight(350);
 
         // Conteneur pour l'image
         StackPane imageContainer = new StackPane();
-        imageContainer.setPrefWidth(300);
-        imageContainer.setPrefHeight(200);
+        imageContainer.setPrefWidth(250);
+        imageContainer.setPrefHeight(150);
+        imageContainer.setStyle("-fx-background-color: #e0e0e0;");
 
         // Image de la formation
         ImageView imageView = new ImageView();
-        imageView.setFitWidth(300);
-        imageView.setFitHeight(200);
+        imageView.setFitWidth(250);
+        imageView.setFitHeight(150);
         imageView.setPreserveRatio(true);
         
         try {
+            System.out.println("=== Début du chargement de l'image pour la formation: " + formation.getTitre() + " ===");
+            System.out.println("Chemin de l'image dans la base de données: " + formation.getImage());
+            
             if (formation.getImage() != null && !formation.getImage().isEmpty()) {
-                // Utiliser un chemin de fichier direct
-                final String imagePath = formation.getImage();
-                String fullPath = "src/main/resources/" + imagePath;
-                File imageFile = new File(fullPath);
+                // Essayer depuis les ressources
+                URL resourceUrl = getClass().getResource("/" + formation.getImage());
+                System.out.println("Tentative de chargement depuis les ressources: " + resourceUrl);
                 
-                if (imageFile.exists()) {
-                    Image image = new Image(imageFile.toURI().toString(), 300, 200, true, true, true);
+                if (resourceUrl != null) {
+                    System.out.println("Image trouvée dans les ressources!");
+                    Image image = new Image(resourceUrl.toExternalForm());
+                    imageView.setImage(image);
                     
-                    // Ajouter des listeners pour gérer le chargement
-                    image.errorProperty().addListener((observable, oldValue, newValue) -> {
+                    // Ajouter un listener pour vérifier si l'image est chargée correctement
+                    image.errorProperty().addListener((obs, oldValue, newValue) -> {
                         if (newValue) {
-                            System.out.println("Erreur de chargement de l'image: " + fullPath);
-                            showNoImageLabel(imageContainer);
+                            System.err.println("Erreur lors du chargement de l'image: " + image.getException());
                         }
                     });
                     
-                    image.progressProperty().addListener((observable, oldValue, newValue) -> {
-                        if (newValue.doubleValue() == 1.0) {
-                            imageView.setImage(image);
-                            if (!imageContainer.getChildren().contains(imageView)) {
-                                imageContainer.getChildren().clear();
-                                imageContainer.getChildren().add(imageView);
-                            }
-                        }
+                    image.progressProperty().addListener((obs, oldValue, newValue) -> {
+                        System.out.println("Progression du chargement: " + (newValue.doubleValue() * 100) + "%");
                     });
+                    
+                    imageContainer.getChildren().add(imageView);
                 } else {
-                    System.out.println("Image non trouvée: " + fullPath);
-                    showNoImageLabel(imageContainer);
+                    System.out.println("Image non trouvée dans les ressources, tentative depuis le système de fichiers...");
+                    // Essayer depuis le système de fichiers
+                    File resourceFile = new File("src/main/resources/" + formation.getImage());
+                    System.out.println("Chemin complet du fichier: " + resourceFile.getAbsolutePath());
+                    System.out.println("Le fichier existe? " + resourceFile.exists());
+                    
+                    if (resourceFile.exists()) {
+                        System.out.println("Image trouvée dans le système de fichiers!");
+                        Image image = new Image(resourceFile.toURI().toString());
+                        imageView.setImage(image);
+                        imageContainer.getChildren().add(imageView);
+                    } else {
+                        System.out.println("Image non trouvée dans le système de fichiers non plus.");
+                        showNoImageLabel(imageContainer);
+                    }
                 }
             } else {
+                System.out.println("Aucun chemin d'image spécifié pour cette formation.");
                 showNoImageLabel(imageContainer);
             }
+            System.out.println("=== Fin du chargement de l'image ===\n");
         } catch (Exception e) {
-            System.out.println("Exception lors du chargement de l'image: " + e.getMessage());
+            System.err.println("Exception lors du chargement de l'image:");
             e.printStackTrace();
             showNoImageLabel(imageContainer);
         }
@@ -107,48 +131,40 @@ public class ClientController implements Initializable {
         titleLabel.getStyleClass().add("formation-title");
         titleLabel.setWrapText(true);
 
-        // Description
+        // Description courte
         Label descriptionLabel = new Label(formation.getDescription());
         descriptionLabel.getStyleClass().add("formation-description");
         descriptionLabel.setWrapText(true);
+        descriptionLabel.setMaxHeight(60);
 
-        // Conteneur pour les informations
-        VBox infoContainer = new VBox(5);
-        infoContainer.getStyleClass().add("formation-info");
+        // Niveau
+        Label levelLabel = new Label("Niveau: " + formation.getNiveau());
+        levelLabel.getStyleClass().add("formation-level");
 
-        // Informations de la formation
-        Label dateLabel = new Label("Date de début: " + formation.getDateDeb());
-        Label niveauLabel = new Label("Niveau: " + formation.getNiveau());
-        Label prixLabel = new Label("Prix: " + formation.getPrix() + " DT");
-        Label lieuLabel = new Label("Lieu: " + formation.getEmplacement());
-        Label placesLabel = new Label("Places disponibles: " + (formation.getNbPlace() - formation.getNbParticipant()));
-        Label dureeLabel = new Label("Durée: " + formation.getDuree());
+        // Prix
+        Label priceLabel = new Label("Prix: " + formation.getPrix() + " DT");
+        priceLabel.getStyleClass().add("formation-price");
 
-        infoContainer.getChildren().addAll(
-            dateLabel, niveauLabel, prixLabel, 
-            lieuLabel, placesLabel, dureeLabel
-        );
-
-        // Bouton Voir plus
-        Button detailsButton = new Button("Voir plus ➜");
-        detailsButton.getStyleClass().add("reserver-btn");
+        // Bouton "Voir plus"
+        Button detailsButton = new Button("Voir plus");
+        detailsButton.getStyleClass().add("details-button");
         detailsButton.setOnAction(e -> showFormationDetails(formation));
 
-        card.getChildren().addAll(
-            imageContainer,
-            titleLabel,
-            descriptionLabel,
-            infoContainer,
-            detailsButton
-        );
-
+        card.getChildren().addAll(imageContainer, titleLabel, descriptionLabel, levelLabel, priceLabel, detailsButton);
         return card;
     }
 
     private void showNoImageLabel(StackPane container) {
+        container.getChildren().clear();
         Label noImageLabel = new Label("Pas d'image");
-        noImageLabel.getStyleClass().add("no-image-label");
+        noImageLabel.setStyle("-fx-text-fill: #666666;");
         container.getChildren().add(noImageLabel);
+        
+        // Ajouter plus de détails dans les logs
+        System.out.println("INFO: Affichage du label 'Pas d'image' pour le conteneur: " + container);
+        System.out.println("INFO: État du conteneur - Largeur: " + container.getWidth() + 
+                         ", Hauteur: " + container.getHeight() +
+                         ", Nombre d'enfants: " + container.getChildren().size());
     }
 
     @FXML
@@ -160,18 +176,14 @@ public class ClientController implements Initializable {
             FormationDetailsController controller = loader.getController();
             controller.setFormation(formation);
             
-            // Trouver le contentArea du MainMenu
-            Node currentNode = formationsContainer.getScene().getRoot();
-            while (currentNode != null && !(currentNode instanceof VBox)) {
-                currentNode = currentNode.getParent();
+            // Sauvegarder la vue actuelle
+            Node currentContent = contentArea.getChildren().get(0);
+            if (currentContent instanceof Parent) {
+                controller.setPreviousView((Parent) currentContent);
             }
             
-            if (currentNode != null) {
-                VBox mainMenu = (VBox) currentNode;
-                StackPane contentArea = (StackPane) mainMenu.getChildren().get(mainMenu.getChildren().size() - 1);
-                contentArea.getChildren().clear();
-                contentArea.getChildren().add(detailsView);
-            }
+            contentArea.getChildren().clear();
+            contentArea.getChildren().add(detailsView);
         } catch (IOException e) {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'afficher les détails de la formation.");

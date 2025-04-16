@@ -2,34 +2,15 @@ package tn.esprit.workshop.services;
 
 import tn.esprit.workshop.entities.FormationReservee;
 import tn.esprit.workshop.utils.MyDbConnexion;
-import tn.esprit.workshop.services.UtilisateurService;
 
 import java.sql.*;
 import java.time.LocalDateTime;
 
 public class FormationReserveeService {
     private Connection connection;
-    private UtilisateurService utilisateurService;
 
     public FormationReserveeService() {
         connection = MyDbConnexion.getInstance().getCnx();
-        utilisateurService = new UtilisateurService();
-    }
-
-    public void reserver(int formationId, int utilisateurId) throws SQLException {
-        // Vérifier si la formation est déjà réservée
-        if (estDejaReservee(formationId, utilisateurId)) {
-            throw new SQLException("Vous avez déjà réservé cette formation.");
-        }
-
-        // Récupérer les informations de l'utilisateur
-        var user = utilisateurService.getCurrentUser();
-        if (user == null) {
-            throw new SQLException("Utilisateur non connecté.");
-        }
-
-        // Effectuer la réservation
-        reserverFormation(formationId, utilisateurId, user.getNom(), user.getPrenom());
     }
 
     public void reserverFormation(int formationId, int utilisateurId, String nom, String prenom) {

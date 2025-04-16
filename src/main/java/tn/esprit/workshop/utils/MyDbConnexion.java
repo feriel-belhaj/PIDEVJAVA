@@ -11,7 +11,7 @@ public class MyDbConnexion {
 
     private static final String USER = "root";
     private static final String PWD = "";
-    private static final String URL = "jdbc:mysql://localhost:3306/artizina8";
+    private static final String URL = "jdbc:mysql://localhost:3306/artizina";
 
     private Connection cnx;
 

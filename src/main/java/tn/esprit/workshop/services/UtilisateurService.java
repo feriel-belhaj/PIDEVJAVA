@@ -65,4 +65,39 @@ public class UtilisateurService {
     public void logout() {
         currentUser = null;
     }
-} 
+    
+    /**
+     * Get a username by user ID
+     * @param userId The ID of the user to find
+     * @return The username (firstName + lastName) of the user, or "Unknown User" if not found
+     */
+    public String getUsernameById(int userId) {
+        String query = "SELECT nom, prenom FROM utilisateur WHERE id = ?";
+        
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, userId);
+            
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                String nom = resultSet.getString("nom");
+                String prenom = resultSet.getString("prenom");
+                return prenom + " " + nom;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "Utilisateur #" + userId;
+    }
+    
+    /**
+     * Get a username by user ID (Integer wrapper for nullable IDs)
+     * @param userId The ID of the user to find, may be null
+     * @return The username (firstName + lastName) of the user, or "Anonymous" if ID is null or user not found
+     */
+    public String getUsernameById(Integer userId) {
+        if (userId == null) {
+            return "Anonyme";
+        }
+        return getUsernameById(userId.intValue());
+    }
+}

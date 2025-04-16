@@ -15,9 +15,6 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class FormationController implements Initializable {
@@ -70,149 +67,6 @@ public class FormationController implements Initializable {
         
         // Chargement initial des données
         refreshTable();
-
-        // Ajout des listeners de validation
-        setupValidation();
-    }
-
-    private void setupValidation() {
-        // Validation du titre (au moins 3 caractères)
-        txtTitre.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                if (newValue.length() < 3) {
-                    txtTitre.setStyle("-fx-border-color: red;");
-                } else {
-                    txtTitre.setStyle("");
-                }
-            }
-        });
-
-        // Validation de la description (au moins 10 caractères)
-        txtDescription.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                if (newValue.length() < 10) {
-                    txtDescription.setStyle("-fx-border-color: red;");
-                } else {
-                    txtDescription.setStyle("");
-                }
-            }
-        });
-
-        // Validation du prix (nombre positif)
-        txtPrix.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*\\.?\\d*")) {
-                txtPrix.setText(oldValue);
-            }
-        });
-
-        // Validation du nombre de places (nombre entier positif)
-        txtNbPlace.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                txtNbPlace.setText(oldValue);
-            }
-        });
-
-        // Validation du nombre de participants (nombre entier positif)
-        txtNbParticipant.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                txtNbParticipant.setText(oldValue);
-            }
-        });
-
-        // Validation de la durée (format valide)
-        txtDuree.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("[0-9]+ (heures|jours|semaines|mois)")) {
-                txtDuree.setStyle("-fx-border-color: red;");
-            } else {
-                txtDuree.setStyle("");
-            }
-        });
-    }
-
-    private List<String> validateForm() {
-        List<String> errors = new ArrayList<>();
-
-        // Validation du titre
-        if (txtTitre.getText() == null || txtTitre.getText().trim().length() < 3) {
-            errors.add("Le titre doit contenir au moins 3 caractères");
-        }
-
-        // Validation de la description
-        if (txtDescription.getText() == null || txtDescription.getText().trim().length() < 10) {
-            errors.add("La description doit contenir au moins 10 caractères");
-        }
-
-        // Validation des dates
-        if (dateDebut.getValue() == null) {
-            errors.add("La date de début est obligatoire");
-        }
-        if (dateFin.getValue() == null) {
-            errors.add("La date de fin est obligatoire");
-        }
-        if (dateDebut.getValue() != null && dateFin.getValue() != null) {
-            if (dateDebut.getValue().isAfter(dateFin.getValue())) {
-                errors.add("La date de début doit être antérieure à la date de fin");
-            }
-            if (dateDebut.getValue().isBefore(LocalDate.now())) {
-                errors.add("La date de début ne peut pas être dans le passé");
-            }
-        }
-
-        // Validation du niveau
-        if (comboNiveau.getValue() == null) {
-            errors.add("Le niveau est obligatoire");
-        }
-
-        // Validation du prix
-        try {
-            float prix = Float.parseFloat(txtPrix.getText());
-            if (prix <= 0) {
-                errors.add("Le prix doit être supérieur à 0");
-            }
-        } catch (NumberFormatException e) {
-            errors.add("Le prix doit être un nombre valide");
-        }
-
-        // Validation de l'emplacement
-        if (txtEmplacement.getText() == null || txtEmplacement.getText().trim().isEmpty()) {
-            errors.add("L'emplacement est obligatoire");
-        }
-
-        // Validation du nombre de places
-        try {
-            int nbPlace = Integer.parseInt(txtNbPlace.getText());
-            if (nbPlace <= 0) {
-                errors.add("Le nombre de places doit être supérieur à 0");
-            }
-        } catch (NumberFormatException e) {
-            errors.add("Le nombre de places doit être un nombre entier valide");
-        }
-
-        // Validation du nombre de participants
-        try {
-            int nbParticipant = Integer.parseInt(txtNbParticipant.getText());
-            int nbPlace = Integer.parseInt(txtNbPlace.getText());
-            if (nbParticipant < 0) {
-                errors.add("Le nombre de participants ne peut pas être négatif");
-            }
-            if (nbParticipant > nbPlace) {
-                errors.add("Le nombre de participants ne peut pas dépasser le nombre de places");
-            }
-        } catch (NumberFormatException e) {
-            errors.add("Le nombre de participants doit être un nombre entier valide");
-        }
-
-        // Validation de l'organisateur
-        if (txtOrganisateur.getText() == null || txtOrganisateur.getText().trim().isEmpty()) {
-            errors.add("L'organisateur est obligatoire");
-        }
-
-        // Validation de la durée
-        if (!txtDuree.getText().matches("[0-9]+ (heures|jours|semaines|mois)")) {
-            errors.add("La durée doit être au format: nombre + unité (heures/jours/semaines/mois)");
-        }
-
-        return errors;
     }
 
     @FXML
@@ -250,13 +104,6 @@ public class FormationController implements Initializable {
 
     @FXML
     private void handleAjouter() {
-        List<String> errors = validateForm();
-        if (!errors.isEmpty()) {
-            String errorMessage = String.join("\n", errors);
-            showAlert(Alert.AlertType.ERROR, "Erreur de validation", errorMessage);
-            return;
-        }
-
         try {
             Formation formation = getFormationFromForm();
             formationService.ajouter(formation);
@@ -272,13 +119,6 @@ public class FormationController implements Initializable {
     private void handleModifier() {
         if (selectedFormation == null) {
             showAlert(Alert.AlertType.WARNING, "Attention", "Veuillez sélectionner une formation à modifier");
-            return;
-        }
-
-        List<String> errors = validateForm();
-        if (!errors.isEmpty()) {
-            String errorMessage = String.join("\n", errors);
-            showAlert(Alert.AlertType.ERROR, "Erreur de validation", errorMessage);
             return;
         }
         

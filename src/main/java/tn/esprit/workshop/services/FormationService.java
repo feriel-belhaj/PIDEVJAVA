@@ -46,10 +46,7 @@ public class FormationService {
             ps.setInt(9, formation.getNbParticipant());
             ps.setString(10, formation.getOrganisateur());
             ps.setString(11, formation.getDuree());
-            // Ne stocker que le nom du fichier
-            String imageName = formation.getImage() != null ? 
-                formation.getImage().substring(formation.getImage().lastIndexOf("/") + 1) : null;
-            ps.setString(12, imageName);
+            ps.setString(12, formation.getImage());
             ps.executeUpdate();
 
             ResultSet rs = ps.getGeneratedKeys();
@@ -73,28 +70,28 @@ public class FormationService {
             ps.setInt(9, formation.getNbParticipant());
             ps.setString(10, formation.getOrganisateur());
             ps.setString(11, formation.getDuree());
-            // Ne stocker que le nom du fichier
-            String imageName = formation.getImage() != null ? 
-                formation.getImage().substring(formation.getImage().lastIndexOf("/") + 1) : null;
-            ps.setString(12, imageName);
+            ps.setString(12, formation.getImage());
             ps.setInt(13, formation.getId());
             ps.executeUpdate();
         }
     }
 
     public void supprimer(int id) throws SQLException {
-        // D'abord, supprimer tous les certificats associés à cette formation
-        String deleteCertificats = "DELETE FROM certificat WHERE formation_id = ?";
-        try (PreparedStatement pst = connection.prepareStatement(deleteCertificats)) {
-            pst.setInt(1, id);
-            pst.executeUpdate();
+        // D'abord, récupérer l'image pour la supprimer si elle existe
+        Formation formation = getById(id);
+        if (formation != null && formation.getImage() != null) {
+            try {
+                Path imagePath = Paths.get(RESOURCES_PATH + formation.getImage());
+                Files.deleteIfExists(imagePath);
+            } catch (Exception e) {
+                System.err.println("Erreur lors de la suppression de l'image: " + e.getMessage());
+            }
         }
 
-        // Ensuite, supprimer la formation
-        String req = "DELETE FROM formation WHERE id = ?";
-        try (PreparedStatement pst = connection.prepareStatement(req)) {
-            pst.setInt(1, id);
-            pst.executeUpdate();
+        String query = "DELETE FROM formation WHERE id=?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
         }
     }
 
@@ -137,18 +134,7 @@ public class FormationService {
         formation.setNbParticipant(rs.getInt("nbparticipant"));
         formation.setOrganisateur(rs.getString("organisateur"));
         formation.setDuree(rs.getString("duree"));
-        // Ajouter le chemin complet pour l'image
-        String imageName = rs.getString("image");
-        if (imageName != null) {
-            // Si le chemin ne commence pas déjà par "uploads/images/", on l'ajoute
-            if (!imageName.startsWith("uploads/images/")) {
-                formation.setImage(IMAGES_PATH + imageName);
-            } else {
-                formation.setImage(imageName);
-            }
-        } else {
-            formation.setImage(null);
-        }
+        formation.setImage(rs.getString("image"));
         return formation;
     }
 
@@ -158,7 +144,7 @@ public class FormationService {
             String targetPath = IMAGES_PATH + fileName;
             Path destination = Paths.get(RESOURCES_PATH + targetPath);
             Files.copy(sourceFile.toPath(), destination, StandardCopyOption.REPLACE_EXISTING);
-            return fileName; // Retourner uniquement le nom du fichier
+            return targetPath;
         } catch (Exception e) {
             System.err.println("Erreur lors de la copie de l'image: " + e.getMessage());
             return null;

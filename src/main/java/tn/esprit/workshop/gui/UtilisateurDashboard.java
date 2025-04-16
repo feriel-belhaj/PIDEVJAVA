@@ -17,6 +17,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -106,7 +107,7 @@ public class UtilisateurDashboard implements Initializable {
     private Button RoleUpdate_btn;
 
     @FXML
-    private BarChart<?, ?> UserHome_Chart;
+    private BarChart<String, Number> UserHome_Chart;
 
     @FXML
     private Label UserHome_NbrFemme;
@@ -238,11 +239,15 @@ public class UtilisateurDashboard implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ObservableList<String> list = FXCollections.observableArrayList("Client","Artisant","Admin");
         Utilisateur_role.setItems(list);
-        ObservableList<String> listSexe = FXCollections.observableArrayList("Homme","Femme");
+        ObservableList<String> listSexe = FXCollections.observableArrayList("male","femelle");
         Utilisateur_sexe.setItems(listSexe);
         displayUsername();
         addUserShowListData();
         addUserSearch();
+        NbrTotalUsers();
+        NbrTotalFemme();
+        NbrTotalHomme();
+        StatUser();
 
     }
     @FXML
@@ -800,6 +805,29 @@ public class UtilisateurDashboard implements Initializable {
             System.out.println(e.getMessage());
         }
 
+    }
+    public void NbrTotalUsers()
+    {
+        int nbr=0;
+        nbr= UserService.homeTotalUsers();
+        UserHome_NbrTotal.setText(String.valueOf(nbr));
+    }
+    public void NbrTotalFemme()
+    {
+        int nbr=0;
+        nbr= UserService.homeTotalWomen();
+        UserHome_NbrFemme.setText(String.valueOf(nbr));
+    }
+    public void NbrTotalHomme()
+    {
+        int nbr=0;
+        nbr= UserService.homeTotalMen();
+        UserHome_NbrHomme.setText(String.valueOf(nbr));
+    }
+
+    public void StatUser()
+    {
+        UserHome_Chart.getData().add(UserService.homeChart());
     }
 
 

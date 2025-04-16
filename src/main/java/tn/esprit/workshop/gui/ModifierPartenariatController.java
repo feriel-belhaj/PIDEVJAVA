@@ -15,16 +15,17 @@ import tn.esprit.workshop.models.Partenariat;
 import tn.esprit.workshop.services.ServicePartenariat;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.function.Consumer;
 
-/**
- * Contrôleur pour la modification des partenariats
- * Utilise du code Java pur sans FXML
- */
 public class ModifierPartenariatController {
 
     private final ServicePartenariat servicePartenariat;
@@ -41,6 +42,10 @@ public class ModifierPartenariatController {
     private Label errorDateFin;
     private Label errorImage;
 
+    private static final long MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+    private static final String UPLOAD_DIR = "C:\\xampp\\htdocs\\img";
+    private static final String[] ALLOWED_IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg"};
+
     public ModifierPartenariatController(Partenariat partenariat, Consumer<Void> onCloseCallback) {
         if (partenariat == null) {
             throw new IllegalArgumentException("Le partenariat ne peut pas être null");
@@ -49,7 +54,7 @@ public class ModifierPartenariatController {
         this.partenariat = partenariat;
         this.servicePartenariat = new ServicePartenariat();
         this.onCloseCallback = onCloseCallback;
-        this.nouveauCheminImage = partenariat.getImage();
+        this.nouveauCheminImage = partenariat.getImage() != null ? partenariat.getImage() : "";
 
         System.out.println("ModifierPartenariatController initialisé pour le partenariat ID: " + partenariat.getId());
         System.out.println("Nom: " + partenariat.getNom());
@@ -108,7 +113,7 @@ public class ModifierPartenariatController {
 
             // Date début
             VBox dateDebutBox = new VBox(5);
-            Label dateDebutLabel = new Label("Date debut");
+            Label dateDebutLabel = new Label("Date debut *");
             dateDebutLabel.setStyle("-fx-text-fill: #555555;");
             DatePicker dateDebutPicker = new DatePicker();
             try {
@@ -116,16 +121,10 @@ public class ModifierPartenariatController {
                     LocalDate dateDebut = partenariat.getDateDebut().toInstant()
                             .atZone(ZoneId.systemDefault()).toLocalDate();
                     dateDebutPicker.setValue(dateDebut);
-                    System.out.println("Date de début définie avec succès: " + dateDebut);
-                } else {
-                    // Si date null, définir la date du jour
-                    dateDebutPicker.setValue(LocalDate.now());
-                    System.out.println("La date de début est null, définie à aujourd'hui");
+                    System.out.println("Date de début définie: " + dateDebut);
                 }
             } catch (Exception e) {
                 System.err.println("Erreur lors de la conversion de la date de début: " + e.getMessage());
-                dateDebutPicker.setValue(LocalDate.now());
-                System.out.println("Date de début définie par défaut après erreur: " + LocalDate.now());
             }
             errorDateDebut = new Label();
             errorDateDebut.setStyle("-fx-text-fill: red;");
@@ -134,7 +133,7 @@ public class ModifierPartenariatController {
 
             // Date fin
             VBox dateFinBox = new VBox(5);
-            Label dateFinLabel = new Label("Date fin");
+            Label dateFinLabel = new Label("Date fin *");
             dateFinLabel.setStyle("-fx-text-fill: #555555;");
             DatePicker dateFinPicker = new DatePicker();
             try {
@@ -142,15 +141,10 @@ public class ModifierPartenariatController {
                     LocalDate dateFin = partenariat.getDateFin().toInstant()
                             .atZone(ZoneId.systemDefault()).toLocalDate();
                     dateFinPicker.setValue(dateFin);
-                    System.out.println("Date de fin définie avec succès: " + dateFin);
-                } else {
-                    System.out.println("La date de fin est null, aucune valeur définie");
+                    System.out.println("Date de fin définie: " + dateFin);
                 }
             } catch (Exception e) {
                 System.err.println("Erreur lors de la conversion de la date de fin: " + e.getMessage());
-                // Si erreur, définir une date par défaut
-                dateFinPicker.setValue(LocalDate.now());
-                System.out.println("Date de fin définie par défaut après erreur: " + LocalDate.now());
             }
             errorDateFin = new Label();
             errorDateFin.setStyle("-fx-text-fill: red;");
@@ -159,11 +153,45 @@ public class ModifierPartenariatController {
 
             // Statut
             VBox statutBox = new VBox(5);
-            Label statutLabel = new Label("Statut");
+            Label statutLabel = new Label("Statut *");
             statutLabel.setStyle("-fx-text-fill: #555555;");
             ComboBox<String> statutCombo = new ComboBox<>();
-            statutCombo.getItems().addAll("Actif", "En Cours", "Expiré");
-            statutCombo.setValue(partenariat.getStatut() != null ? partenariat.getStatut() : "En attente");
+            statutCombo.getItems().addAll("Actif", "EnCours");
+            statutCombo.setValue(partenariat.getStatut() != null ? partenariat.getStatut() : null);
+            statutCombo.setCellFactory(listView -> new ListCell<String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                        setStyle("");
+                    } else {
+                        setText(item);
+                        if ("EnCours".equals(item)) {
+                            setStyle("-fx-text-fill: #D4A76A;");
+                        } else {
+                            setStyle("");
+                        }
+                    }
+                }
+            });
+            statutCombo.setButtonCell(new ListCell<String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                        setStyle("");
+                    } else {
+                        setText(item);
+                        if ("EnCours".equals(item)) {
+                            setStyle("-fx-text-fill: #D4A76A;");
+                        } else {
+                            setStyle("");
+                        }
+                    }
+                }
+            });
             errorStatut = new Label();
             errorStatut.setStyle("-fx-text-fill: red;");
             errorStatut.setVisible(false);
@@ -171,19 +199,15 @@ public class ModifierPartenariatController {
 
             // Image du Partenariat
             VBox imageBox = new VBox(10);
-            Label imageTitleLabel = new Label("Image du Partenariat");
+            Label imageTitleLabel = new Label("Image du Partenariat *");
             imageTitleLabel.setStyle("-fx-text-fill: #555555;");
-
-            // Conteneur pour la sélection de fichier
             HBox fileSelectBox = new HBox(10);
             Button choisirImageBtn = new Button("Choisir un fichier");
             choisirImageBtn.setStyle("-fx-background-color: #F8F9FA; -fx-border-color: #CCCCCC; -fx-border-radius: 3;");
-            Label imagePathLabel = new Label("Aucun fichier n'a été sélectionné");
-
+            Label imagePathLabel = new Label("Aucun fichier sélectionné");
             if (partenariat.getImage() != null && !partenariat.getImage().isEmpty()) {
                 try {
-                    File imageFile = new File(partenariat.getImage());
-                    imagePathLabel.setText(imageFile.getName());
+                    imagePathLabel.setText(new File(partenariat.getImage()).getName());
                 } catch (Exception e) {
                     System.err.println("Erreur lors de l'accès au fichier image: " + e.getMessage());
                 }
@@ -192,14 +216,10 @@ public class ModifierPartenariatController {
             errorImage.setStyle("-fx-text-fill: red;");
             errorImage.setVisible(false);
             fileSelectBox.getChildren().addAll(choisirImageBtn, imagePathLabel);
-
-            // Aperçu de l'image
             ImageView imagePreview = new ImageView();
             imagePreview.setFitHeight(150);
             imagePreview.setFitWidth(150);
             imagePreview.setPreserveRatio(true);
-
-            // Charger l'image existante si disponible
             if (partenariat.getImage() != null && !partenariat.getImage().isEmpty()) {
                 try {
                     File file = new File(partenariat.getImage());
@@ -211,10 +231,8 @@ public class ModifierPartenariatController {
                     }
                 } catch (Exception e) {
                     System.err.println("Erreur lors du chargement de l'image: " + e.getMessage());
-                    e.printStackTrace();
                 }
             }
-
             imageBox.getChildren().addAll(imageTitleLabel, fileSelectBox, errorImage, imagePreview);
 
             // Bouton Mettre à jour
@@ -225,27 +243,17 @@ public class ModifierPartenariatController {
             updateBtnBox.getChildren().add(updateBtn);
             updateBtnBox.setPadding(new Insets(20, 0, 0, 0));
 
-            // Ajouter tous les éléments au conteneur principal
+            // Ajouter les éléments
             root.getChildren().addAll(
-                    titleLabel,
-                    nomBox,
-                    typeBox,
-                    descriptionBox,
-                    dateDebutBox,
-                    dateFinBox,
-                    statutBox,
-                    imageBox,
-                    updateBtnBox
+                    titleLabel, nomBox, typeBox, descriptionBox, dateDebutBox, dateFinBox, statutBox, imageBox, updateBtnBox
             );
 
-            System.out.println("Interface créée, configuration de la scène...");
-
-            // Ajouter un ScrollPane pour rendre la fenêtre scrollable
+            // ScrollPane
             ScrollPane scrollPane = new ScrollPane(root);
-            scrollPane.setFitToWidth(true); // Ajuster la largeur au contenu
-            scrollPane.setStyle("-fx-background-color: #F5F5F5;"); // Aligner le style avec le fond
+            scrollPane.setFitToWidth(true);
+            scrollPane.setStyle("-fx-background-color: #F5F5F5;");
 
-            // Créer la scène et la fenêtre
+            // Scène et fenêtre
             Scene scene = new Scene(scrollPane, 600, 750);
             Stage stage = new Stage();
             stage.setTitle("Modifier un Partenariat");
@@ -254,92 +262,126 @@ public class ModifierPartenariatController {
             stage.setMinWidth(600);
             stage.setMinHeight(750);
 
-            System.out.println("Configuration des événements...");
-
-            // Action du bouton de mise à jour
+            // Action de mise à jour
             updateBtn.setOnAction(e -> {
                 try {
-                    // Reset styles and errors
                     resetStyle(nomField, typeField, descriptionArea, dateDebutPicker, dateFinPicker, statutCombo);
                     resetErrors();
+                    imagePathLabel.setTextFill(javafx.scene.paint.Color.BLACK);
 
                     boolean hasError = false;
 
-                    // Validation du nom (si non vide)
+                    // Validation du nom
                     String nomText = nomField.getText();
-                    if (!nomText.isEmpty()) {
-                        if (nomText.length() > 50) {
-                            nomField.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
-                            errorNom.setText("Le nom ne peut pas dépasser 50 caractères.");
-                            errorNom.setVisible(true);
-                            hasError = true;
-                        } else if (!nomText.matches("^[A-ZÀ-ÿ][a-zA-ZÀ-ÿéèêëàâäçôùûîï]+( [a-zA-ZÀ-ÿéèêëàâäçôùûîï]+)*$")) {
-                            nomField.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
-                            errorNom.setText("Le nom doit commencer par une majuscule et peut contenir des lettres accentuées et des espaces.");
-                            errorNom.setVisible(true);
-                            hasError = true;
-                        }
+                    if (nomText.length() > 50) {
+                        nomField.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
+                        errorNom.setText("Le nom ne peut pas dépasser 50 caractères.");
+                        errorNom.setVisible(true);
+                        hasError = true;
+                    } else if (!nomText.isEmpty() && !nomText.matches("^[A-ZÀ-ÿ][a-zA-ZÀ-ÿéèêëàâäçôùûîï]+( [a-zA-ZÀ-ÿéèêëàâäçôùûîï]+)*$")) {
+                        nomField.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
+                        errorNom.setText("Le nom doit commencer par une majuscule et peut contenir des lettres accentuées et des espaces.");
+                        errorNom.setVisible(true);
+                        hasError = true;
                     }
 
-                    // Validation du type (si non vide)
+                    // Validation du type
                     String typeText = typeField.getText();
-                    if (!typeText.isEmpty()) {
-                        if (typeText.length() > 50) {
-                            typeField.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
-                            errorType.setText("Le type ne peut pas dépasser 50 caractères.");
-                            errorType.setVisible(true);
-                            hasError = true;
-                        } else if (!typeText.matches("^[A-ZÀ-ÿ][a-zA-ZÀ-ÿéèêëàâäçôùûîï]+( [a-zA-ZÀ-ÿéèêëàâäçôùûîï]+)*$")) {
-                            typeField.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
-                            errorType.setText("Le type doit commencer par une majuscule et peut contenir des lettres accentuées et des espaces.");
-                            errorType.setVisible(true);
-                            hasError = true;
-                        }
+                    if (typeText.length() > 50) {
+                        typeField.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
+                        errorType.setText("Le type ne peut pas dépasser 50 caractères.");
+                        errorType.setVisible(true);
+                        hasError = true;
+                    } else if (!typeText.isEmpty() && !typeText.matches("^[A-ZÀ-ÿ][a-zA-ZÀ-ÿéèêëàâäçôùûîï]+( [a-zA-ZÀ-ÿéèêëàâäçôùûîï]+)*$")) {
+                        typeField.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
+                        errorType.setText("Le type doit commencer par une majuscule et peut contenir des lettres accentuées et des espaces.");
+                        errorType.setVisible(true);
+                        hasError = true;
                     }
 
-                    // Validation de la description (si non vide)
+                    // Validation de la description
                     String descriptionText = descriptionArea.getText();
-                    if (!descriptionText.isEmpty()) {
-                        if (descriptionText.length() < 10) {
-                            descriptionArea.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
-                            errorDescription.setText("La description doit contenir au moins 10 caractères.");
-                            errorDescription.setVisible(true);
-                            hasError = true;
-                        } else if (descriptionText.length() > 255) {
-                            descriptionArea.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
-                            errorDescription.setText("La description ne peut pas dépasser 255 caractères.");
-                            errorDescription.setVisible(true);
-                            hasError = true;
-                        } else if (!descriptionText.matches("^[A-ZÀ-ÿ][a-zA-ZÀ-ÿéèêëàâäçôùûîï ,;.:'\"!?-]*$")) {
-                            descriptionArea.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
-                            errorDescription.setText("La description doit commencer par une majuscule et contenir uniquement des lettres accentuées, des espaces et des signes de ponctuation.");
-                            errorDescription.setVisible(true);
-                            hasError = true;
-                        }
+                    if (descriptionText.length() < 10 && !descriptionText.isEmpty()) {
+                        descriptionArea.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
+                        errorDescription.setText("La description doit contenir au moins 10 caractères.");
+                        errorDescription.setVisible(true);
+                        hasError = true;
+                    } else if (descriptionText.length() > 255) {
+                        descriptionArea.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
+                        errorDescription.setText("La description ne peut pas dépasser 255 caractères.");
+                        errorDescription.setVisible(true);
+                        hasError = true;
+                    } else if (!descriptionText.isEmpty() && !descriptionText.matches("^[A-ZÀ-ÿ][a-zA-ZÀ-ÿéèêëàâäçôùûîï ,;.:'\"!?-]*$")) {
+                        descriptionArea.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
+                        errorDescription.setText("La description doit commencer par une majuscule et contenir uniquement des lettres accentuées, des espaces et des signes de ponctuation.");
+                        errorDescription.setVisible(true);
+                        hasError = true;
                     }
 
-                    // Validation du statut (si sélectionné)
+                    // Validation du statut
                     String statutValue = statutCombo.getValue();
-                    // No required check for statut
+                    if (statutValue == null) {
+                        statutCombo.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
+                        errorStatut.setText("Le statut est requis.");
+                        errorStatut.setVisible(true);
+                        hasError = true;
+                    }
 
-                    // Validation des dates (si les deux sont remplies)
+                    // Validation des dates
                     LocalDate dateDebutValue = dateDebutPicker.getValue();
+                    if (dateDebutValue == null) {
+                        dateDebutPicker.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
+                        errorDateDebut.setText("La date de début est requise.");
+                        errorDateDebut.setVisible(true);
+                        hasError = true;
+                    }
+
                     LocalDate dateFinValue = dateFinPicker.getValue();
-                    if (dateDebutValue != null && dateFinValue != null && dateFinValue.isBefore(dateDebutValue)) {
+                    if (dateFinValue == null) {
+                        dateFinPicker.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
+                        errorDateFin.setText("La date de fin est requise.");
+                        errorDateFin.setVisible(true);
+                        hasError = true;
+                    } else if (dateDebutValue != null && dateFinValue.isBefore(dateDebutValue)) {
                         dateFinPicker.setStyle("-fx-border-color: red; -fx-border-radius: 5;");
                         errorDateFin.setText("La date de fin doit être postérieure à la date de début.");
                         errorDateFin.setVisible(true);
                         hasError = true;
                     }
 
-                    // Validation de l'image (si sélectionnée)
-                    if (nouveauCheminImage != null && !nouveauCheminImage.isEmpty()) {
-                        String lowerCasePath = nouveauCheminImage.toLowerCase();
-                        if (!lowerCasePath.endsWith(".png") && !lowerCasePath.endsWith(".jpg") && !lowerCasePath.endsWith(".jpeg")) {
+                    // Validation de l'image
+                    if (nouveauCheminImage == null || nouveauCheminImage.isEmpty()) {
+                        imagePathLabel.setTextFill(javafx.scene.paint.Color.RED);
+                        errorImage.setText("L'image est requise.");
+                        errorImage.setVisible(true);
+                        hasError = true;
+                    } else {
+                        File imageFile = new File(nouveauCheminImage);
+                        if (!imageFile.exists()) {
                             imagePathLabel.setTextFill(javafx.scene.paint.Color.RED);
-                            errorImage.setText("Veuillez sélectionner une image au format PNG, JPEG ou JPG.");
+                            errorImage.setText("Le fichier image n'existe pas.");
                             errorImage.setVisible(true);
                             hasError = true;
+                        } else if (imageFile.length() > MAX_FILE_SIZE) {
+                            imagePathLabel.setTextFill(javafx.scene.paint.Color.RED);
+                            errorImage.setText("L'image ne doit pas dépasser 5 Mo.");
+                            errorImage.setVisible(true);
+                            hasError = true;
+                        } else {
+                            String lowerCasePath = nouveauCheminImage.toLowerCase();
+                            boolean validExtension = false;
+                            for (String ext : ALLOWED_IMAGE_EXTENSIONS) {
+                                if (lowerCasePath.endsWith(ext)) {
+                                    validExtension = true;
+                                    break;
+                                }
+                            }
+                            if (!validExtension) {
+                                imagePathLabel.setTextFill(javafx.scene.paint.Color.RED);
+                                errorImage.setText("Veuillez sélectionner une image au format PNG, JPEG ou JPG.");
+                                errorImage.setVisible(true);
+                                hasError = true;
+                            }
                         }
                     }
 
@@ -352,110 +394,129 @@ public class ModifierPartenariatController {
                         return;
                     }
 
-                    // Mettre à jour les données du partenariat
-                    partenariat.setNom(nomField.getText());
-                    partenariat.setType(typeField.getText());
-                    partenariat.setDescription(descriptionArea.getText());
-                    partenariat.setStatut(statutCombo.getValue());
+                    // Copier l'image
+                    String imageFileName = copyFileToDestination(nouveauCheminImage);
 
-                    // Mettre à jour le chemin de l'image
-                    if (nouveauCheminImage != null) {
-                        partenariat.setImage(nouveauCheminImage);
+                    // Mettre à jour les données
+                    partenariat.setNom(nomText);
+                    partenariat.setType(typeText);
+                    partenariat.setDescription(descriptionText);
+                    partenariat.setStatut(statutValue);
+                    partenariat.setImage(imageFileName);
+
+                    if (dateDebutValue != null) {
+                        partenariat.setDateDebut(Date.from(dateDebutValue.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+                    }
+                    if (dateFinValue != null) {
+                        partenariat.setDateFin(Date.from(dateFinValue.atStartOfDay(ZoneId.systemDefault()).toInstant()));
                     }
 
-                    // Convertir LocalDate en Date
-                    if (dateDebutPicker.getValue() != null) {
-                        Date dateDebut = Date.from(
-                                dateDebutPicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()
-                        );
-                        partenariat.setDateDebut(dateDebut);
-                    } else {
-                        partenariat.setDateDebut(null); // Allow null if not set
-                    }
-
-                    if (dateFinPicker.getValue() != null) {
-                        Date dateFin = Date.from(
-                                dateFinPicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()
-                        );
-                        partenariat.setDateFin(dateFin);
-                    } else {
-                        partenariat.setDateFin(null); // Allow null if not set
-                    }
-
-                    // Sauvegarder les modifications
+                    // Sauvegarder
                     servicePartenariat.update(partenariat);
 
-                    // Afficher un message de succès
                     Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                     successAlert.setTitle("Succès");
                     successAlert.setHeaderText(null);
                     successAlert.setContentText("Le partenariat a été mis à jour avec succès !");
                     successAlert.showAndWait();
 
-                    // Fermer la fenêtre
                     stage.close();
+                } catch (IOException ex) {
+                    afficherErreur("Erreur", "Erreur lors de la copie de l'image: " + ex.getMessage());
                 } catch (SQLException ex) {
-                    System.err.println("Erreur SQL lors de la mise à jour: " + ex.getMessage());
-                    ex.printStackTrace();
                     afficherErreur("Erreur", "Impossible de mettre à jour le partenariat: " + ex.getMessage());
                 } catch (Exception ex) {
-                    System.err.println("Erreur générale lors de la mise à jour: " + ex.getMessage());
-                    ex.printStackTrace();
-                    afficherErreur("Erreur", "Une erreur s'est produite lors de la mise à jour: " + ex.getMessage());
+                    afficherErreur("Erreur", "Une erreur s'est produite: " + ex.getMessage());
                 }
             });
 
             // Gestion de l'image
             choisirImageBtn.setOnAction(e -> {
-                try {
-                    FileChooser fileChooser = new FileChooser();
-                    fileChooser.setTitle("Choisir une image");
-                    fileChooser.getExtensionFilters().add(
-                            new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg", "*.gif")
-                    );
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Choisir une image");
+                fileChooser.getExtensionFilters().add(
+                        new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg")
+                );
 
-                    File selectedFile = fileChooser.showOpenDialog(stage);
-                    if (selectedFile != null) {
-                        nouveauCheminImage = selectedFile.getAbsolutePath();
-                        imagePathLabel.setText(selectedFile.getName());
-                        imagePathLabel.setTextFill(javafx.scene.paint.Color.BLACK); // Reset color
+                File selectedFile = fileChooser.showOpenDialog(stage);
+                if (selectedFile != null) {
+                    if (selectedFile.length() > MAX_FILE_SIZE) {
+                        imagePathLabel.setTextFill(javafx.scene.paint.Color.RED);
+                        errorImage.setText("L'image ne doit pas dépasser 5 Mo.");
+                        errorImage.setVisible(true);
+                        return;
+                    }
 
-                        // Mettre à jour l'aperçu
-                        try {
-                            Image image = new Image(selectedFile.toURI().toString());
-                            imagePreview.setImage(image);
-                        } catch (Exception ex) {
-                            System.err.println("Erreur lors du chargement de l'image: " + ex.getMessage());
-                            afficherErreur("Erreur", "Impossible de charger l'image sélectionnée");
+                    String fileName = selectedFile.getName().toLowerCase();
+                    boolean isValidExtension = false;
+                    for (String ext : ALLOWED_IMAGE_EXTENSIONS) {
+                        if (fileName.endsWith(ext)) {
+                            isValidExtension = true;
+                            break;
                         }
                     }
-                } catch (Exception ex) {
-                    System.err.println("Erreur lors de la sélection de l'image: " + ex.getMessage());
-                    afficherErreur("Erreur", "Impossible de sélectionner l'image");
+                    if (!isValidExtension) {
+                        imagePathLabel.setTextFill(javafx.scene.paint.Color.RED);
+                        errorImage.setText("Veuillez sélectionner une image au format PNG, JPEG ou JPG.");
+                        errorImage.setVisible(true);
+                        return;
+                    }
+
+                    nouveauCheminImage = selectedFile.getAbsolutePath();
+                    imagePathLabel.setText(selectedFile.getName());
+                    imagePathLabel.setTextFill(javafx.scene.paint.Color.BLACK);
+                    errorImage.setVisible(false);
+
+                    try {
+                        Image image = new Image(selectedFile.toURI().toString());
+                        imagePreview.setImage(image);
+                    } catch (Exception ex) {
+                        afficherErreur("Erreur", "Impossible de charger l'image sélectionnée");
+                    }
                 }
             });
 
-            // Exécuter le callback quand la fenêtre est fermée
+            // Callback on close
             stage.setOnHidden(e -> {
                 if (onCloseCallback != null) {
                     onCloseCallback.accept(null);
                 }
             });
 
-            System.out.println("Affichage de la fenêtre...");
-
-            // Afficher la fenêtre
             stage.show();
-
         } catch (Exception e) {
-            System.err.println("Erreur détaillée lors de la création de l'interface: " + e.getMessage());
-            if (e.getCause() != null) {
-                System.err.println("Cause: " + e.getCause().getMessage());
-            }
-            e.printStackTrace();
-            afficherErreur("Erreur", "Impossible de créer l'interface de modification: " +
-                    (e.getMessage() != null ? e.getMessage() : "Une erreur inattendue s'est produite"));
+            afficherErreur("Erreur", "Impossible de créer l'interface: " + e.getMessage());
         }
+    }
+
+    private String copyFileToDestination(String sourcePath) throws IOException {
+        if (sourcePath == null || sourcePath.isEmpty()) {
+            throw new IOException("Chemin de l'image source non spécifié");
+        }
+
+        File sourceFile = new File(sourcePath);
+        if (!sourceFile.exists()) {
+            throw new IOException("L'image source n'existe pas: " + sourcePath);
+        }
+
+        Path destDir = Paths.get(UPLOAD_DIR);
+        if (!Files.exists(destDir)) {
+            Files.createDirectories(destDir);
+        }
+
+        String originalFileName = sourceFile.getName();
+        String fileName = originalFileName;
+        Path destPath = Paths.get(UPLOAD_DIR, fileName);
+
+        if (Files.exists(destPath)) {
+            String nameWithoutExtension = originalFileName.substring(0, originalFileName.lastIndexOf('.'));
+            String extension = originalFileName.substring(originalFileName.lastIndexOf('.'));
+            fileName = nameWithoutExtension + "_" + Instant.now().toEpochMilli() + extension;
+            destPath = Paths.get(UPLOAD_DIR, fileName);
+        }
+
+        Files.copy(sourceFile.toPath(), destPath);
+        return fileName;
     }
 
     private void resetStyle(Control... controls) {

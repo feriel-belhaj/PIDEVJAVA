@@ -12,7 +12,12 @@ import tn.esprit.workshop.models.Partenariat;
 import tn.esprit.workshop.services.ServiceCandidature;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Arrays;
@@ -72,7 +77,9 @@ public class PostulerPartenariatController {
     private ServiceCandidature serviceCandidature;
 
     private static final long MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB en octets
-    private static final List<String> ALLOWED_MIME_TYPES = Arrays.asList("image/png", "image/jpeg", "image/jpg");
+    private static final List<String> ALLOWED_CV_EXTENSIONS = Arrays.asList(".pdf", ".doc", ".docx");
+    private static final List<String> ALLOWED_PORTFOLIO_EXTENSIONS = Arrays.asList(".png", ".jpeg", ".jpg");
+    private static final String UPLOAD_DIR = "C:\\xampp\\htdocs\\img";
 
     @FXML
     public void initialize() {
@@ -127,6 +134,16 @@ public class PostulerPartenariatController {
                 return;
             }
 
+            // Vérifier l'extension du fichier
+            String fileName = selectedFile.getName().toLowerCase();
+            boolean isValidExtension = ALLOWED_CV_EXTENSIONS.stream().anyMatch(fileName::endsWith);
+            if (!isValidExtension) {
+                cvLabel.setTextFill(javafx.scene.paint.Color.RED);
+                errorCv.setText("Le CV doit être un fichier PDF, DOC ou DOCX.");
+                errorCv.setVisible(true);
+                return;
+            }
+
             cvPath = selectedFile.getAbsolutePath();
             cvLabel.setText(selectedFile.getName());
             cvLabel.setTextFill(javafx.scene.paint.Color.BLACK);
@@ -154,10 +171,10 @@ public class PostulerPartenariatController {
                 return;
             }
 
-            // Vérifier le type MIME (approximation basée sur l'extension)
+            // Vérifier l'extension du fichier
             String fileName = selectedFile.getName().toLowerCase();
-            boolean isValidMimeType = fileName.endsWith(".png") || fileName.endsWith(".jpeg") || fileName.endsWith(".jpg");
-            if (!isValidMimeType) {
+            boolean isValidExtension = ALLOWED_PORTFOLIO_EXTENSIONS.stream().anyMatch(fileName::endsWith);
+            if (!isValidExtension) {
                 portfolioLabel.setTextFill(javafx.scene.paint.Color.RED);
                 errorPortfolio.setText("Le portfolio doit être une image PNG, JPEG ou JPG.");
                 errorPortfolio.setVisible(true);
@@ -237,6 +254,10 @@ public class PostulerPartenariatController {
         }
 
         try {
+            // Copier les fichiers et obtenir les noms de fichiers
+            String cvFileName = copyFileToDestination(cvPath, "cv");
+            String portfolioFileName = copyFileToDestination(portfolioPath, "portfolio");
+
             // Création d'un nouvel objet Candidature
             Candidature candidature = new Candidature();
 
@@ -245,8 +266,8 @@ public class PostulerPartenariatController {
 
             // Paramétrage de l'objet Candidature
             candidature.setDatePostulation(datePost);
-            candidature.setCv(cvPath);
-            candidature.setPortfolio(portfolioPath);
+            candidature.setCv(cvFileName);
+            candidature.setPortfolio(portfolioFileName);
             candidature.setMotivation(lettreMotivation.getText());
             candidature.setTypeCollab(typeCollaboration.getValue());
             candidature.setPartenariat(partenariat);
@@ -265,6 +286,13 @@ public class PostulerPartenariatController {
             Stage stage = (Stage) btnEnregistrer.getScene().getWindow();
             stage.close();
 
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur");
+            alert.setHeaderText(null);
+            alert.setContentText("Erreur lors de la copie des fichiers: " + e.getMessage());
+            alert.showAndWait();
+            e.printStackTrace();
         } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erreur");
@@ -273,6 +301,42 @@ public class PostulerPartenariatController {
             alert.showAndWait();
             e.printStackTrace();
         }
+    }
+
+    private String copyFileToDestination(String sourcePath, String fileType) throws IOException {
+        if (sourcePath == null || sourcePath.isEmpty()) {
+            throw new IOException("Chemin du fichier source non spécifié pour " + fileType);
+        }
+
+        File sourceFile = new File(sourcePath);
+        if (!sourceFile.exists()) {
+            throw new IOException("Le fichier source n'existe pas: " + sourcePath);
+        }
+
+        // Créer le répertoire de destination s'il n'existe pas
+        Path destDir = Paths.get(UPLOAD_DIR);
+        if (!Files.exists(destDir)) {
+            Files.createDirectories(destDir);
+        }
+
+        // Obtenir le nom du fichier
+        String originalFileName = sourceFile.getName();
+        String fileName = originalFileName;
+        Path destPath = Paths.get(UPLOAD_DIR, fileName);
+
+        // Gérer les conflits de noms (ajouter un timestamp si le fichier existe)
+        if (Files.exists(destPath)) {
+            String nameWithoutExtension = originalFileName.substring(0, originalFileName.lastIndexOf('.'));
+            String extension = originalFileName.substring(originalFileName.lastIndexOf('.'));
+            fileName = nameWithoutExtension + "_" + Instant.now().toEpochMilli() + extension;
+            destPath = Paths.get(UPLOAD_DIR, fileName);
+        }
+
+        // Copier le fichier
+        Files.copy(sourceFile.toPath(), destPath);
+
+        // Retourner uniquement le nom du fichier
+        return fileName;
     }
 
     private void resetErrors() {

@@ -60,6 +60,14 @@ public class MainMenuController implements Initializable {
     @FXML
     private void ShowDashboard() {switchToBackOffice("/dashboardUser.fxml");}
 
+    public void close() {
+        System.exit(0);
+    }
+
+    public void minimize() {
+        Stage stage = (Stage) contentArea.getScene().getWindow();
+        stage.setIconified(true);
+    }
 
     private void switchToBackOffice(String initialView) {
         try {

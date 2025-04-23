@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="mainContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="600.0" spacing="15.0" style="-fx-background-color: #F5F5F5;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="mainContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="600.0" spacing="15.0" style="-fx-background-color: #F5F5F5;" stylesheets="@../../../../../Downloads/dashboardDesign.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
     <children>
-        <Label alignment="CENTER" maxWidth="Infinity" text="Mise à Jour du Partenariat" textAlignment="CENTER">
+        <Label alignment="CENTER" maxWidth="Infinity" styleClass="h1" text="Mise à Jour du Partenariat" textAlignment="CENTER">
             <font>
                 <Font name="System Italic Bold" size="28.0" />
             </font>
@@ -21,40 +27,40 @@
         </Label>
 
         <VBox spacing="5.0">
-            <Label text="Nom" />
-            <TextField fx:id="nomField" prefWidth="400.0" />
+            <Label styleClass="h2" text="Nom" />
+            <TextField fx:id="nomField" prefWidth="400.0" styleClass="textfield" />
         </VBox>
 
         <VBox spacing="5.0">
-            <Label text="Type" />
-            <TextField fx:id="typeField" prefWidth="400.0" />
+            <Label styleClass="h2" text="Type" />
+            <TextField fx:id="typeField" prefWidth="400.0" styleClass="textfield" />
         </VBox>
 
         <VBox spacing="5.0">
-            <Label text="Description" />
-            <TextArea fx:id="descriptionArea" prefHeight="100.0" wrapText="true" />
+            <Label styleClass="h2" text="Description" />
+            <TextArea fx:id="descriptionArea" prefHeight="100.0" styleClass="textfield" wrapText="true" />
         </VBox>
 
         <VBox spacing="5.0">
-            <Label text="Date debut" />
-            <DatePicker fx:id="dateDebutPicker" prefWidth="200.0" />
+            <Label styleClass="h2" text="Date debut" />
+            <DatePicker fx:id="dateDebutPicker" prefWidth="200.0" styleClass="textfield" />
         </VBox>
 
         <VBox spacing="5.0">
-            <Label text="Date fin" />
-            <DatePicker fx:id="dateFinPicker" prefWidth="200.0" />
+            <Label styleClass="h2" text="Date fin" />
+            <DatePicker fx:id="dateFinPicker" prefWidth="200.0" styleClass="textfield" />
         </VBox>
 
         <VBox spacing="5.0">
-            <Label text="Statut" />
-            <ComboBox fx:id="statutCombo" prefWidth="200.0" />
+            <Label styleClass="h2" text="Statut" />
+            <ComboBox fx:id="statutCombo" prefWidth="200.0" styleClass="textfield" />
         </VBox>
 
         <VBox spacing="10.0">
-            <Label text="Image du Partenariat" />
-            <HBox spacing="10.0" alignment="CENTER_LEFT">
-                <Button fx:id="choisirImageBtn" text="Choisir un fichier" style="-fx-background-color: #F8F9FA; -fx-border-color: #CCCCCC; -fx-border-radius: 3;" />
-                <Label fx:id="imagePathLabel" text="Aucun fichier n'a été sélectionné" />
+            <Label styleClass="h2" text="Image du Partenariat" />
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                <Button fx:id="choisirImageBtn" styleClass="logout" text="Choisir un fichier" />
+                <Label fx:id="imagePathLabel" styleClass="h3" text="Aucun fichier n'a été sélectionné" />
             </HBox>
             <ImageView fx:id="imagePreview" fitHeight="150.0" fitWidth="150.0" preserveRatio="true" />
         </VBox>
@@ -63,7 +69,7 @@
             <VBox.margin>
                 <Insets top="20.0" />
             </VBox.margin>
-            <Button fx:id="updateBtn" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #D4A76A; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 25;" text="Mettre à jour" />
+            <Button fx:id="updateBtn" prefHeight="40.0" prefWidth="200.0" styleClass="update-btn" text="Mettre à jour" />
         </HBox>
     </children>
 </VBox>

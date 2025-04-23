@@ -165,14 +165,14 @@ public class ListePartenariatsController {
         Label statutOverlay = new Label(partenariat.getStatut());
         String styleStatut;
         switch (partenariat.getStatut()) {
-            case "Actif":
-                styleStatut = "-fx-background-color: #2ecc71; -fx-text-fill: white;";
-                break;
             case "EnCours":
                 styleStatut = "-fx-background-color: #FFD700; -fx-text-fill: white;";
                 break;
             case "Expiré":
                 styleStatut = "-fx-background-color: #e74c3c; -fx-text-fill: white;";
+                break;
+            case "À venir":
+                styleStatut = "-fx-background-color: #3498db; -fx-text-fill: white;";
                 break;
             default:
                 styleStatut = "-fx-background-color: #95a5a6; -fx-text-fill: white;";

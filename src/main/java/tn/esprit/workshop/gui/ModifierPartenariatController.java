@@ -24,10 +24,6 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.function.Consumer;
 
-/**
- * Contrôleur pour la modification des partenariats
- * Utilise du code Java pur sans FXML
- */
 public class ModifierPartenariatController {
 
     private final ServicePartenariat servicePartenariat;
@@ -40,7 +36,6 @@ public class ModifierPartenariatController {
     private Label errorNom;
     private Label errorType;
     private Label errorDescription;
-    private Label errorStatut;
     private Label errorDateDebut;
     private Label errorDateFin;
     private Label errorImage;
@@ -122,13 +117,17 @@ public class ModifierPartenariatController {
                     dateDebutPicker.setValue(dateDebut);
                     System.out.println("Date de début définie avec succès: " + dateDebut);
                 } else {
-                    dateDebutPicker.setValue(LocalDate.now());
-                    System.out.println("La date de début est null, définie à aujourd'hui");
+                    // Pré-remplir avec la date actuelle
+                    LocalDate defaultDateDebut = LocalDate.now();
+                    dateDebutPicker.setValue(defaultDateDebut);
+                    System.out.println("Date de début pré-remplie: " + defaultDateDebut);
                 }
             } catch (Exception e) {
                 System.err.println("Erreur lors de la conversion de la date de début: " + e.getMessage());
-                dateDebutPicker.setValue(LocalDate.now());
-                System.out.println("Date de début définie par défaut après erreur: " + LocalDate.now());
+                // Pré-remplir avec la date actuelle en cas d'erreur
+                LocalDate defaultDateDebut = LocalDate.now();
+                dateDebutPicker.setValue(defaultDateDebut);
+                System.out.println("Date de début pré-remplie après erreur: " + defaultDateDebut);
             }
             errorDateDebut = new Label();
             errorDateDebut.setStyle("-fx-text-fill: red;");
@@ -146,28 +145,23 @@ public class ModifierPartenariatController {
                             .atZone(ZoneId.systemDefault()).toLocalDate();
                     dateFinPicker.setValue(dateFin);
                     System.out.println("Date de fin définie avec succès: " + dateFin);
+                } else {
+                    // Pré-remplir avec une date future (1 mois après la date actuelle)
+                    LocalDate defaultDateFin = LocalDate.now().plusMonths(1);
+                    dateFinPicker.setValue(defaultDateFin);
+                    System.out.println("Date de fin pré-remplie: " + defaultDateFin);
                 }
             } catch (Exception e) {
                 System.err.println("Erreur lors de la conversion de la date de fin: " + e.getMessage());
-                dateFinPicker.setValue(LocalDate.now());
-                System.out.println("Date de fin définie par défaut après erreur: " + LocalDate.now());
+                // Pré-remplir avec une date future en cas d'erreur
+                LocalDate defaultDateFin = LocalDate.now().plusMonths(1);
+                dateFinPicker.setValue(defaultDateFin);
+                System.out.println("Date de fin pré-remplie après erreur: " + defaultDateFin);
             }
             errorDateFin = new Label();
             errorDateFin.setStyle("-fx-text-fill: red;");
             errorDateFin.setVisible(false);
             dateFinBox.getChildren().addAll(dateFinLabel, dateFinPicker, errorDateFin);
-
-            // Statut
-            VBox statutBox = new VBox(5);
-            Label statutLabel = new Label("Statut");
-            statutLabel.setStyle("-fx-text-fill: #555555;");
-            ComboBox<String> statutCombo = new ComboBox<>();
-            statutCombo.getItems().addAll("Actif", "En Cours", "Expiré");
-            statutCombo.setValue(partenariat.getStatut() != null ? partenariat.getStatut() : "En Cours");
-            errorStatut = new Label();
-            errorStatut.setStyle("-fx-text-fill: red;");
-            errorStatut.setVisible(false);
-            statutBox.getChildren().addAll(statutLabel, statutCombo, errorStatut);
 
             // Image du Partenariat
             VBox imageBox = new VBox(10);
@@ -182,7 +176,7 @@ public class ModifierPartenariatController {
 
             if (partenariat.getImage() != null && !partenariat.getImage().isEmpty()) {
                 try {
-                    File imageFile = new File(partenariat.getImage());
+                    File imageFile = new File(IMAGE_DESTINATION_PATH, partenariat.getImage());
                     imagePathLabel.setText(imageFile.getName());
                 } catch (Exception e) {
                     System.err.println("Erreur lors de l'accès au fichier image: " + e.getMessage());
@@ -202,7 +196,7 @@ public class ModifierPartenariatController {
             // Charger l'image existante si disponible
             if (partenariat.getImage() != null && !partenariat.getImage().isEmpty()) {
                 try {
-                    File file = new File(partenariat.getImage());
+                    File file = new File(IMAGE_DESTINATION_PATH, partenariat.getImage());
                     if (file.exists()) {
                         Image image = new Image(file.toURI().toString());
                         imagePreview.setImage(image);
@@ -222,7 +216,7 @@ public class ModifierPartenariatController {
             updateBtnBox.setAlignment(Pos.CENTER);
             Button updateBtn = new Button("Mettre à jour");
             updateBtn.setStyle("-fx-background-color: #D4A76A; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 30; -fx-background-radius: 25;");
-            updateBtnBox.getChildren().add(updateBtn);
+            updateBtnBox.getChildren().add(updateBtn); // Correction ici : get.Children() -> getChildren()
             updateBtnBox.setPadding(new Insets(20, 0, 0, 0));
 
             // Ajouter tous les éléments au conteneur principal
@@ -233,7 +227,6 @@ public class ModifierPartenariatController {
                     descriptionBox,
                     dateDebutBox,
                     dateFinBox,
-                    statutBox,
                     imageBox,
                     updateBtnBox
             );
@@ -260,7 +253,7 @@ public class ModifierPartenariatController {
             updateBtn.setOnAction(e -> {
                 try {
                     // Reset styles and errors
-                    resetStyle(nomField, typeField, descriptionArea, dateDebutPicker, dateFinPicker, statutCombo);
+                    resetStyle(nomField, typeField, descriptionArea, dateDebutPicker, dateFinPicker);
                     resetErrors();
 
                     boolean hasError = false;
@@ -318,7 +311,7 @@ public class ModifierPartenariatController {
                         }
                     }
 
-                    // Validation des dates (si les deux sont remplies)
+                    // Validation des dates (non obligatoire, mais vérifier si les deux sont remplies)
                     LocalDate dateDebutValue = dateDebutPicker.getValue();
                     LocalDate dateFinValue = dateFinPicker.getValue();
                     if (dateDebutValue != null && dateFinValue != null && dateFinValue.isBefore(dateDebutValue)) {
@@ -328,7 +321,7 @@ public class ModifierPartenariatController {
                         hasError = true;
                     }
 
-                    // Validation de l'image (si sélectionnée)
+                    // Validation de l'image (non obligatoire, mais vérifier le format si une image est sélectionnée)
                     if (nouveauCheminImage != null && !nouveauCheminImage.isEmpty()) {
                         String lowerCasePath = nouveauCheminImage.toLowerCase();
                         if (!lowerCasePath.endsWith(".png") && !lowerCasePath.endsWith(".jpg") && !lowerCasePath.endsWith(".jpeg")) {
@@ -352,21 +345,24 @@ public class ModifierPartenariatController {
                     partenariat.setNom(nomField.getText());
                     partenariat.setType(typeField.getText());
                     partenariat.setDescription(descriptionArea.getText());
-                    partenariat.setStatut(statutCombo.getValue());
 
                     // Mettre à jour le chemin de l'image
                     if (nouveauCheminImage != null) {
                         partenariat.setImage(nouveauCheminImage);
+                    } else {
+                        partenariat.setImage(null); // Permettre que l'image soit null
                     }
 
-                    // Convertir LocalDate en Date
+                    // Convertir LocalDate en Date (gérer les cas où les dates sont null)
                     if (dateDebutPicker.getValue() != null) {
                         Date dateDebut = Date.from(
                                 dateDebutPicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()
                         );
                         partenariat.setDateDebut(dateDebut);
+                        System.out.println("Mise à jour - dateDebut: " + dateDebut);
                     } else {
                         partenariat.setDateDebut(null);
+                        System.out.println("Mise à jour - dateDebut: null");
                     }
 
                     if (dateFinPicker.getValue() != null) {
@@ -374,12 +370,22 @@ public class ModifierPartenariatController {
                                 dateFinPicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()
                         );
                         partenariat.setDateFin(dateFin);
+                        System.out.println("Mise à jour - dateFin: " + dateFin);
                     } else {
                         partenariat.setDateFin(null);
+                        System.out.println("Mise à jour - dateFin: null");
                     }
+
+                    // Log de l'image
+                    System.out.println("Mise à jour - image: " + nouveauCheminImage);
+
+                    // Mettre à jour le statut dynamiquement
+                    partenariat.updateStatut();
+                    System.out.println("Statut mis à jour dynamiquement: " + partenariat.getStatut());
 
                     // Sauvegarder les modifications
                     servicePartenariat.update(partenariat);
+                    System.out.println("Partenariat mis à jour avec succès: ID=" + partenariat.getId());
 
                     // Afficher un message de succès
                     Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
@@ -429,9 +435,10 @@ public class ModifierPartenariatController {
                         File destFile = new File(destDir, selectedFile.getName());
                         try {
                             Files.copy(selectedFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                            nouveauCheminImage = destFile.getAbsolutePath();
+                            nouveauCheminImage = selectedFile.getName(); // Stocker uniquement le nom du fichier
                             imagePathLabel.setText(selectedFile.getName());
                             imagePathLabel.setTextFill(javafx.scene.paint.Color.BLACK);
+                            System.out.println("Image copiée avec succès: " + destFile.getAbsolutePath());
 
                             // Mettre à jour l'aperçu
                             Image image = new Image(destFile.toURI().toString());
@@ -440,6 +447,13 @@ public class ModifierPartenariatController {
                             System.err.println("Erreur lors de la copie de l'image: " + ex.getMessage());
                             afficherErreur("Erreur", "Impossible de copier l'image dans le dossier cible: " + ex.getMessage());
                         }
+                    } else {
+                        // Si l'utilisateur annule la sélection, réinitialiser l'image
+                        nouveauCheminImage = null;
+                        imagePathLabel.setText("Aucun fichier n'a été sélectionné");
+                        imagePathLabel.setTextFill(javafx.scene.paint.Color.BLACK);
+                        imagePreview.setImage(null);
+                        errorImage.setVisible(false);
                     }
                 } catch (Exception ex) {
                     System.err.println("Erreur lors de la sélection de l'image: " + ex.getMessage());
@@ -480,7 +494,6 @@ public class ModifierPartenariatController {
         errorNom.setVisible(false);
         errorType.setVisible(false);
         errorDescription.setVisible(false);
-        errorStatut.setVisible(false);
         errorDateDebut.setVisible(false);
         errorDateFin.setVisible(false);
         errorImage.setVisible(false);

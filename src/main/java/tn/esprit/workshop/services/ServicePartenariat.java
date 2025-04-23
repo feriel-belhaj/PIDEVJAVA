@@ -1,4 +1,5 @@
-package tn.esprit.workshop.services;
+
+        package tn.esprit.workshop.services;
 
 import tn.esprit.workshop.models.Partenariat;
 import tn.esprit.workshop.models.Candidature;
@@ -21,8 +22,17 @@ public class ServicePartenariat implements CRUDPartenariat<Partenariat> {
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = cnx.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
 
-        ps.setDate(1, new java.sql.Date(partenariat.getDateDebut().getTime()));
-        ps.setDate(2, new java.sql.Date(partenariat.getDateFin().getTime()));
+        // Gérer les dates null
+        if (partenariat.getDateDebut() != null) {
+            ps.setDate(1, new java.sql.Date(partenariat.getDateDebut().getTime()));
+        } else {
+            ps.setDate(1, null);
+        }
+        if (partenariat.getDateFin() != null) {
+            ps.setDate(2, new java.sql.Date(partenariat.getDateFin().getTime()));
+        } else {
+            ps.setDate(2, null);
+        }
         ps.setString(3, partenariat.getStatut());
         ps.setString(4, partenariat.getDescription());
         ps.setString(5, partenariat.getNom());
@@ -44,8 +54,17 @@ public class ServicePartenariat implements CRUDPartenariat<Partenariat> {
         String req = "UPDATE `partenariat` SET `date_debut`=?, `date_fin`=?, `statut`=?, `description`=?, `nom`=?, `type`=?, `image`=? WHERE `id`=?";
         PreparedStatement ps = cnx.prepareStatement(req);
 
-        ps.setDate(1, new java.sql.Date(partenariat.getDateDebut().getTime()));
-        ps.setDate(2, new java.sql.Date(partenariat.getDateFin().getTime()));
+        // Gérer les dates null
+        if (partenariat.getDateDebut() != null) {
+            ps.setDate(1, new java.sql.Date(partenariat.getDateDebut().getTime()));
+        } else {
+            ps.setDate(1, null);
+        }
+        if (partenariat.getDateFin() != null) {
+            ps.setDate(2, new java.sql.Date(partenariat.getDateFin().getTime()));
+        } else {
+            ps.setDate(2, null);
+        }
         ps.setString(3, partenariat.getStatut());
         ps.setString(4, partenariat.getDescription());
         ps.setString(5, partenariat.getNom());
@@ -89,6 +108,14 @@ public class ServicePartenariat implements CRUDPartenariat<Partenariat> {
             p.setNom(rs.getString("nom"));
             p.setType(rs.getString("type"));
             p.setImage(rs.getString("image"));
+
+            // Mettre à jour le statut
+            String oldStatut = p.getStatut();
+            p.updateStatut();
+            if (!p.getStatut().equals(oldStatut)) {
+                updateStatutInDatabase(p);
+            }
+
             temp.add(p);
         }
         return temp;
@@ -107,7 +134,6 @@ public class ServicePartenariat implements CRUDPartenariat<Partenariat> {
             params.add(searchPattern);
         }
 
-        // Logique de contention stricte : date_debut >= dateDebutRecherche AND date_fin <= dateFinRecherche
         if (dateDebut != null && dateFin != null) {
             req.append(" AND date_debut >= ? AND date_fin <= ?");
             params.add(new java.sql.Date(dateDebut.getTime()));
@@ -122,7 +148,6 @@ public class ServicePartenariat implements CRUDPartenariat<Partenariat> {
 
         req.append(" ORDER BY id DESC");
 
-        // Logs pour déboguer
         System.out.println("Requête SQL : " + req.toString());
         System.out.println("Paramètres : " + params);
 
@@ -142,6 +167,14 @@ public class ServicePartenariat implements CRUDPartenariat<Partenariat> {
             p.setNom(rs.getString("nom"));
             p.setType(rs.getString("type"));
             p.setImage(rs.getString("image"));
+
+            // Mettre à jour le statut
+            String oldStatut = p.getStatut();
+            p.updateStatut();
+            if (!p.getStatut().equals(oldStatut)) {
+                updateStatutInDatabase(p);
+            }
+
             temp.add(p);
         }
 
@@ -165,9 +198,30 @@ public class ServicePartenariat implements CRUDPartenariat<Partenariat> {
             p.setNom(rs.getString("nom"));
             p.setType(rs.getString("type"));
             p.setImage(rs.getString("image"));
+
+            // Mettre à jour le statut
+            String oldStatut = p.getStatut();
+            p.updateStatut();
+            if (!p.getStatut().equals(oldStatut)) {
+                updateStatutInDatabase(p);
+            }
+
             return p;
         }
         return null;
+    }
+
+    private void updateStatutInDatabase(Partenariat partenariat) throws SQLException {
+        String req = "UPDATE `partenariat` SET `statut`=? WHERE `id`=?";
+        PreparedStatement ps = cnx.prepareStatement(req);
+        ps.setString(1, partenariat.getStatut());
+        ps.setInt(2, partenariat.getId());
+        int rowsAffected = ps.executeUpdate();
+        if (rowsAffected > 0) {
+            System.out.println("Statut du partenariat ID=" + partenariat.getId() + " mis à jour à : " + partenariat.getStatut());
+        } else {
+            System.err.println("Échec de la mise à jour du statut pour le partenariat ID=" + partenariat.getId());
+        }
     }
 
     private List<Candidature> getCandidaturesByPartenariatId(int partenariatId) throws SQLException {

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox stylesheets="@../styles/front.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="tn.esprit.workshop.gui.MainMenuBackController">
+    
+                <MenuBar>
+        <Menu text="Navigation">
+
+            <MenuItem onAction="#ShowDashboard" text="Suivi utilisateurs" />
+            <MenuItem onAction="#ShowEvents" text="Evennements" />
+            <MenuItem onAction="#showFormations" text="Formations" />
+            <MenuItem onAction="#showCertificats" text="Certificats" />
+            <MenuItem onAction="#ShowProduits" text="Gestion des Produit" />
+            <MenuItem onAction="#ShowCommandes" text="Gestion des Commandes" />
+            <MenuItem onAction="#ShowCandidatures" text="Gestion des Candidatures" />
+            <SeparatorMenuItem />
+            <MenuItem onAction="#showClientView" text="Partie Client" />
+            <SeparatorMenuItem />
+            <MenuItem onAction="#quit" text="Quitter" />
+        </Menu>
+        
+                </MenuBar>
+
+                   <!-- Contenu principal qui changera en fonction de la navigation -->
+    <StackPane fx:id="contentArea" VBox.vgrow="ALWAYS">
+
+    </StackPane>
+</VBox>

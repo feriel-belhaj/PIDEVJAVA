@@ -5,10 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import tn.esprit.workshop.models.User;
@@ -29,6 +26,10 @@ import java.io.IOException;
 public class Utilisateur {
     private double x = 0;
     private double y = 0;
+
+    @FXML
+    private Label User_CreateAccount;
+
     @FXML
     private Button User_login_btn;
 
@@ -112,6 +113,33 @@ public class Utilisateur {
             e.printStackTrace();
         }
 
+    }
+    @FXML
+    void SwitchSignUp(MouseEvent event) {
+        User_CreateAccount.getScene().getWindow().hide();
+
+        try {
+            Parent root  = FXMLLoader.load(getClass().getResource("/SignUpUtilisateur.fxml"));
+            Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            root.setOnMousePressed((MouseEvent Mevent) ->{
+                x = Mevent.getSceneX();
+                y = Mevent.getSceneY();
+            });
+
+            root.setOnMouseDragged((MouseEvent Mevent) ->{
+                stage.setX(Mevent.getScreenX() - x);
+                stage.setY(Mevent.getScreenY() - y);
+            });
+
+            stage.initStyle(StageStyle.TRANSPARENT);
+            stage.setScene(scene);
+            stage.show();
+
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

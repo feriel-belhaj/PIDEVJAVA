@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox stylesheets="@../styles/front.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.workshop.gui.MainMenuController">
+   <AnchorPane prefHeight="37.0" prefWidth="1064.0" styleClass="nav-bar">
+      <children>
+         <Label layoutX="6.0" layoutY="11.0" prefHeight="21.0" prefWidth="217.0" styleClass="h3" stylesheets="@../dashboardDesign.css" text="ArtiZina-Application" />
+         <Button fx:id="close" layoutX="1012.0" layoutY="12.0" mnemonicParsing="false" onAction="#close" prefHeight="25.0" prefWidth="38.0" styleClass="close" stylesheets="@../dashboardDesign.css" text="X" />
+         <Button fx:id="minimize" layoutX="974.0" layoutY="12.0" mnemonicParsing="false" onAction="#minimize" prefHeight="25.0" prefWidth="38.0" styleClass="close" stylesheets="@../dashboardDesign.css" text="-" />
+      </children>
+   </AnchorPane>
+
+    <!-- Barre de navigation -->
+    <HBox alignment="CENTER" prefWidth="1064.0" styleClass="nav-bar">
+        <padding>
+            <Insets bottom="10" left="20" right="20" top="10" />
+        </padding>
+        <ImageView fx:id="logoImage" fitHeight="50" fitWidth="150" preserveRatio="true" />
+        <HBox alignment="CENTER" spacing="20" HBox.hgrow="ALWAYS">
+            <Button onAction="#showAccueil" styleClass="nav-button" text="Accueil" />
+            <Button onAction="#showAbout" styleClass="nav-button" text="About" />
+            <Button onAction="#showClientView" styleClass="nav-button" text="Formations" />
+            <Button onAction="#showPartenariats" styleClass="nav-button" text="Partenariats" />
+            <Button onAction="#showEvenements" styleClass="nav-button" text="Événements" />
+            <Button onAction="#showProduits" styleClass="nav-button" text="Produit" />
+            <Button onAction="#showCommande" styleClass="nav-button" text="Panier" />
+        </HBox>
+        <Button fx:id="SwitchToBack" mnemonicParsing="false" onAction="#ShowDashboard">
+         <graphic>
+            <ImageView fitHeight="20.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/backOffice.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+        <Button fx:id="logout" onAction="#logout" styleClass="logout" stylesheets="@../dashboardDesign.css" text="Se déconnecter">
+         <HBox.margin>
+            <Insets left="10.0" />
+         </HBox.margin></Button>
+    </HBox>
+
+          <!-- Contenu principal qui changera en fonction de la navigation -->
+    <StackPane fx:id="contentArea" VBox.vgrow="ALWAYS">
+        <padding>
+            <Insets bottom="10" left="10" right="10" top="10" />
+        </padding>
+    </StackPane>
+</VBox>

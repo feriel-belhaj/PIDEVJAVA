@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tn.esprit.workshop.gui.Commandeclient"
+            stylesheets="@./styles/dashboardDesign.css"
+            fitToWidth="true">
+
+    <VBox fx:id="commandeContainer" spacing="20" prefWidth="800">
+        <TableView fx:id="commandeTable" prefWidth="750" prefHeight="400">
+            <columns>
+                <!--<TableColumn fx:id="colId" text="ID Commande" /> -->
+                <TableColumn fx:id="colDate" text="Date" />
+                <TableColumn fx:id="colStatut" text="Statut" />
+                <TableColumn fx:id="colPrix" text="Prix Total" />
+                <TableColumn fx:id="colProduits" text="Produits" />
+                <TableColumn fx:id="colActions" text="Actions" />
+            </columns>
+        </TableView>
+        <Region minHeight="20" />
+    </VBox>
+</ScrollPane>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #F3F4F6;" stylesheets="@dashboardDesign.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.workshop.gui.ListeCandidaturesController">
+    <children>
+
+        <!-- Contenu principal -->
+        <VBox layoutX="0.0" layoutY="80.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="80.0">
+            <children>
+                <!-- Titre -->
+                <HBox alignment="CENTER" spacing="20.0" style="-fx-padding: 20 30;" />
+
+                <!-- Grille de candidatures -->
+                <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-padding: 0;" VBox.vgrow="ALWAYS">
+                    <content>
+                        <FlowPane fx:id="candidaturesContainer" hgap="20" style="-fx-padding: 20;" vgap="20">
+                            <!-- Les cartes seront ajoutées dynamiquement ici -->
+                        </FlowPane>
+                    </content>
+                </ScrollPane>
+            </children>
+        </VBox>
+           <Label layoutX="390.0" layoutY="33.0" styleClass="h1" text="Listes des Candidatures" />
+    </children>
+</AnchorPane>

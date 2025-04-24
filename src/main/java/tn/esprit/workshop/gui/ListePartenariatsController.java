@@ -29,9 +29,6 @@ public class ListePartenariatsController {
     private FlowPane cardsContainer;
 
     @FXML
-    private TextField searchField;
-
-    @FXML
     private DatePicker dateDebutPicker;
 
     @FXML
@@ -48,7 +45,6 @@ public class ListePartenariatsController {
     private final int itemsPerPage = 4;
     private int totalPages = 1;
 
-    // Pagination controls
     private Button btnPrevious;
     private Button btnNext;
     private Label pageLabel;
@@ -56,9 +52,18 @@ public class ListePartenariatsController {
     @FXML
     public void initialize() {
         servicePartenariat = new ServicePartenariat();
-        // Initialize pagination controls
         setupPaginationControls();
         chargerPartenariats();
+
+        // Test FXML loading
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/DetailsPartenariat.fxml"));
+            loader.load();
+            System.out.println("Fichier DetailsPartenariat.fxml chargé avec succès.");
+        } catch (Exception e) {
+            System.err.println("Erreur lors du chargement de DetailsPartenariat.fxml: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void setupPaginationControls() {
@@ -80,7 +85,6 @@ public class ListePartenariatsController {
 
         paginationBox.getChildren().addAll(btnPrevious, pageLabel, btnNext);
 
-        // Add pagination controls to the bottom of cardsContainer's parent
         VBox parentContainer = (VBox) cardsContainer.getParent();
         parentContainer.getChildren().add(paginationBox);
     }
@@ -97,23 +101,19 @@ public class ListePartenariatsController {
     private void updatePagination(List<Partenariat> partenariats) {
         cardsContainer.getChildren().clear();
         totalPages = (int) Math.ceil((double) partenariats.size() / itemsPerPage);
-        totalPages = Math.max(1, totalPages); // Ensure at least 1 page
+        totalPages = Math.max(1, totalPages);
 
-        // Ensure currentPage is within bounds
         if (currentPage < 1) currentPage = 1;
         if (currentPage > totalPages) currentPage = totalPages;
 
-        // Calculate start and end indices
         int startIndex = (currentPage - 1) * itemsPerPage;
         int endIndex = Math.min(startIndex + itemsPerPage, partenariats.size());
 
-        // Display partnerships for the current page
         for (int i = startIndex; i < endIndex; i++) {
             VBox card = creerCartePartenariat(partenariats.get(i));
             cardsContainer.getChildren().add(card);
         }
 
-        // Update pagination controls
         pageLabel.setText("Page " + currentPage + " / " + totalPages);
         btnPrevious.setDisable(currentPage <= 1);
         btnNext.setDisable(currentPage >= totalPages);
@@ -138,16 +138,40 @@ public class ListePartenariatsController {
     }
 
     private VBox creerCartePartenariat(Partenariat partenariat) {
+        if (partenariat == null) {
+            System.err.println("Partenariat null détecté");
+            return new VBox();
+        }
+
         VBox card = new VBox();
         card.setPrefWidth(300.0);
         card.setStyle("-fx-background-color: white; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2); -fx-background-radius: 10;");
         card.setCursor(Cursor.HAND);
+        card.setPickOnBounds(true);
+
+        // Click handler for the card
+        card.setOnMouseClicked(e -> {
+            if (!(e.getTarget() instanceof Button)) { // Ignore clicks on the Modifier button
+                System.out.println("Clic détecté sur la carte pour le partenariat: " + partenariat.getNom());
+                ouvrirDetailsPartenariat(partenariat);
+            }
+        });
+
+        // Hover effects
+        card.setOnMouseEntered(e -> {
+            card.setStyle("-fx-background-color: white; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 15, 0, 0, 3); -fx-background-radius: 10; -fx-scale-x: 1.02; -fx-scale-y: 1.02;");
+        });
+        card.setOnMouseExited(e -> {
+            card.setStyle("-fx-background-color: white; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2); -fx-background-radius: 10; -fx-scale-x: 1.0; -fx-scale-y: 1.0;");
+        });
 
         StackPane imageContainer = new StackPane();
         ImageView imageView = new ImageView();
         imageView.setFitWidth(300.0);
         imageView.setFitHeight(200.0);
         imageView.setPreserveRatio(false);
+        imageView.setMouseTransparent(true); // Pass clicks through to the card
+        imageContainer.setPickOnBounds(false); // Pass clicks through to the card
 
         String imagePath = partenariat.getImage();
         String basePath = "C:\\xampp\\htdocs\\img";
@@ -209,32 +233,60 @@ public class ListePartenariatsController {
         Button btnModifier = new Button("Modifier");
         btnModifier.setStyle("-fx-background-color: #D4A76A; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8 20; -fx-background-radius: 20;");
         btnModifier.setOnAction(e -> {
+            System.out.println("Clic sur Modifier pour: " + partenariat.getNom());
             e.consume();
             modifierPartenariat(partenariat);
         });
 
         contenu.getChildren().addAll(nomLabel, typeLabel, descriptionLabel, dateDebutLabel, dateFinLabel, btnModifier);
         card.getChildren().addAll(imageContainer, contenu);
-        card.setOnMouseClicked(e -> ouvrirDetailsPartenariat(partenariat));
 
         return card;
     }
 
     private void ouvrirDetailsPartenariat(Partenariat partenariat) {
+        if (partenariat == null) {
+            afficherErreur("Erreur", "Le partenariat sélectionné est invalide.");
+            return;
+        }
+
+        System.out.println("Ouverture des détails pour le partenariat ID=" + partenariat.getId() + ", Nom=" + partenariat.getNom());
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/DetailsPartenariat.fxml"));
+            String fxmlPath = "/DetailsPartenariat.fxml";
+            System.out.println("Tentative de chargement du fichier FXML: " + fxmlPath);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            if (loader.getLocation() == null) {
+                throw new IOException("Fichier FXML introuvable: " + fxmlPath);
+            }
+
             Parent root = loader.load();
             DetailsPartenariatController controller = loader.getController();
+            if (controller == null) {
+                throw new IllegalStateException("Le contrôleur DetailsPartenariatController n'a pas été initialisé.");
+            }
+
+            System.out.println("Initialisation des données pour le partenariat: " + partenariat.getNom());
             controller.initData(partenariat);
             controller.setOnDeleteCallback(this::chargerPartenariats);
+
             Stage stage = new Stage();
             stage.setTitle("Détails du Partenariat");
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
+            System.out.println("Affichage de la fenêtre de détails pour: " + partenariat.getNom());
             stage.show();
         } catch (IOException e) {
-            afficherErreur("Erreur", "Impossible d'ouvrir la fenêtre de détails: " + e.getMessage());
+            System.err.println("Erreur IOException lors du chargement de DetailsPartenariat.fxml: " + e.getMessage());
             e.printStackTrace();
+            afficherErreur("Erreur", "Impossible de charger le fichier FXML: " + e.getMessage());
+        } catch (IllegalStateException e) {
+            System.err.println("Erreur IllegalStateException: " + e.getMessage());
+            e.printStackTrace();
+            afficherErreur("Erreur", "Problème avec le contrôleur: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Erreur inattendue lors de l'ouverture des détails: " + e.getMessage());
+            e.printStackTrace();
+            afficherErreur("Erreur", "Erreur inattendue: " + e.getMessage());
         }
     }
 
@@ -248,48 +300,42 @@ public class ListePartenariatsController {
             stage.setScene(new Scene(root));
             stage.show();
             stage.setOnHidden(e -> {
-                currentPage = 1; // Reset to first page after adding
+                currentPage = 1;
                 chargerPartenariats();
             });
         } catch (IOException e) {
-            afficherErreur("Erreur", "Impossible d'ouvrir la fenêtre d'ajout de partenariat");
+            afficherErreur("Erreur", "Impossible d'ouvrir la fenêtre d'ajout de partenariat: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     @FXML
     void rechercher() {
-        // Récupérer les dates saisies
         LocalDate dateDebutLocal = dateDebutPicker.getValue();
         LocalDate dateFinLocal = dateFinPicker.getValue();
 
-        // Validation des dates
         if (dateDebutLocal != null && dateFinLocal != null && dateDebutLocal.isAfter(dateFinLocal)) {
             afficherErreur("Erreur", "La date de début doit être antérieure ou égale à la date de fin.");
             cardsContainer.getChildren().clear();
             afficherMessage("Information", "Aucun partenariat trouvé dans cet intervalle de dates.");
-            // Vider les champs DatePicker
             dateDebutPicker.setValue(null);
             dateFinPicker.setValue(null);
             return;
         }
 
-        // Convertir les LocalDate en java.util.Date
         Date dateDebut = dateDebutLocal != null ? java.sql.Date.valueOf(dateDebutLocal) : null;
         Date dateFin = dateFinLocal != null ? java.sql.Date.valueOf(dateFinLocal) : null;
 
-        // Logs pour déboguer les dates saisies
         System.out.println("Date de début recherchée : " + dateDebut);
         System.out.println("Date de fin recherchée : " + dateFin);
 
         try {
-            // Appeler searchPartenariats (searchText is null since the field was removed from FXML)
             List<Partenariat> partenariats = servicePartenariat.searchPartenariats(null, dateDebut, dateFin);
-            currentPage = 1; // Reset to first page after search
+            currentPage = 1;
             updatePagination(partenariats);
         } catch (SQLException e) {
             afficherErreur("Erreur lors de la recherche", e.getMessage());
         } finally {
-            // Vider les champs DatePicker après la recherche
             dateDebutPicker.setValue(null);
             dateFinPicker.setValue(null);
         }

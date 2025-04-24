@@ -102,15 +102,16 @@ public class PostulerPartenariatController {
 
         // Chargement de l'image
         String imagePath = partenariat.getImage();
+        String basePath = "C:\\xampp\\htdocs\\img";
         if (imagePath != null && !imagePath.isEmpty()) {
-            File imageFile = new File(imagePath);
+            File imageFile = new File(basePath, imagePath);
             if (imageFile.exists()) {
                 imageView.setImage(new Image(imageFile.toURI().toString()));
             } else {
-                imageView.setImage(new Image(getClass().getResourceAsStream("/images/default_img.png")));
+                imageView.setImage(new Image(getClass().getResourceAsStream("/images/default.png")));
             }
         } else {
-            imageView.setImage(new Image(getClass().getResourceAsStream("/images/default_img.png")));
+            imageView.setImage(new Image(getClass().getResourceAsStream("/images/default.png")));
         }
     }
 

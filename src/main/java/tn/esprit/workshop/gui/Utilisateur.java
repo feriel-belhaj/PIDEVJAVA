@@ -1,5 +1,6 @@
 package tn.esprit.workshop.gui;
 
+import com.google.api.services.gmail.Gmail;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,10 +10,18 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import tn.esprit.workshop.models.User;
+import tn.esprit.workshop.services.GoogleAuthService;
 import tn.esprit.workshop.services.ServiceUser;
 
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.sql.SQLException;
+
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.file.Paths;
 
 
 import javafx.scene.input.MouseEvent;
@@ -141,5 +150,118 @@ public class Utilisateur {
             throw new RuntimeException(e);
         }
     }
+
+    public static boolean sendToFlask(String imagePath) {
+        try {
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://127.0.0.1:5000/verify-face"))
+                    .header("Content-Type", "application/octet-stream")
+                    .POST(HttpRequest.BodyPublishers.ofFile(Paths.get(imagePath)))
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            return Boolean.parseBoolean(response.body());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    @FXML
+    void faceRecognitionLogin(ActionEvent event) {
+        String imgPath = "temp/face.jpg";
+        boolean success = sendToFlask(imgPath);
+
+        if (success) {
+
+            String recognizedEmail = "email_de_l_utilisateur_reconnu";
+            try {
+                User user = serviceUser.findByEmail(recognizedEmail);
+                if (user != null) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Information Message");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Facial recognition successful. Welcome " + user.getPrenom());
+                    alert.showAndWait();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText("Facial recognition failed.");
+            alert.showAndWait();
+        }
+    }
+
+    @FXML
+    private void onGoogleLogin() {
+        try {
+            // Tenter de récupérer le service Gmail via GoogleAuthService
+            Gmail service = GoogleAuthService.getGmailService();
+
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Authentification Google");
+            alert.setHeaderText("Succès de l'authentification");
+            alert.setContentText("Vous êtes maintenant connecté avec Google !");
+            alert.showAndWait();
+            User_login_btn.getScene().getWindow().hide();
+            try {
+                Parent root  = FXMLLoader.load(getClass().getResource("/fxml/MainMenu.fxml"));
+                Stage stage = new Stage();
+                Scene scene = new Scene(root);
+                root.setOnMousePressed((MouseEvent Mevent) ->{
+                    x = Mevent.getSceneX();
+                    y = Mevent.getSceneY();
+                });
+
+                root.setOnMouseDragged((MouseEvent Mevent) ->{
+                    stage.setX(Mevent.getScreenX() - x);
+                    stage.setY(Mevent.getScreenY() - y);
+                });
+
+                stage.initStyle(StageStyle.TRANSPARENT);
+                stage.setScene(scene);
+                stage.show();
+
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            String userEmail = service.users().getProfile("me").execute().getEmailAddress();
+            ServiceUser serviceUser = new ServiceUser();
+
+            try {
+                User user =serviceUser.findByEmail(userEmail);
+                UserGetData.nom=user.getNom();
+                UserGetData.prenom=user.getPrenom();
+                UserGetData.id=user.getId();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
+            System.out.println("Email de l'utilisateur : " + userEmail);
+
+        } catch (IOException e) {
+            e.printStackTrace();  // Affiche les détails de l'exception dans la console
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur d'authentification");
+            alert.setHeaderText("Erreur lors de l'authentification");
+            alert.setContentText("Erreur lors de la communication avec les services Google : " + e.getMessage());
+            alert.showAndWait();
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();  // Affiche les détails de l'exception dans la console
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur de sécurité");
+            alert.setHeaderText("Erreur de sécurité lors de l'authentification");
+            alert.setContentText("Une erreur de sécurité est survenue : " + e.getMessage());
+            alert.showAndWait();
+        }
+    }
+
 
 }

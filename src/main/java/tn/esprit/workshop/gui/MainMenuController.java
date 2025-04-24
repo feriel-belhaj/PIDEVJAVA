@@ -15,6 +15,7 @@ import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.StageStyle;
+import tn.esprit.workshop.services.GoogleAuthService;
 
 import java.awt.event.ActionEvent;
 import java.io.IOException;
@@ -194,7 +195,7 @@ public class MainMenuController implements Initializable {
         Optional<ButtonType> option = alert.showAndWait();
         try {
             if (option.get().equals(ButtonType.OK)) {
-
+                GoogleAuthService.logout();
                 logout.getScene().getWindow().hide();
                 Parent root = FXMLLoader.load(getClass().getResource("/Utilisateur.fxml"));
                 Stage stage = new Stage();

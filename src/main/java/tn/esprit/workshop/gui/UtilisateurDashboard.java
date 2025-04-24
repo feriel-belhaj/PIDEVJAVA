@@ -1,5 +1,6 @@
 package tn.esprit.workshop.gui;
 
+import com.google.api.client.auth.oauth2.Credential;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -25,6 +26,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.StageStyle;
 import tn.esprit.workshop.models.User;
 import tn.esprit.workshop.services.CRUD;
+import tn.esprit.workshop.services.GoogleAuthService;
 import tn.esprit.workshop.services.ServiceUser;
 import tn.esprit.workshop.services.UserGetData;
 
@@ -289,6 +291,8 @@ public class UtilisateurDashboard implements Initializable {
     private double x = 0;
     private double y = 0;
 
+
+
     @FXML
     void logout() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -298,7 +302,7 @@ public class UtilisateurDashboard implements Initializable {
         Optional<ButtonType> option = alert.showAndWait();
         try {
             if (option.get().equals(ButtonType.OK)) {
-
+                GoogleAuthService.logout();
                 logout.getScene().getWindow().hide();
                 Parent root = FXMLLoader.load(getClass().getResource("/Utilisateur.fxml"));
                 Stage stage = new Stage();

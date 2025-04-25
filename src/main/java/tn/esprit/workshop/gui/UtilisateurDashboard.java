@@ -24,12 +24,14 @@ import javafx.stage.Stage;
 
 import javafx.scene.input.MouseEvent;
 import javafx.stage.StageStyle;
+import tn.esprit.workshop.models.EmailSender;
 import tn.esprit.workshop.models.User;
 import tn.esprit.workshop.services.CRUD;
 import tn.esprit.workshop.services.GoogleAuthService;
 import tn.esprit.workshop.services.ServiceUser;
 import tn.esprit.workshop.services.UserGetData;
 
+import javax.mail.MessagingException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -445,15 +447,6 @@ public class UtilisateurDashboard implements Initializable {
 
     public void addUserInsertImage() {
 
-//        FileChooser open = new FileChooser();
-//        File file = open.showOpenDialog(User_MainForm.getScene().getWindow());
-//
-//        if (file != null) {
-//            UserGetData.path = file.getAbsolutePath();
-//
-//            img = new Image(file.toURI().toString(), 101, 127, false, true);
-//            Utilisateur_Image.setImage(img);
-//        }
         FileChooser open = new FileChooser();
         open.setTitle("Choisir une image");
 
@@ -509,10 +502,6 @@ public class UtilisateurDashboard implements Initializable {
         Utilisateur_tel.setText(SelectedUser.getTelephone());
         Utilisateur_role.setValue(SelectedUser.getRole());
 
-//        UserGetData.path =SelectedUser.getImage();
-//        String uri = "file:" + SelectedUser.getImage();
-//        img = new Image(uri,101, 127, false, true);
-//        Utilisateur_Image.setImage(img);
         String imageName = SelectedUser.getImage();
         UserGetData.path = imageName;
 
@@ -654,6 +643,11 @@ public class UtilisateurDashboard implements Initializable {
                         Role = "ROLE_ARTISAN";
                     u.setRole(Role);
                     UserService.insert(u);
+                    try {
+                        EmailSender.sendWelcomeEmail(u.getEmail(), u.getNom());
+                    } catch (MessagingException e) {
+                        System.out.println("Erreur lors de l'envoi de l'e-mail de bienvenue : " + e.getMessage());
+                    }
                     alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Information Message");
                     alert.setHeaderText(null);

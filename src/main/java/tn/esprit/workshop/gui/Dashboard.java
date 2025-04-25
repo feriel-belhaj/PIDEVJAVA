@@ -20,6 +20,9 @@ public class Dashboard {
             goToStore(null);
         } catch (IOException e) {
             e.printStackTrace();
+
+
+
         }
     }
     @FXML

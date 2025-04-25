@@ -9,6 +9,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import tn.esprit.workshop.models.EmailSender;
+import tn.esprit.workshop.models.OTPGenerator;
 import tn.esprit.workshop.models.User;
 import tn.esprit.workshop.services.GoogleAuthService;
 import tn.esprit.workshop.services.ServiceUser;
@@ -61,7 +63,7 @@ public class Utilisateur {
     void login(ActionEvent event) {
         String email = User_login_mail.getText();
         String password = User_login_pwd.getText();
-        Alert alert;
+         Alert alert;
         try {
             User loggedUser = serviceUser.loginUser(email, password);
             if (User_login_mail.getText().isEmpty() || User_login_pwd.getText().isEmpty()) {
@@ -73,41 +75,67 @@ public class Utilisateur {
             }
             else {
                 if (loggedUser != null) {
-                    UserGetData.nom=loggedUser.getNom();
-                    UserGetData.prenom=loggedUser.getPrenom();
-                    UserGetData.id=loggedUser.getId();
-
-                    System.out.println(loggedUser);
-                    alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Information Message");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Successfully Login");
-                    alert.showAndWait();
-                    User_login_btn.getScene().getWindow().hide();
-
+                    String otp = OTPGenerator.generateOTP(); // Génération de l'OTP
                     try {
-                        Parent root  = FXMLLoader.load(getClass().getResource("/fxml/MainMenu.fxml"));
-                        Stage stage = new Stage();
-                        Scene scene = new Scene(root);
-                        root.setOnMousePressed((MouseEvent Mevent) ->{
-                            x = Mevent.getSceneX();
-                            y = Mevent.getSceneY();
-                        });
-
-                        root.setOnMouseDragged((MouseEvent Mevent) ->{
-                            stage.setX(Mevent.getScreenX() - x);
-                            stage.setY(Mevent.getScreenY() - y);
-                        });
-
-                        stage.initStyle(StageStyle.TRANSPARENT);
-                        stage.setScene(scene);
-                        stage.show();
-
-
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
+                        EmailSender.sendOTP(email, otp); // Envoi de l'OTP par email
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error Message");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Failed to send OTP email.");
+                        alert.showAndWait();
+                        return;
                     }
+                    TextInputDialog otpDialog = new TextInputDialog();
+                    otpDialog.setTitle("OTP Verification");
+                    otpDialog.setHeaderText("Please enter the OTP sent to your email");
+                    otpDialog.showAndWait().ifPresent(otpInput -> {
+                        if (otpInput.equals(otp)) {
+                            UserGetData.nom = loggedUser.getNom();
+                            UserGetData.prenom = loggedUser.getPrenom();
+                            UserGetData.id = loggedUser.getId();
 
+                            System.out.println(loggedUser);
+                            Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                            successAlert.setTitle("Information Message");
+                            successAlert.setHeaderText(null);
+                            successAlert.setContentText("Successfully Login");
+                            successAlert.showAndWait();
+                            User_login_btn.getScene().getWindow().hide();
+
+                            try {
+                                Parent root = FXMLLoader.load(getClass().getResource("/fxml/MainMenu.fxml"));
+                                Stage stage = new Stage();
+                                Scene scene = new Scene(root);
+                                root.setOnMousePressed((MouseEvent Mevent) -> {
+                                    x = Mevent.getSceneX();
+                                    y = Mevent.getSceneY();
+                                });
+
+                                root.setOnMouseDragged((MouseEvent Mevent) -> {
+                                    stage.setX(Mevent.getScreenX() - x);
+                                    stage.setY(Mevent.getScreenY() - y);
+                                });
+
+                                stage.initStyle(StageStyle.TRANSPARENT);
+                                stage.setScene(scene);
+                                stage.show();
+
+
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                        else {
+                            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                            errorAlert.setTitle("Error Message");
+                            errorAlert.setHeaderText(null);
+                            errorAlert.setContentText("Invalid OTP. Please try again.");
+                            errorAlert.showAndWait();
+                        }
+
+                    });
                 } else {
                     alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error Message");

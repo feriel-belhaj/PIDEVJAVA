@@ -2,9 +2,14 @@ package tn.esprit.workshop.gui;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import tn.esprit.workshop.models.Produit;
 import tn.esprit.workshop.services.Serviceproduit;
 import javafx.stage.FileChooser;
@@ -178,26 +183,42 @@ public class Ajouterproduit {
         Serviceproduit service = new Serviceproduit();
         try {
             service.insert1(produit);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setContentText("Le produit a été ajouté avec succès !");
-            alert.show();
 
-            nom.clear();
-            description.clear();
-            prix.clear();
-            quantitestock.clear();
-            categorie.clear();
-            imageLabel.setText("Aucune image sélectionnée");
-            imageFile = null;
-            resetStyle(nom, description, prix, quantitestock, categorie);
-            resetErrors();
+            // Afficher message de succès
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Succès");
+            alert.setHeaderText(null);
+            alert.setContentText("Produit ajouté avec succès !");
+            alert.showAndWait();
+
+            // Redirection vers afficherproduit.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/afficherproduit.fxml"));
+            Parent root = loader.load();
+
+            // Rafraîchir les données
+            AfficherProduit controller = loader.getController();
+            controller.rafraichirTable();
+
+            // Changer de scène
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
 
         } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur");
+            alert.setHeaderText(null);
             alert.setContentText("Erreur lors de l'ajout du produit : " + e.getMessage());
+            alert.show();
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur");
+            alert.setHeaderText(null);
+            alert.setContentText("Erreur lors du chargement de l'interface : " + e.getMessage());
             alert.show();
         }
     }
+
 
     public void preRemplirFormulaire(Produit produit) {
         nom.setText(produit.getNom());

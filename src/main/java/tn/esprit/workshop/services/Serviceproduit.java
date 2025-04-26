@@ -1,13 +1,15 @@
 package tn.esprit.workshop.services;
 
+import javafx.collections.ObservableList;
 import tn.esprit.workshop.models.Produit;
+import tn.esprit.workshop.models.User;
 import tn.esprit.workshop.utils.MyDbConnexion;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Serviceproduit implements CRUD<Produit> {
+public class Serviceproduit implements PrCRUD<Produit> {
     private Connection cnx;
 
     public Serviceproduit() {
@@ -25,9 +27,9 @@ public class Serviceproduit implements CRUD<Produit> {
     }
 
     public void insert1(Produit produit) throws SQLException {
-        String req = "INSERT INTO produit(nom, description, prix, quantitestock, image, categorie, datecreation) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String req = "INSERT INTO produit(nom, description, prix, quantitestock, image, categorie, datecreation,createur_id) VALUES (?, ?, ?, ?, ?, ?, ?,?)";
         PreparedStatement ps = cnx.prepareStatement(req);
-
+        int createur_id= UserGetData.id;
         ps.setString(1, produit.getNom());
         ps.setString(2, produit.getDescription());
         ps.setDouble(3, produit.getPrix());
@@ -35,6 +37,7 @@ public class Serviceproduit implements CRUD<Produit> {
         ps.setString(5, produit.getImage());
         ps.setString(6, produit.getCategorie());
         ps.setDate(7, produit.getDateCreation());
+        ps.setInt(8, createur_id);
 
         ps.executeUpdate();
         System.out.println("Insertion OK!");

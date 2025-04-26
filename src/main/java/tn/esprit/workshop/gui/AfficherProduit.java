@@ -59,7 +59,14 @@ public class AfficherProduit {
             private final Button btnModifier = new Button("Modifier");
 
             {
-                btnModifier.setStyle("-fx-background-color: #2980b9; -fx-text-fill: white;");
+                btnModifier.setStyle(
+                        "-fx-background-color: #327252;" +
+                                "-fx-background-radius: 8px;" +
+                                "-fx-text-fill: #fff;" +
+                                "-fx-font-size: 14px;" +
+                                "-fx-font-family: 'Arial';" +
+                                "-fx-cursor: hand;"
+                );
             }
 
             @Override
@@ -82,7 +89,14 @@ public class AfficherProduit {
             private final Button btnSupprimer = new Button("Supprimer");
 
             {
-                btnSupprimer.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white;");
+                btnSupprimer.setStyle(
+                        "-fx-background-color: #86253f;" +
+                                "-fx-background-radius: 8px;" +
+                                "-fx-text-fill: #fff;" +
+                                "-fx-font-size: 14px;" +
+                                "-fx-font-family: 'Arial';" +
+                                "-fx-cursor: hand;"
+                );
             }
 
             @Override

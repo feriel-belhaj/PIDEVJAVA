@@ -16,30 +16,100 @@ import tn.esprit.workshop.services.Serviceproduit;
 import java.net.URL;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 public class Store implements Initializable {
 
-    @FXML
-    private FlowPane produitContainer;
-
-    @FXML
-    private Button btnCommander;
+    @FXML private FlowPane produitContainer;
+    @FXML private Button btnCommander;
+    @FXML private ComboBox<String> cbCategories;
+    @FXML private TextField tfPrixMin;
+    @FXML private TextField tfPrixMax;
+    @FXML private DatePicker datePickerFrom;
+    @FXML private DatePicker datePickerTo;
 
     private final Map<Produit, TextField> quantitesMap = new HashMap<>();
     private final Serviceproduit serviceProduit = new Serviceproduit();
     private final ServiceCommande serviceCommande = new ServiceCommande();
+    private List<Produit> tousLesProduits;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        chargerProduits();
+        chargerTousLesProduits();
+        initialiserFiltres();
     }
 
-    private void chargerProduits() {
+    private void chargerTousLesProduits() {
+        tousLesProduits = serviceProduit.getAll();
+        afficherProduits(tousLesProduits);
+    }
+
+    private void initialiserFiltres() {
+        // Initialisation du filtre par catégorie
+        Set<String> categories = new HashSet<>();
+        for (Produit produit : tousLesProduits) {
+            categories.add(produit.getCategorie());
+        }
+
+        cbCategories.getItems().clear();
+        cbCategories.getItems().add("Toutes les catégories");
+        cbCategories.getItems().addAll(categories);
+        cbCategories.getSelectionModel().selectFirst();
+    }
+
+    @FXML
+    private void appliquerFiltres() {
+        String categorieSelectionnee = cbCategories.getSelectionModel().getSelectedItem();
+
+        List<Produit> produitsFiltres = new ArrayList<>(tousLesProduits);
+
+        // Filtrage par catégorie
+        if (categorieSelectionnee != null && !"Toutes les catégories".equals(categorieSelectionnee)) {
+            produitsFiltres.removeIf(p -> !categorieSelectionnee.equals(p.getCategorie()));
+        }
+
+        // Filtrage par prix
+        try {
+            double prixMin = tfPrixMin.getText().isEmpty() ? 0 : Double.parseDouble(tfPrixMin.getText());
+            double prixMax = tfPrixMax.getText().isEmpty() ? Double.MAX_VALUE : Double.parseDouble(tfPrixMax.getText());
+
+            if (prixMin > 0 || prixMax < Double.MAX_VALUE) {
+                produitsFiltres.removeIf(p -> p.getPrix() < prixMin || p.getPrix() > prixMax);
+            }
+        } catch (NumberFormatException e) {
+            new Alert(Alert.AlertType.ERROR, "Veuillez entrer des valeurs numériques valides pour les prix").showAndWait();
+            return;
+        }
+
+        // Filtrage par date
+        if (datePickerFrom.getValue() != null || datePickerTo.getValue() != null) {
+            LocalDate fromDate = datePickerFrom.getValue() != null ? datePickerFrom.getValue() : LocalDate.MIN;
+            LocalDate toDate = datePickerTo.getValue() != null ? datePickerTo.getValue() : LocalDate.MAX;
+
+            produitsFiltres.removeIf(p -> {
+                // Conversion sécurisée de java.sql.Date à LocalDate
+                LocalDate produitDate = p.getDateCreation().toLocalDate();
+                return produitDate.isBefore(fromDate) || produitDate.isAfter(toDate);
+            });
+        }
+
+        afficherProduits(produitsFiltres);
+    }
+
+    @FXML
+    public void reinitialiserFiltres() {
+        cbCategories.getSelectionModel().selectFirst();
+        tfPrixMin.clear();
+        tfPrixMax.clear();
+        datePickerFrom.setValue(null);
+        datePickerTo.setValue(null);
+        afficherProduits(tousLesProduits);
+    }
+
+    private void afficherProduits(List<Produit> produits) {
         produitContainer.getChildren().clear();
         quantitesMap.clear();
-
-        List<Produit> produits = serviceProduit.getAll();
 
         for (Produit produit : produits) {
             VBox card = new VBox(10);
@@ -53,6 +123,7 @@ public class Store implements Initializable {
                             "-fx-effect: dropshadow(gaussian, lightgray, 5, 0, 2, 2);"
             );
 
+            // Image du produit
             ImageView imageView = new ImageView();
             imageView.setFitWidth(200);
             imageView.setFitHeight(120);
@@ -64,6 +135,7 @@ public class Store implements Initializable {
                 imageView.setImage(new Image("https://via.placeholder.com/200x120?text=Image+manquante"));
             }
 
+            // Informations du produit
             Label lblNom = new Label(produit.getNom());
             lblNom.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
 
@@ -72,18 +144,21 @@ public class Store implements Initializable {
             lblDescription.setWrapText(true);
 
             Label lblCategorie = new Label("Catégorie : " + produit.getCategorie());
-
             Label lblPrix = new Label("Prix : " + produit.getPrix() + " DT");
             lblPrix.setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
 
+            Label lblDate = new Label("Date : " + produit.getDateCreation());
             Label lblStock = new Label("Stock : " + produit.getQuantiteStock());
 
+            // Champ de quantité
             TextField tfQuantite = new TextField();
             tfQuantite.setPromptText("Quantité");
             tfQuantite.setDisable(produit.getQuantiteStock() == 0);
             quantitesMap.put(produit, tfQuantite);
 
-            card.getChildren().addAll(imageView, lblNom, lblDescription, lblCategorie, lblPrix, lblStock, tfQuantite);
+            // Ajout des éléments à la carte
+            card.getChildren().addAll(imageView, lblNom, lblDescription, lblCategorie,
+                    lblPrix, lblDate, lblStock, tfQuantite);
             produitContainer.getChildren().add(card);
         }
     }
@@ -109,12 +184,10 @@ public class Store implements Initializable {
                         if (quantite > produit.getQuantiteStock()) {
                             new Alert(Alert.AlertType.ERROR, "La quantité saisie pour \"" + produit.getNom() + "\" dépasse le stock (" + produit.getQuantiteStock() + ").").showAndWait();
                         }
-
                     } else {
                         tfQuantite.setStyle("-fx-border-color: green;");
                         produitsCommandes.add(new CommandeProduit(produit, quantite));
                     }
-
                 } catch (NumberFormatException e) {
                     tfQuantite.setStyle("-fx-border-color: red;");
                     new Alert(Alert.AlertType.ERROR, "Quantité invalide pour : " + produit.getNom()).showAndWait();
@@ -130,18 +203,21 @@ public class Store implements Initializable {
             return;
         }
 
+        // Création de la commande
         Commande commande = new Commande();
         commande.setStatut("En attente");
         commande.setDateCmd(Date.valueOf(LocalDate.now()));
         commande.setProduits(produitsCommandes);
 
         try {
+            // Enregistrement de la commande
             serviceCommande.insert(commande);
 
+            // Ajout des produits à la commande et mise à jour du stock
             for (CommandeProduit cp : produitsCommandes) {
                 serviceCommande.ajouterProduitACommande(commande.getId(), cp.getProduit().getId(), cp.getQuantite());
 
-                // Décrément stock
+                // Mise à jour du stock
                 Produit p = cp.getProduit();
                 int nouveauStock = p.getQuantiteStock() - cp.getQuantite();
                 p.setQuantiteStock(nouveauStock);
@@ -149,7 +225,7 @@ public class Store implements Initializable {
             }
 
             new Alert(Alert.AlertType.INFORMATION, "Commande enregistrée avec succès !").showAndWait();
-            chargerProduits();
+            chargerTousLesProduits();
 
         } catch (Exception e) {
             e.printStackTrace();

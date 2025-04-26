@@ -6,8 +6,7 @@ import tn.esprit.workshop.models.Produit;
 import tn.esprit.workshop.utils.MyDbConnexion;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class ServiceCommande {
     private Connection cnx;
@@ -24,14 +23,14 @@ public class ServiceCommande {
             prixTotal += cp.getProduit().getPrix() * cp.getQuantite(); // Prix unitaire * quantité
         }
         commande.setPrix(prixTotal); // On assigne le prix calculé à la commande
-
+        int CreateurId=UserGetData.id;
         // Insérer la commande avec le prix calculé
-        String req = "INSERT INTO commande (statut, datecmd, prix) VALUES (?, ?, ?)";
+        String req = "INSERT INTO commande (statut, datecmd, prix, createur_id) VALUES (?, ?, ?,?)";
         PreparedStatement ps = cnx.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
         ps.setString(1, commande.getStatut());
         ps.setDate(2, commande.getDateCmd());
         ps.setDouble(3, commande.getPrix());  // Insertion du prix calculé
-
+        ps.setDouble(4,CreateurId);
         ps.executeUpdate();
 
         // Récupérer l'ID de la commande généré
@@ -85,9 +84,13 @@ public class ServiceCommande {
     // Afficher toutes les commandes avec les produits associés et leur quantité
     public List<Commande> showAll() throws SQLException {
         List<Commande> commandes = new ArrayList<>();
-        String req = "SELECT * FROM commande";
-        Statement st = cnx.createStatement();
-        ResultSet rs = st.executeQuery(req);
+        int createurId = UserGetData.id;
+        System.out.println(createurId);
+
+        String req = "SELECT * FROM commande WHERE createur_id = ?";
+        PreparedStatement ps1 = cnx.prepareStatement(req);
+        ps1.setInt(1, createurId);
+        ResultSet rs = ps1.executeQuery();
 
         while (rs.next()) {
             Commande c = new Commande();
@@ -157,5 +160,115 @@ public class ServiceCommande {
         ps.setString(1, nouveauStatut);
         ps.setInt(2, idCommande);
         ps.executeUpdate();
+    }
+    ////stat
+    public int countAllCommandes() throws SQLException {
+        String req = "SELECT COUNT(*) FROM commande WHERE createur_id = ?";
+        PreparedStatement ps = cnx.prepareStatement(req);
+        ps.setInt(1, UserGetData.id);
+        ResultSet rs = ps.executeQuery();
+        return rs.next() ? rs.getInt(1) : 0;
+    }
+
+    public int countByStatut(String statut) throws SQLException {
+        String req = "SELECT COUNT(*) FROM commande WHERE statut = ? AND createur_id = ?";
+        PreparedStatement ps = cnx.prepareStatement(req);
+        ps.setString(1, statut);
+        ps.setInt(2, UserGetData.id);
+        ResultSet rs = ps.executeQuery();
+        return rs.next() ? rs.getInt(1) : 0;
+    }
+
+    public double getMontantMoyen() throws SQLException {
+        String req = "SELECT AVG(prix) FROM commande WHERE createur_id = ?";
+        PreparedStatement ps = cnx.prepareStatement(req);
+        ps.setInt(1, UserGetData.id);
+        ResultSet rs = ps.executeQuery();
+        return rs.next() ? rs.getDouble(1) : 0;
+    }
+
+    public double getChiffreAffairesTotal() throws SQLException {
+        String req = "SELECT SUM(prix) FROM commande WHERE createur_id = ?";
+        PreparedStatement ps = cnx.prepareStatement(req);
+        ps.setInt(1, UserGetData.id);
+        ResultSet rs = ps.executeQuery();
+        return rs.next() ? rs.getDouble(1) : 0;
+    }
+
+    public String getNomProduitLePlusCommande() throws SQLException {
+        String req = "SELECT p.nom " +
+                "FROM commande_produit cp " +
+                "JOIN produit p ON cp.produit_id = p.id " +
+                "JOIN commande c ON cp.commande_id = c.id " +
+                "WHERE c.createur_id = ? " +
+                "GROUP BY p.nom " +
+                "ORDER BY COUNT(cp.commande_id) DESC " +
+                "LIMIT 1";
+
+        PreparedStatement ps = cnx.prepareStatement(req);
+        ps.setInt(1, UserGetData.id);
+        ResultSet rs = ps.executeQuery();
+
+        return rs.next() ? rs.getString("nom") : "Aucun produit commandé";
+    }
+
+    public List<Object[]> getTopCategories(int limit) throws SQLException {
+        List<Object[]> results = new ArrayList<>();
+        String req = "SELECT p.categorie, COUNT(cp.commande_id) AS total " +
+                "FROM commande_produit cp " +
+                "JOIN produit p ON cp.produit_id = p.id " +
+                "JOIN commande c ON cp.commande_id = c.id " +
+                "WHERE c.createur_id = ? " +
+                "GROUP BY p.categorie ORDER BY total DESC LIMIT ?";
+        PreparedStatement ps = cnx.prepareStatement(req);
+        ps.setInt(1, UserGetData.id);
+        ps.setInt(2, limit);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            results.add(new Object[]{rs.getString("categorie"), rs.getInt("total")});
+        }
+        return results;
+    }
+
+    public Map<String, Double> getChiffreAffairesParStatut() throws SQLException {
+        Map<String, Double> result = new HashMap<>();
+        String req = "SELECT statut, SUM(prix) as total FROM commande WHERE createur_id = ? GROUP BY statut";
+        PreparedStatement ps = cnx.prepareStatement(req);
+        ps.setInt(1, UserGetData.id);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            result.put(rs.getString("statut"), rs.getDouble("total"));
+        }
+        return result;
+    }
+
+    public Map<String, Integer> getCommandesParJour() throws SQLException {
+        Map<String, Integer> result = new LinkedHashMap<>();
+        String req = "SELECT DATE(dateCmd) as jour, COUNT(*) as total " +
+                "FROM commande WHERE createur_id = ? " +
+                "GROUP BY DATE(dateCmd) ORDER BY jour DESC LIMIT 7";
+        PreparedStatement ps = cnx.prepareStatement(req);
+        ps.setInt(1, UserGetData.id);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            result.put(rs.getString("jour"), rs.getInt("total"));
+        }
+        return result;
+    }
+
+    public double getProduitsMoyensParCommande() throws SQLException {
+        String req = "SELECT AVG(produit_count) as moyenne " +
+                "FROM (SELECT COUNT(cp.produit_id) as produit_count " +
+                "FROM commande_produit cp " +
+                "JOIN commande c ON cp.commande_id = c.id " +
+                "WHERE c.createur_id = ? " +
+                "GROUP BY cp.commande_id) as counts";
+        PreparedStatement ps = cnx.prepareStatement(req);
+        ps.setInt(1, UserGetData.id);
+        ResultSet rs = ps.executeQuery();
+        return rs.next() ? rs.getDouble("moyenne") : 0;
     }
 }

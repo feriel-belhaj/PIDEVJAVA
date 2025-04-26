@@ -100,7 +100,7 @@ public class Commandeartisan {
         filteredCommandes = new FilteredList<>(allCommandes, p -> true);
 
         // Remplir le ComboBox avec les statuts possibles
-        cbStatuts.getItems().addAll("Tous", "En attente", "En cours", "livrée", "Annulée");
+        cbStatuts.getItems().addAll("Tous", "En attente", "En cours", "livrée", "Annulée","payé");
         cbStatuts.getSelectionModel().selectFirst();
 
         // Appliquer le filtre quand le statut change

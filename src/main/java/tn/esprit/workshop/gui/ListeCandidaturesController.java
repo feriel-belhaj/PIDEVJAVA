@@ -405,7 +405,9 @@ public class ListeCandidaturesController {
             stage.setOnHidden(e -> chargerCandidatures());
             stage.show();
         } catch (IOException ex) {
-            System.err.println("Exception lors du chargement du FXML: " + ex.getMessage());
+            System.err.println("Exception lors du ch" +
+                    "" +
+                    "argement du FXML: " + ex.getMessage());
             ex.printStackTrace();
             afficherErreur("Erreur", "Impossible de charger l'interface: " + ex.getMessage());
         } catch (Exception e) {

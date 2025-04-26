@@ -10,11 +10,15 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import tn.esprit.workshop.models.EmailSender;
+import tn.esprit.workshop.models.FaceRecognitionClient;
 import tn.esprit.workshop.models.OTPGenerator;
 import tn.esprit.workshop.models.User;
 import tn.esprit.workshop.services.GoogleAuthService;
 import tn.esprit.workshop.services.ServiceUser;
+import tn.esprit.workshop.models.FaceRecognitionClient;
 
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.sql.SQLException;
@@ -25,6 +29,16 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.Paths;
 
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.core.Size;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.videoio.VideoCapture;
+
+import tn.esprit.workshop.models.User;
+
+import javax.swing.*;
+import java.io.File;
 
 import javafx.scene.input.MouseEvent;
 
@@ -179,55 +193,11 @@ public class Utilisateur {
         }
     }
 
-    public static boolean sendToFlask(String imagePath) {
-        try {
-            HttpClient client = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://127.0.0.1:5000/verify-face"))
-                    .header("Content-Type", "application/octet-stream")
-                    .POST(HttpRequest.BodyPublishers.ofFile(Paths.get(imagePath)))
-                    .build();
 
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            return Boolean.parseBoolean(response.body());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-    @FXML
-    void faceRecognitionLogin(ActionEvent event) {
-        String imgPath = "temp/face.jpg";
-        boolean success = sendToFlask(imgPath);
-
-        if (success) {
-
-            String recognizedEmail = "email_de_l_utilisateur_reconnu";
-            try {
-                User user = serviceUser.findByEmail(recognizedEmail);
-                if (user != null) {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Information Message");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Facial recognition successful. Welcome " + user.getPrenom());
-                    alert.showAndWait();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error Message");
-            alert.setHeaderText(null);
-            alert.setContentText("Facial recognition failed.");
-            alert.showAndWait();
-        }
-    }
 
     @FXML
     private void onGoogleLogin() {
         try {
-            // Tenter de récupérer le service Gmail via GoogleAuthService
             Gmail service = GoogleAuthService.getGmailService();
 
 
@@ -275,20 +245,113 @@ public class Utilisateur {
             System.out.println("Email de l'utilisateur : " + userEmail);
 
         } catch (IOException e) {
-            e.printStackTrace();  // Affiche les détails de l'exception dans la console
+            e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erreur d'authentification");
             alert.setHeaderText("Erreur lors de l'authentification");
             alert.setContentText("Erreur lors de la communication avec les services Google : " + e.getMessage());
             alert.showAndWait();
         } catch (GeneralSecurityException e) {
-            e.printStackTrace();  // Affiche les détails de l'exception dans la console
+            e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erreur de sécurité");
             alert.setHeaderText("Erreur de sécurité lors de l'authentification");
             alert.setContentText("Une erreur de sécurité est survenue : " + e.getMessage());
             alert.showAndWait();
         }
+    }
+
+
+
+
+    public void captureAndLogin() {
+        System.load("C:\\Users\\Fatma\\IdeaProjects\\ArtizinaJava\\venv\\Lib\\site-packages\\opencv_java4100.dll");
+
+        VideoCapture camera = new VideoCapture(0);
+
+        if (!camera.isOpened()) {
+            System.out.println("Erreur : Impossible d'accéder à la caméra.");
+            return;
+        }
+
+        Mat frame = new Mat();
+
+        camera.read(frame);
+
+
+        if (!frame.empty()) {
+            String outputPath = "C:\\xampp\\htdocs\\img\\image_capture.jpg";
+            boolean isSaved = Imgcodecs.imwrite(outputPath, frame);
+
+            if (isSaved) {
+                System.out.println("Image capturée et sauvegardée avec succès.");
+            } else {
+                System.out.println("Erreur lors de la sauvegarde de l'image.");
+            }
+
+            try {
+                User user = FaceRecognitionClient.sendImageToFlask(outputPath);
+                Alert alert;
+                if (user != null) {
+                    System.out.println("Connexion réussie pour l'utilisateur : " + user.getNom());
+                    User_login_mail.setText(user.getEmail());
+                    User_login_pwd.setText(user.getPassword());
+                    User loggedUser = user;
+                    UserGetData.nom = loggedUser.getNom();
+                    UserGetData.prenom = loggedUser.getPrenom();
+                    UserGetData.id = loggedUser.getId();
+
+                    System.out.println(loggedUser);
+                    Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                    successAlert.setTitle("Information Message");
+                    successAlert.setHeaderText(null);
+                    successAlert.setContentText("Successfully Login");
+                    successAlert.showAndWait();
+                    User_login_btn.getScene().getWindow().hide();
+
+                    try {
+                        Parent root = FXMLLoader.load(getClass().getResource("/fxml/MainMenu.fxml"));
+                        Stage stage = new Stage();
+                        Scene scene = new Scene(root);
+                        root.setOnMousePressed((MouseEvent Mevent) -> {
+                            x = Mevent.getSceneX();
+                            y = Mevent.getSceneY();
+                        });
+
+                        root.setOnMouseDragged((MouseEvent Mevent) -> {
+                            stage.setX(Mevent.getScreenX() - x);
+                            stage.setY(Mevent.getScreenY() - y);
+                        });
+
+                        stage.initStyle(StageStyle.TRANSPARENT);
+                        stage.setScene(scene);
+                        stage.show();
+
+
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                }
+                else {
+                    alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error Message");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Aucun utilisateur trouvé avec cette image.");
+                    alert.showAndWait();
+
+
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            System.out.println("Aucune image capturée.");
+        }
+
+        camera.release();
+
     }
 
 

@@ -273,4 +273,30 @@ public class ServiceUser implements CRUD<User>{
         return chart;
     }
 
+    public User getUserByImage(String imageName) throws SQLException {
+        String req = "SELECT * FROM utilisateur WHERE image = ?";
+        PreparedStatement ps = cnx.prepareStatement(req);
+        ps.setString(1, imageName);
+
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            User user = new User();
+            user.setId(rs.getInt("id"));
+            user.setNom(rs.getString("nom"));
+            user.setPrenom(rs.getString("prenom"));
+            user.setEmail(rs.getString("email"));
+            user.setAdresse(rs.getString("adresse"));
+            user.setPassword(rs.getString("password"));
+            user.setImage(rs.getString("image"));
+            user.setRole(rs.getString("role"));
+            user.setSexe(rs.getString("sexe"));
+            user.setTelephone(rs.getString("telephone"));
+            user.setDate_inscription(rs.getTimestamp("date_inscription").toLocalDateTime());
+            return user;
+        }
+
+        return null;
+    }
+
 }

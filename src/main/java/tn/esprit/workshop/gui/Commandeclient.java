@@ -38,10 +38,10 @@ public class Commandeclient {
     @FXML private TableColumn<Commande, Void> colPaiement;
 
     private final ServiceCommande serviceCommande = new ServiceCommande();
-    private static final String STRIPE_SECRET_KEY = "sk_test_51QvhyiP7cyQsM3mKr0KjH8HyzdI1HNjQQuPU0sBzRdAPtfMJhFx6ECWvswwrFXe6xg8rKskkLgy5WLmbL23C6Byh00YuLdSS19";
+    private static final String STRIPE_SECRET_KEY = "";
     private static final String STRIPE_SUCCESS_URL = "https://checkout.stripe.com/success";
     private static final String STRIPE_CANCEL_URL = "https://checkout.stripe.com/cancel";
-    private final EmailService emailService = new EmailService("kridtaoufik994@gmail.com", "dxqo fzdu mnvo upju");
+    private final EmailService emailService = new EmailService("kridtaoufik994@gmail.com", "mdp");
     private static final int POINTS_PAR_COMMANDE = 50;
     private static final int SEUIL_POINTS_FIDELITE = 100;
     private static final double REMISE_FIDELITE = 0.10; // 10%

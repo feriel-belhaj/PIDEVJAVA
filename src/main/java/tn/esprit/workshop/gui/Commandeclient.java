@@ -22,6 +22,7 @@ import tn.esprit.workshop.models.Commande;
 import tn.esprit.workshop.models.CommandeProduit;
 import tn.esprit.workshop.services.ServiceCommande;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -40,7 +41,7 @@ public class Commandeclient {
     private static final String STRIPE_SECRET_KEY = "";
     private static final String STRIPE_SUCCESS_URL = "https://checkout.stripe.com/success";
     private static final String STRIPE_CANCEL_URL = "https://checkout.stripe.com/cancel";
-
+    private final EmailService emailService = new EmailService("kridtaoufik994@gmail.com", "mdp");
     public void initialize() {
         Stripe.apiKey = STRIPE_SECRET_KEY;
         configureColumns();
@@ -214,20 +215,41 @@ public class Commandeclient {
 
     private void verifyAndHandlePayment(int commandeId) {
         try {
+            // 1. Mettre à jour le statut de la commande
             serviceCommande.updateStatut(commandeId, "Payé");
-            showPaymentSuccessAlert(commandeId);
+
+            // 2. Envoyer l'email de confirmation
+            try {
+                String clientEmail = "taoufik.krid.949@gmail.com"; // Email fixe
+                emailService.sendConfirmationEmail(clientEmail, commandeId);
+                showPaymentSuccessAlert(commandeId, true); // Email envoyé avec succès
+            } catch (MessagingException e) {
+                System.err.println("Erreur lors de l'envoi de l'email: " + e.getMessage());
+                showPaymentSuccessAlert(commandeId, false); // Email non envoyé
+            }
+
+            // 3. Rafraîchir la liste des commandes
             refreshCommandes();
         } catch (SQLException e) {
-            showAlert("Erreur de mise à jour", "Le paiement a réussi mais la commande n'a pas été mise à jour: " + e.getMessage(), Alert.AlertType.ERROR);
+            showAlert("Erreur de mise à jour",
+                    "Le paiement a réussi mais la commande n'a pas été mise à jour: " + e.getMessage(),
+                    Alert.AlertType.ERROR);
         }
     }
 
-    private void showPaymentSuccessAlert(int commandeId) {
+    private void showPaymentSuccessAlert(int commandeId, boolean emailSent) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Paiement confirmé");
         alert.setHeaderText("✅ Paiement réussi");
-        alert.setContentText("Votre commande #" + commandeId + " a été payée avec succès.\n"
-                + "Un email de confirmation vous a été envoyé.");
+
+        String contentText = "Votre commande #" + commandeId + " a été payée avec succès.\n";
+        if (emailSent) {
+            contentText += "Un email de confirmation a été envoyé à taoufik.krid.949@gmail.com.";
+        } else {
+            contentText += "L'email de confirmation n'a pas pu être envoyé.";
+        }
+
+        alert.setContentText(contentText);
 
         // Style inline sans CSS
         DialogPane dialogPane = alert.getDialogPane();

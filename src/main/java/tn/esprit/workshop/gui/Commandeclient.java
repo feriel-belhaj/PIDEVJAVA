@@ -38,7 +38,7 @@ public class Commandeclient {
     @FXML private TableColumn<Commande, Void> colPaiement;
 
     private final ServiceCommande serviceCommande = new ServiceCommande();
-    private static final String STRIPE_SECRET_KEY = "";
+    
     private static final String STRIPE_SUCCESS_URL = "https://checkout.stripe.com/success";
     private static final String STRIPE_CANCEL_URL = "https://checkout.stripe.com/cancel";
     private final EmailService emailService = new EmailService("kridtaoufik994@gmail.com", "mdp");

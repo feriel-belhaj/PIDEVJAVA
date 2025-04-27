@@ -1,4 +1,4 @@
-package tn.esprit.workshop.entities;
+package tn.esprit.workshop.models;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

@@ -68,8 +68,16 @@
         <columns>
             <TableColumn fx:id="titreCol" text="Titre"/>
             <TableColumn fx:id="descriptionCol" text="Description"/>
+            <TableColumn fx:id="dateDebutCol" text="Date début"/>
+            <TableColumn fx:id="dateFinCol" text="Date fin"/>
             <TableColumn fx:id="niveauCol" text="Niveau"/>
             <TableColumn fx:id="prixCol" text="Prix"/>
+            <TableColumn fx:id="emplacementCol" text="Emplacement"/>
+            <TableColumn fx:id="nbPlaceCol" text="Nombre de places"/>
+            <TableColumn fx:id="nbParticipantCol" text="Nombre de participants"/>
+            <TableColumn fx:id="organisateurCol" text="Organisateur"/>
+            <TableColumn fx:id="dureeCol" text="Durée"/>
+            <TableColumn fx:id="imageCol" text="Image"/>
         </columns>
     </TableView>
 </VBox> 

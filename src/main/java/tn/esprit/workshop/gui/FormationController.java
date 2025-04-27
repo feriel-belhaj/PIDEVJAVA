@@ -7,7 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import tn.esprit.workshop.entities.Formation;
+import tn.esprit.workshop.models.Formation;
 import tn.esprit.workshop.services.FormationService;
 
 import java.io.File;
@@ -37,8 +37,16 @@ public class FormationController implements Initializable {
     @FXML private TableView<Formation> tableFormations;
     @FXML private TableColumn<Formation, String> titreCol;
     @FXML private TableColumn<Formation, String> descriptionCol;
+    @FXML private TableColumn<Formation, LocalDate> dateDebutCol;
+    @FXML private TableColumn<Formation, LocalDate> dateFinCol;
     @FXML private TableColumn<Formation, String> niveauCol;
     @FXML private TableColumn<Formation, String> prixCol;
+    @FXML private TableColumn<Formation, String> emplacementCol;
+    @FXML private TableColumn<Formation, String> nbPlaceCol;
+    @FXML private TableColumn<Formation, String> nbParticipantCol;
+    @FXML private TableColumn<Formation, String> organisateurCol;
+    @FXML private TableColumn<Formation, String> dureeCol;
+    @FXML private TableColumn<Formation, String> imageCol;
     
     private FormationService formationService;
     private Formation selectedFormation;
@@ -54,8 +62,16 @@ public class FormationController implements Initializable {
         // Configuration des colonnes
         titreCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getTitre()));
         descriptionCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getDescription()));
+        dateDebutCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleObjectProperty<>(cellData.getValue().getDateDeb()));
+        dateFinCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleObjectProperty<>(cellData.getValue().getDateFin()));
         niveauCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getNiveau()));
-        prixCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(String.valueOf(cellData.getValue().getPrix())));
+        prixCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(String.valueOf(cellData.getValue().getPrix()) + " DT"));
+        emplacementCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getEmplacement()));
+        nbPlaceCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(String.valueOf(cellData.getValue().getNbPlace())));
+        nbParticipantCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(String.valueOf(cellData.getValue().getNbParticipant())));
+        organisateurCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getOrganisateur()));
+        dureeCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getDuree()));
+        imageCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getImage()));
         
         // Gestion de la sélection
         tableFormations.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {

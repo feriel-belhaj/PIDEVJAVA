@@ -5,8 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import tn.esprit.workshop.entities.Certificat;
-import tn.esprit.workshop.entities.Formation;
+import tn.esprit.workshop.models.Certificat;
+import tn.esprit.workshop.models.Formation;
 import tn.esprit.workshop.services.CertificatService;
 import tn.esprit.workshop.services.FormationService;
 

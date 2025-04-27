@@ -1,7 +1,7 @@
 package tn.esprit.workshop.services;
 
-import tn.esprit.workshop.entities.Certificat;
-import tn.esprit.workshop.entities.Formation;
+import tn.esprit.workshop.models.Certificat;
+import tn.esprit.workshop.models.Formation;
 import tn.esprit.workshop.utils.MyDbConnexion;
 
 import java.sql.*;

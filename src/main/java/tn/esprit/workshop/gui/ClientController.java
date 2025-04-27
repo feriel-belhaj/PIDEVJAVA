@@ -13,7 +13,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import tn.esprit.workshop.entities.Formation;
+import tn.esprit.workshop.models.Formation;
 import tn.esprit.workshop.services.FormationService;
 
 import java.io.File;

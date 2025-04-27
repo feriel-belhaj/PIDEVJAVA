@@ -38,10 +38,15 @@ public class Commandeclient {
     @FXML private TableColumn<Commande, Void> colPaiement;
 
     private final ServiceCommande serviceCommande = new ServiceCommande();
-    private static final String STRIPE_SECRET_KEY = "";
+    private static final String STRIPE_SECRET_KEY = "sk_test_51QvhyiP7cyQsM3mKr0KjH8HyzdI1HNjQQuPU0sBzRdAPtfMJhFx6ECWvswwrFXe6xg8rKskkLgy5WLmbL23C6Byh00YuLdSS19";
     private static final String STRIPE_SUCCESS_URL = "https://checkout.stripe.com/success";
     private static final String STRIPE_CANCEL_URL = "https://checkout.stripe.com/cancel";
-    private final EmailService emailService = new EmailService("kridtaoufik994@gmail.com", "mdp");
+    private final EmailService emailService = new EmailService("kridtaoufik994@gmail.com", "dxqo fzdu mnvo upju");
+    private static final int POINTS_PAR_COMMANDE = 50;
+    private static final int SEUIL_POINTS_FIDELITE = 100;
+    private static final double REMISE_FIDELITE = 0.10; // 10%
+    private int pointsFidelite = 0;
+    private boolean fideliteUtilisee = false;
     public void initialize() {
         Stripe.apiKey = STRIPE_SECRET_KEY;
         configureColumns();
@@ -110,10 +115,15 @@ public class Commandeclient {
     private TableCell<Commande, Void> createPaymentCell() {
         return new TableCell<>() {
             private final Button payBtn = new Button("Payer");
+            private final Button fideliteBtn = new Button("Utiliser Fidélité");
+            private final HBox hbox = new HBox(5, payBtn, fideliteBtn);
 
             {
                 payBtn.setStyle("-fx-background-color: #2ecc71; -fx-text-fill: white;");
+                fideliteBtn.setStyle("-fx-background-color: #f39c12; -fx-text-fill: white;");
+
                 payBtn.setOnAction(e -> handlePaymentAction());
+                fideliteBtn.setOnAction(e -> handleFideliteAction());
             }
 
             @Override
@@ -124,8 +134,11 @@ public class Commandeclient {
                 } else {
                     Commande commande = getTableView().getItems().get(getIndex());
                     boolean enAttente = "En attente".equalsIgnoreCase(commande.getStatut());
+
                     payBtn.setDisable(!enAttente);
-                    setGraphic(payBtn);
+                    fideliteBtn.setDisable(!enAttente || pointsFidelite < SEUIL_POINTS_FIDELITE || fideliteUtilisee);
+
+                    setGraphic(hbox);
                 }
             }
 
@@ -133,6 +146,8 @@ public class Commandeclient {
                 Commande commande = getTableView().getItems().get(getIndex());
                 if ("En attente".equalsIgnoreCase(commande.getStatut())) {
                     try {
+                        // Ajouter les points de fidélité avant le paiement
+                        ajouterPointsFidelite(POINTS_PAR_COMMANDE);
                         processPayment(commande);
                     } catch (StripeException ex) {
                         showAlert("Erreur de paiement: " + ex.getMessage());
@@ -141,9 +156,60 @@ public class Commandeclient {
                     showAlert("Seules les commandes en attente peuvent être payées");
                 }
             }
+
+            private void handleFideliteAction() {
+                Commande commande = getTableView().getItems().get(getIndex());
+                if ("En attente".equalsIgnoreCase(commande.getStatut())) {
+                    if (pointsFidelite >= SEUIL_POINTS_FIDELITE && !fideliteUtilisee) {
+                        appliquerRemiseFidelite(commande);
+                    } else {
+                        showAlert("Conditions non remplies",
+                                "Vous devez avoir au moins " + SEUIL_POINTS_FIDELITE +
+                                        " points et ne pas avoir déjà utilisé votre réduction",
+                                Alert.AlertType.WARNING);
+                    }
+                } else {
+                    showAlert("Seules les commandes en attente peuvent utiliser la fidélité");
+                }
+            }
         };
     }
+    ///fidelite
+    private void ajouterPointsFidelite(int points) {
+        this.pointsFidelite += points;
+        showPointsFideliteAlert();
+    }
 
+    private void showPointsFideliteAlert() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Points de fidélité");
+        alert.setHeaderText("Vos points de fidélité ont été mis à jour");
+        alert.setContentText("Vous avez maintenant " + pointsFidelite + " points.\n" +
+                "À " + SEUIL_POINTS_FIDELITE + " points, vous pouvez bénéficier d'une réduction de 10%.");
+        alert.showAndWait();
+    }
+
+    private void appliquerRemiseFidelite(Commande commande) {
+        double nouveauPrix = commande.getPrix() * (1 - REMISE_FIDELITE);
+        commande.setPrix(nouveauPrix);
+
+        try {
+            serviceCommande.updatePrix2(commande.getId(), true);
+            this.pointsFidelite -= SEUIL_POINTS_FIDELITE;
+            this.fideliteUtilisee = true;
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Réduction appliquée");
+            alert.setHeaderText("Réduction de fidélité appliquée avec succès");
+            alert.setContentText("Une réduction de 10% a été appliquée à votre commande.\n" +
+                    "Nouveau prix: " + String.format("%.2f", nouveauPrix) + " DT");
+            alert.showAndWait();
+
+            refreshCommandes();
+        } catch (SQLException e) {
+            showAlert("Erreur", "Impossible d'appliquer la réduction: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
     private void processPayment(Commande commande) throws StripeException {
         SessionCreateParams params = SessionCreateParams.builder()
                 .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)

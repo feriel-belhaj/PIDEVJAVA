@@ -9,10 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import tn.esprit.workshop.models.EmailSender;
-import tn.esprit.workshop.models.FaceRecognitionClient;
-import tn.esprit.workshop.models.OTPGenerator;
-import tn.esprit.workshop.models.User;
+import tn.esprit.workshop.models.*;
 import tn.esprit.workshop.services.GoogleAuthService;
 import tn.esprit.workshop.services.ServiceUser;
 import tn.esprit.workshop.models.FaceRecognitionClient;
@@ -77,6 +74,7 @@ public class Utilisateur {
     void login(ActionEvent event) {
         String email = User_login_mail.getText();
         String password = User_login_pwd.getText();
+
          Alert alert;
         try {
             User loggedUser = serviceUser.loginUser(email, password);
@@ -89,9 +87,9 @@ public class Utilisateur {
             }
             else {
                 if (loggedUser != null) {
-                    String otp = OTPGenerator.generateOTP(); // Génération de l'OTP
+                    String otp = OTPGenerator.generateOTP();
                     try {
-                        EmailSender.sendOTP(email, otp); // Envoi de l'OTP par email
+                        EmailSender.sendOTP(email, otp);
                     } catch (Exception e) {
                         e.printStackTrace();
                         alert = new Alert(Alert.AlertType.ERROR);
@@ -109,6 +107,7 @@ public class Utilisateur {
                             UserGetData.nom = loggedUser.getNom();
                             UserGetData.prenom = loggedUser.getPrenom();
                             UserGetData.id = loggedUser.getId();
+                            UserGetData.email = loggedUser.getEmail();
 
                             System.out.println(loggedUser);
                             Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
@@ -353,6 +352,35 @@ public class Utilisateur {
         camera.release();
 
     }
+
+    @FXML
+    void SwitchToResetPwd(MouseEvent event) {
+        User_CreateAccount.getScene().getWindow().hide();
+
+        try {
+            Parent root  = FXMLLoader.load(getClass().getResource("/ResetPwd.fxml"));
+            Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            root.setOnMousePressed((MouseEvent Mevent) ->{
+                x = Mevent.getSceneX();
+                y = Mevent.getSceneY();
+            });
+
+            root.setOnMouseDragged((MouseEvent Mevent) ->{
+                stage.setX(Mevent.getScreenX() - x);
+                stage.setY(Mevent.getScreenY() - y);
+            });
+
+            stage.initStyle(StageStyle.TRANSPARENT);
+            stage.setScene(scene);
+            stage.show();
+
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 
 }

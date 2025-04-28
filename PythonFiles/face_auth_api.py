@@ -3,10 +3,14 @@ import face_recognition
 import numpy as np
 import cv2
 import os
+#import jwt
+import datetime
+
 
 app = Flask(__name__)
 
 image_directory = "C:/xampp/htdocs/img"
+SECRET_KEY = "my_super_secret_key123"
 
 def load_face_encodings():
     encodings = []
@@ -56,6 +60,12 @@ def compare_face():
         for encoding, image_path in zip(known_face_encodings, known_face_images):
             matches = face_recognition.compare_faces([encoding], captured_encoding,tolerance=0.5)
             if matches[0]:
+                user_filename = os.path.basename(image_path)
+                payload = {
+                    'user_filename': user_filename,
+                    'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+                }
+                #token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
                 return jsonify({"message": f"Face matched with image: {image_path}"}), 200
 
 

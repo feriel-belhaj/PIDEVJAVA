@@ -23,10 +23,9 @@ public class FaceRecognitionClient {
             String lineEnd = "\r\n";
             String twoHyphens = "--";
 
-            // Start form data part
+
             os.write((twoHyphens + boundary + lineEnd).getBytes());
 
-            // Add the image part
             os.write(("Content-Disposition: form-data; name=\"image\"; filename=\"" + imageFile.getName() + "\"" + lineEnd).getBytes());
             os.write(("Content-Type: image/jpeg" + lineEnd).getBytes());
             os.write(lineEnd.getBytes());

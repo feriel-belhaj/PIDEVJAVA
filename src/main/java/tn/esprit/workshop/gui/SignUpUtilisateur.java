@@ -18,6 +18,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import tn.esprit.workshop.models.EmailSender;
+import tn.esprit.workshop.models.PasswordUtils;
 import tn.esprit.workshop.models.User;
 import tn.esprit.workshop.services.ServiceUser;
 import tn.esprit.workshop.services.UserGetData;
@@ -206,11 +207,12 @@ public class SignUpUtilisateur implements Initializable {
                 } else {
 
                     String uri = Paths.get(UserGetData.path).getFileName().toString();
+                    String hashedPassword = PasswordUtils.hashPassword(User_SignUp_pwd2.getText());
                     User u = new User(User_SignUp_nom.getText()
                             ,User_SignUp_prenom.getText()
                             ,User_SignUp_Mail.getText()
                             ,User_SignUp_adresse.getText()
-                            ,User_SignUp_pwd2.getText()
+                            ,hashedPassword
                             ,uri
                             ,User_SignUp_role.getSelectionModel().getSelectedItem()
                             ,User_SignUp_sexe.getSelectionModel().getSelectedItem()

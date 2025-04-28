@@ -25,6 +25,7 @@ import javafx.stage.Stage;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.StageStyle;
 import tn.esprit.workshop.models.EmailSender;
+import tn.esprit.workshop.models.PasswordUtils;
 import tn.esprit.workshop.models.User;
 import tn.esprit.workshop.services.CRUD;
 import tn.esprit.workshop.services.GoogleAuthService;
@@ -620,11 +621,12 @@ public class UtilisateurDashboard implements Initializable {
                 } else {
 
                     String uri = Paths.get(UserGetData.path).getFileName().toString();
+                    String hashedPassword = PasswordUtils.hashPassword(Utilisateur_pwd2.getText());
                     User u = new User(Utilisateur_nom.getText()
                              ,Utilisateur_prenom.getText()
                             ,Utilisateur_mail.getText()
                             ,Utilisateur_add.getText()
-                             ,Utilisateur_pwd2.getText()
+                             ,hashedPassword
                              ,uri
                             ,Utilisateur_role.getSelectionModel().getSelectedItem()
                             ,Utilisateur_sexe.getSelectionModel().getSelectedItem()
@@ -642,6 +644,7 @@ public class UtilisateurDashboard implements Initializable {
                     else
                         Role = "ROLE_ARTISAN";
                     u.setRole(Role);
+
                     UserService.insert(u);
                     try {
                         EmailSender.sendWelcomeEmail(u.getEmail(), u.getNom());
@@ -744,12 +747,12 @@ public class UtilisateurDashboard implements Initializable {
                 if (option.get().equals(ButtonType.OK)) {
                     String uri = Paths.get(UserGetData.path).getFileName().toString();
                     //String uri = Paths.get("C:", "xampp", "htdocs", "img", imgName).toString();
-
+                    String hashedPassword = PasswordUtils.hashPassword(Utilisateur_pwd2.getText());
                     User u = new User(Utilisateur_nom.getText()
                             ,Utilisateur_prenom.getText()
                             ,Utilisateur_mail.getText()
                             ,Utilisateur_add.getText()
-                            ,Utilisateur_pwd2.getText()
+                            ,hashedPassword
                             ,uri
                             ,Utilisateur_role.getSelectionModel().getSelectedItem()
                             ,Utilisateur_sexe.getSelectionModel().getSelectedItem()

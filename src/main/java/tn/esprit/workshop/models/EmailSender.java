@@ -3,13 +3,11 @@ package tn.esprit.workshop.models;
 import javax.mail.*;
 import javax.mail.internet.*;
 import java.util.Properties;
+import java.util.UUID;
 
 public class EmailSender {
 
-    private static final String SMTP_HOST = "smtp.gmail.com";  // Utilise un service SMTP
-    private static final String SMTP_PORT = "587";
-    private static final String USERNAME = "chakrounfatma23@gmail.com";
-    private static final String PASSWORD = "zeoydafupqelieqx";
+   
 
     public static void sendOTP(String recipientEmail, String otp) throws MessagingException {
         Properties props = new Properties();
@@ -61,5 +59,7 @@ public class EmailSender {
         Transport.send(message);
         System.out.println("Email de bienvenue envoyé à " + recipientEmail);
     }
+
+
 
 }

@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
+import tn.esprit.workshop.models.PasswordUtils;
 import tn.esprit.workshop.models.User;
 import tn.esprit.workshop.utils.MyDbConnexion;
 
@@ -132,27 +133,34 @@ public class ServiceUser implements CRUD<User>{
         return temp;
     }
     public User loginUser(String username, String password) throws SQLException {
-        String req = "SELECT * FROM utilisateur WHERE email = ? AND password = ?";
+        String req = "SELECT * FROM utilisateur WHERE email = ?";
         PreparedStatement ps = cnx.prepareStatement(req);
         ps.setString(1, username);
-        ps.setString(2, password);
         ResultSet rs = ps.executeQuery();
         User u = new User();
         if (rs.next()){
-            u.setId(rs.getInt("id"));
-            u.setNom(rs.getString("nom"));
-            u.setPrenom(rs.getString("prenom"));
-            u.setEmail(rs.getString("email"));
-            u.setAdresse(rs.getString("adresse"));
-            u.setPassword(rs.getString("password"));
-            u.setImage(rs.getString("image"));
-            u.setRole(rs.getString("role"));
-            u.setSexe(rs.getString("sexe"));
-            u.setTelephone(rs.getString("telephone"));
-            u.setDate_inscription(rs.getTimestamp("date_inscription").toLocalDateTime());
+            String hashedPassword = rs.getString("password");
+            if (PasswordUtils.checkPassword(password, hashedPassword)) {
+
+                u.setId(rs.getInt("id"));
+                u.setNom(rs.getString("nom"));
+                u.setPrenom(rs.getString("prenom"));
+                u.setEmail(rs.getString("email"));
+                u.setAdresse(rs.getString("adresse"));
+                u.setPassword(rs.getString("password"));
+                u.setImage(rs.getString("image"));
+                u.setRole(rs.getString("role"));
+                u.setSexe(rs.getString("sexe"));
+                u.setTelephone(rs.getString("telephone"));
+                u.setDate_inscription(rs.getTimestamp("date_inscription").toLocalDateTime());
+            }
+            else {
+                u = null;
+            }
         }
         else
             u=null;
+
         rs.close();
         ps.close();
 
@@ -298,5 +306,18 @@ public class ServiceUser implements CRUD<User>{
 
         return null;
     }
+
+    public void updatePassword(User user) throws SQLException {
+        String req = "UPDATE utilisateur SET password = ? WHERE id = ?";
+        PreparedStatement ps = cnx.prepareStatement(req);
+
+        ps.setString(1, user.getPassword());
+        ps.setInt(2, user.getId());
+
+        ps.executeUpdate();
+
+        System.out.println("Mot de passe mis à jour avec succès pour l'utilisateur ID : " + user.getId());
+    }
+
 
 }

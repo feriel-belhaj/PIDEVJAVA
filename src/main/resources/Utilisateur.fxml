@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
@@ -29,10 +30,16 @@
                   <Button fx:id="User_login_btn" layoutX="35.0" layoutY="287.0" mnemonicParsing="false" onAction="#login" prefHeight="40.0" prefWidth="220.0" styleClass="login-btn" stylesheets="@loginDesign.css" text="Se connecter" />
                   <PasswordField fx:id="User_login_pwd" layoutX="35.0" layoutY="229.0" prefHeight="30.0" prefWidth="220.0" promptText="Mot de passe" styleClass="textfield" stylesheets="@loginDesign.css" />
                   <Button layoutX="240.0" layoutY="14.0" mnemonicParsing="false" onAction="#close" styleClass="close" text="X" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0" />
-                  <Button fx:id="faceRecognitionLoginBtn" onAction="#faceRecognitionLogin" text="Login by Face" />
-                  <Button text="Se connecter avec Google" onAction="#onGoogleLogin"/>
+                  <Button onAction="#captureAndLogin" text="Se connecter avec face id" />
+                  <Button layoutY="35.0" onAction="#onGoogleLogin" text="Se connecter avec Google" />
 
-                  <Label fx:id="User_CreateAccount" layoutX="145.0" layoutY="337.0" onMouseClicked="#SwitchSignUp" prefHeight="39.0" prefWidth="134.0" styleClass="h2" stylesheets="@loginDesign.css" text="Créer un compte?" />
+                  <Label fx:id="User_CreateAccount" layoutX="145.0" layoutY="337.0" onMouseClicked="#SwitchSignUp" prefHeight="39.0" prefWidth="134.0" styleClass="h2" stylesheets="@loginDesign.css" text="Créer un compte?" underline="true" />
+                  <Label fx:id="User_ResetPwd" layoutX="151.0" layoutY="375.0" onMouseClicked="#SwitchToResetPwd" prefHeight="39.0" prefWidth="123.0" styleClass="h3" text="Mot de passe oublié?" underline="true">
+                     <stylesheets>
+                        <URL value="@loginDesign.css" />
+                        <URL value="@dashboardDesign.css" />
+                     </stylesheets>
+                  </Label>
                </children>
             </AnchorPane>
          </children>

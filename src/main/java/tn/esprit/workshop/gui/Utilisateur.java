@@ -104,10 +104,16 @@ public class Utilisateur {
                     otpDialog.setHeaderText("Please enter the OTP sent to your email");
                     otpDialog.showAndWait().ifPresent(otpInput -> {
                         if (otpInput.equals(otp)) {
-                            UserGetData.nom = loggedUser.getNom();
-                            UserGetData.prenom = loggedUser.getPrenom();
-                            UserGetData.id = loggedUser.getId();
-                            UserGetData.email = loggedUser.getEmail();
+//                            UserGetData.nom = loggedUser.getNom();
+//                            UserGetData.prenom = loggedUser.getPrenom();
+//                            UserGetData.id = loggedUser.getId();
+//                            UserGetData.email = loggedUser.getEmail();
+
+                            String jwt = JwtUtils.generateToken(loggedUser);
+                            System.out.println("JWT: " + jwt);
+
+
+                            SessionManager.setToken(jwt);
 
                             System.out.println(loggedUser);
                             Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
@@ -234,9 +240,14 @@ public class Utilisateur {
 
             try {
                 User user =serviceUser.findByEmail(userEmail);
-                UserGetData.nom=user.getNom();
-                UserGetData.prenom=user.getPrenom();
-                UserGetData.id=user.getId();
+//                UserGetData.nom=user.getNom();
+//                UserGetData.prenom=user.getPrenom();
+//                UserGetData.id=user.getId();
+                String jwt = JwtUtils.generateToken(user);
+                System.out.println("JWT: " + jwt);
+
+
+                SessionManager.setToken(jwt);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -296,9 +307,16 @@ public class Utilisateur {
                     User_login_mail.setText(user.getEmail());
                     User_login_pwd.setText(user.getPassword());
                     User loggedUser = user;
-                    UserGetData.nom = loggedUser.getNom();
-                    UserGetData.prenom = loggedUser.getPrenom();
-                    UserGetData.id = loggedUser.getId();
+
+//                    UserGetData.nom = loggedUser.getNom();
+//                    UserGetData.prenom = loggedUser.getPrenom();
+//                    UserGetData.id = loggedUser.getId();
+
+                    String jwt = JwtUtils.generateToken(loggedUser);
+                    System.out.println("JWT: " + jwt);
+
+
+                    SessionManager.setToken(jwt);
 
                     System.out.println(loggedUser);
                     Alert successAlert = new Alert(Alert.AlertType.INFORMATION);

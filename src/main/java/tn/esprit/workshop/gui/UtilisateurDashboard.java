@@ -26,6 +26,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.StageStyle;
 import tn.esprit.workshop.models.EmailSender;
 import tn.esprit.workshop.models.PasswordUtils;
+import tn.esprit.workshop.models.SessionManager;
 import tn.esprit.workshop.models.User;
 import tn.esprit.workshop.services.CRUD;
 import tn.esprit.workshop.services.GoogleAuthService;
@@ -288,7 +289,7 @@ public class UtilisateurDashboard implements Initializable {
     }
 
     public void displayUsername() {
-        Utilisateur_UserName.setText(UserGetData.prenom + "  " + UserGetData.nom);
+        Utilisateur_UserName.setText(SessionManager.getUserNom() + "  " + SessionManager.getUserPreom());
     }
 
     private double x = 0;

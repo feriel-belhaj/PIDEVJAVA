@@ -18,6 +18,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import tn.esprit.workshop.models.Creation;
 import tn.esprit.workshop.services.CreationService;
+import tn.esprit.workshop.services.StabilityAIService;
 import tn.esprit.workshop.services.UtilisateurService;
 
 import java.io.File;
@@ -33,6 +34,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.concurrent.CompletableFuture;
 
 public class CreationController implements Initializable {
     @FXML private TextField searchField;
@@ -57,6 +59,7 @@ public class CreationController implements Initializable {
     
     private CreationService creationService;
     private UtilisateurService utilisateurService;
+    private StabilityAIService stabilityAIService;
     private Creation selectedCreation;
     private static final String UPLOAD_DIR = "src/main/resources/uploads/images";
     private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
@@ -65,6 +68,7 @@ public class CreationController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         creationService = new CreationService();
         utilisateurService = new UtilisateurService();
+        stabilityAIService = new StabilityAIService();
         
         // Initialize categories ComboBox
         categorieFilter.getItems().addAll("Tous", "Painting", "Digital Art", "Sculpture", "Photography", "Other");
@@ -193,11 +197,33 @@ public class CreationController implements Initializable {
             TextField txtImage = new TextField();
             Button btnImage = new Button("Choisir une image");
             
+            // AI image generation components
+            Separator separator = new Separator();
+            Label lblAiGenerator = new Label("Générer une image avec l'IA");
+            lblAiGenerator.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+            TextArea txtAiPrompt = new TextArea();
+            txtAiPrompt.setPromptText("Décrivez l'image que vous souhaitez générer...");
+            txtAiPrompt.setPrefRowCount(3);
+            
+            ComboBox<String> comboArtStyle = new ComboBox<>();
+            comboArtStyle.getItems().addAll(stabilityAIService.getArtStyles());
+            comboArtStyle.setValue("Photorealistic");
+            comboArtStyle.setPromptText("Style d'art");
+            
+            Button btnGenerateImage = new Button("Générer l'image");
+            ImageView previewImageView = new ImageView();
+            previewImageView.setFitHeight(200);
+            previewImageView.setFitWidth(200);
+            previewImageView.setPreserveRatio(true);
+            previewImageView.setImage(new Image(getClass().getResource("/images/dot-pattern.png").toExternalForm()));
+            
+            // Set up the grid
             GridPane grid = new GridPane();
             grid.setHgap(10);
             grid.setVgap(10);
             grid.setPadding(new Insets(20, 150, 10, 10));
             
+            // Add standard creation fields
             grid.add(new Label("Titre:"), 0, 0);
             grid.add(txtTitre, 1, 0);
             grid.add(new Label("Description:"), 0, 1);
@@ -210,6 +236,20 @@ public class CreationController implements Initializable {
             grid.add(new Label("Image:"), 0, 3);
             grid.add(imageBox, 1, 3);
             
+            // Add AI generation section
+            grid.add(separator, 0, 4, 2, 1);
+            grid.add(lblAiGenerator, 0, 5, 2, 1);
+            grid.add(new Label("Prompt IA:"), 0, 6);
+            grid.add(txtAiPrompt, 1, 6);
+            grid.add(new Label("Style d'art:"), 0, 7);
+            grid.add(comboArtStyle, 1, 7);
+            
+            HBox generationBox = new HBox(10);
+            generationBox.getChildren().add(btnGenerateImage);
+            grid.add(generationBox, 1, 8);
+            grid.add(previewImageView, 1, 9);
+            
+            // Button to choose image files
             btnImage.setOnAction(e -> {
                 FileChooser fileChooser = new FileChooser();
                 fileChooser.setTitle("Choisir une image");
@@ -225,22 +265,93 @@ public class CreationController implements Initializable {
                         
                         Files.copy(selectedFile.toPath(), targetPath, StandardCopyOption.REPLACE_EXISTING);
                         txtImage.setText("uploads/images/" + fileName);
+                        
+                        // Show the selected image in the preview
+                        previewImageView.setImage(new Image(targetPath.toUri().toString()));
                     } catch (IOException ex) {
                         showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la copie de l'image: " + ex.getMessage());
                     }
                 }
             });
             
+            // Button to generate AI image
+            btnGenerateImage.setOnAction(e -> {
+                String prompt = txtAiPrompt.getText().trim();
+                String style = comboArtStyle.getValue();
+                
+                if (prompt.isEmpty()) {
+                    showAlert(Alert.AlertType.WARNING, "Attention", "Veuillez entrer un prompt pour générer une image.");
+                    return;
+                }
+                
+                // Show loading indicator
+                btnGenerateImage.setDisable(true);
+                btnGenerateImage.setText("Génération en cours...");
+                
+                // Generate the image asynchronously
+                CompletableFuture<String> future = stabilityAIService.generateImage(prompt, style);
+                future.thenAccept(imagePath -> {
+                    javafx.application.Platform.runLater(() -> {
+                        try {
+                            // Display the generated image
+                            File imageFile = new File("src/main/resources/uploads/" + imagePath);
+                            if (imageFile.exists()) {
+                                previewImageView.setImage(new Image(imageFile.toURI().toString()));
+                                txtImage.setText("uploads/" + imagePath);
+                                
+                                // Re-enable the button
+                                btnGenerateImage.setDisable(false);
+                                btnGenerateImage.setText("Générer l'image");
+                                
+                                showAlert(Alert.AlertType.INFORMATION, "Succès", "Image générée avec succès!");
+                            } else {
+                                throw new IOException("Le fichier d'image généré n'existe pas");
+                            }
+                        } catch (Exception ex) {
+                            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la génération de l'image: " + ex.getMessage());
+                            btnGenerateImage.setDisable(false);
+                            btnGenerateImage.setText("Générer l'image");
+                        }
+                    });
+                }).exceptionally(ex -> {
+                    javafx.application.Platform.runLater(() -> {
+                        showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la génération de l'image: " + ex.getMessage());
+                        btnGenerateImage.setDisable(false);
+                        btnGenerateImage.setText("Générer l'image");
+                    });
+                    return null;
+                });
+            });
+            
+            // Create and show the dialog
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Nouvelle Création");
             dialog.setHeaderText("Ajouter une nouvelle création");
-            dialog.getDialogPane().setContent(grid);
+            
+            ScrollPane scrollPane = new ScrollPane(grid);
+            scrollPane.setFitToWidth(true);
+            dialog.getDialogPane().setContent(scrollPane);
+            dialog.getDialogPane().setPrefWidth(700);  // Increased from 600
+            dialog.getDialogPane().setPrefHeight(700); // Increased from 600
             dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+            
+            // Set dialog to be resizable
+            dialog.setResizable(true);
+            
+            // Set dialog on the screen
+            Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+            stage.setMinWidth(700);
+            stage.setMinHeight(700);
             
             Optional<ButtonType> result = dialog.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 if (txtTitre.getText().isEmpty() || comboCategorie.getValue() == null) {
                     showAlert(Alert.AlertType.WARNING, "Attention", "Le titre et la catégorie sont obligatoires.");
+                    return;
+                }
+                
+                if (txtImage.getText().isEmpty()) {
+                    showAlert(Alert.AlertType.WARNING, "Attention", "Veuillez sélectionner ou générer une image.");
                     return;
                 }
                 
@@ -306,11 +417,47 @@ public class CreationController implements Initializable {
             comboStatut.getItems().addAll("actif", "inactif", "signalé");
             comboStatut.setValue(selectedCreation.getStatut());
             
+            // AI Image Generation components
+            Separator separator = new Separator();
+            Label lblAiGenerator = new Label("Générer une image avec l'IA");
+            lblAiGenerator.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+            TextArea txtAiPrompt = new TextArea();
+            txtAiPrompt.setPromptText("Décrivez l'image que vous souhaitez générer...");
+            txtAiPrompt.setPrefRowCount(3);
+            
+            ComboBox<String> comboArtStyle = new ComboBox<>();
+            comboArtStyle.getItems().addAll(stabilityAIService.getArtStyles());
+            comboArtStyle.setValue("Photorealistic");
+            comboArtStyle.setPromptText("Style d'art");
+            
+            Button btnGenerateImage = new Button("Générer l'image");
+            ImageView previewImageView = new ImageView();
+            previewImageView.setFitHeight(200);
+            previewImageView.setFitWidth(200);
+            previewImageView.setPreserveRatio(true);
+            
+            // Show current image in preview
+            try {
+                if (selectedCreation.getImage() != null && !selectedCreation.getImage().isEmpty()) {
+                    File imageFile = new File("src/main/resources/" + selectedCreation.getImage());
+                    if (imageFile.exists()) {
+                        previewImageView.setImage(new Image(imageFile.toURI().toString()));
+                    } else {
+                        previewImageView.setImage(new Image(getClass().getResource("/images/dot-pattern.png").toExternalForm()));
+                    }
+                } else {
+                    previewImageView.setImage(new Image(getClass().getResource("/images/dot-pattern.png").toExternalForm()));
+                }
+            } catch (Exception e) {
+                previewImageView.setImage(new Image(getClass().getResource("/images/dot-pattern.png").toExternalForm()));
+            }
+            
             GridPane grid = new GridPane();
             grid.setHgap(10);
             grid.setVgap(10);
             grid.setPadding(new Insets(20, 150, 10, 10));
             
+            // Add standard fields
             grid.add(new Label("Titre:"), 0, 0);
             grid.add(txtTitre, 1, 0);
             grid.add(new Label("Description:"), 0, 1);
@@ -325,6 +472,19 @@ public class CreationController implements Initializable {
             
             grid.add(new Label("Statut:"), 0, 4);
             grid.add(comboStatut, 1, 4);
+            
+            // Add AI generation section
+            grid.add(separator, 0, 5, 2, 1);
+            grid.add(lblAiGenerator, 0, 6, 2, 1);
+            grid.add(new Label("Prompt IA:"), 0, 7);
+            grid.add(txtAiPrompt, 1, 7);
+            grid.add(new Label("Style d'art:"), 0, 8);
+            grid.add(comboArtStyle, 1, 8);
+            
+            HBox generationBox = new HBox(10);
+            generationBox.getChildren().add(btnGenerateImage);
+            grid.add(generationBox, 1, 9);
+            grid.add(previewImageView, 1, 10);
             
             btnImage.setOnAction(e -> {
                 FileChooser fileChooser = new FileChooser();
@@ -346,6 +506,9 @@ public class CreationController implements Initializable {
                         Files.copy(selectedFile.toPath(), targetPath, StandardCopyOption.REPLACE_EXISTING);
                         txtImage.setText("uploads/images/" + fileName);
                         
+                        // Update preview
+                        previewImageView.setImage(new Image(targetPath.toUri().toString()));
+                        
                         // Delete the old image file
                         if (oldImagePath != null && !oldImagePath.isEmpty()) {
                             Files.deleteIfExists(Paths.get("src/main/resources/", oldImagePath));
@@ -356,11 +519,73 @@ public class CreationController implements Initializable {
                 }
             });
             
+            // Button to generate AI image
+            btnGenerateImage.setOnAction(e -> {
+                String prompt = txtAiPrompt.getText().trim();
+                String style = comboArtStyle.getValue();
+                
+                if (prompt.isEmpty()) {
+                    showAlert(Alert.AlertType.WARNING, "Attention", "Veuillez entrer un prompt pour générer une image.");
+                    return;
+                }
+                
+                // Show loading indicator
+                btnGenerateImage.setDisable(true);
+                btnGenerateImage.setText("Génération en cours...");
+                
+                // Generate the image asynchronously
+                CompletableFuture<String> future = stabilityAIService.generateImage(prompt, style);
+                future.thenAccept(imagePath -> {
+                    javafx.application.Platform.runLater(() -> {
+                        try {
+                            // Display the generated image
+                            File imageFile = new File("src/main/resources/uploads/" + imagePath);
+                            if (imageFile.exists()) {
+                                previewImageView.setImage(new Image(imageFile.toURI().toString()));
+                                txtImage.setText("uploads/" + imagePath);
+                                
+                                // Re-enable the button
+                                btnGenerateImage.setDisable(false);
+                                btnGenerateImage.setText("Générer l'image");
+                                
+                                showAlert(Alert.AlertType.INFORMATION, "Succès", "Image générée avec succès!");
+                            } else {
+                                throw new IOException("Le fichier d'image généré n'existe pas");
+                            }
+                        } catch (Exception ex) {
+                            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la génération de l'image: " + ex.getMessage());
+                            btnGenerateImage.setDisable(false);
+                            btnGenerateImage.setText("Générer l'image");
+                        }
+                    });
+                }).exceptionally(ex -> {
+                    javafx.application.Platform.runLater(() -> {
+                        showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la génération de l'image: " + ex.getMessage());
+                        btnGenerateImage.setDisable(false);
+                        btnGenerateImage.setText("Générer l'image");
+                    });
+                    return null;
+                });
+            });
+            
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Modifier la Création");
             dialog.setHeaderText("Modifier la création: " + selectedCreation.getTitre());
-            dialog.getDialogPane().setContent(grid);
+            
+            ScrollPane scrollPane = new ScrollPane(grid);
+            scrollPane.setFitToWidth(true);
+            dialog.getDialogPane().setContent(scrollPane);
+            dialog.getDialogPane().setPrefWidth(700);  // Increased from 600
+            dialog.getDialogPane().setPrefHeight(700); // Increased from 600
             dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+            
+            // Set dialog to be resizable
+            dialog.setResizable(true);
+            
+            // Set dialog on the screen
+            Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+            stage.setMinWidth(700);
+            stage.setMinHeight(700);
             
             Optional<ButtonType> result = dialog.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {

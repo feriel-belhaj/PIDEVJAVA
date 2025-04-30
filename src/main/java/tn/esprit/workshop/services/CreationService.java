@@ -7,16 +7,66 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
 
 public class CreationService {
     private Connection connection;
+    private static final String PROFANITY_API_URL = "https://vector.profanity.dev";
 
     public CreationService() {
         connection = MyDbConnexion.getInstance().getCnx();
     }
+    
+    /**
+     * Check if the provided text contains profanity using the profanity API
+     * 
+     * @param text The text to check for profanity
+     * @return true if profanity is detected, false otherwise
+     * @throws IOException if there's an issue with the API call
+     * @throws InterruptedException if the API call is interrupted
+     */
+    private boolean containsProfanity(String text) throws IOException, InterruptedException {
+        if (text == null || text.trim().isEmpty()) {
+            return false;
+        }
+
+        HttpClient client = HttpClient.newBuilder()
+                .connectTimeout(Duration.ofSeconds(10))
+                .build();
+        
+        // Create the JSON request body
+        String requestBody = "{\"message\":\"" + text.replace("\"", "\\\"") + "\"}";
+        
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(PROFANITY_API_URL))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                .build();
+        
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        
+        // Check if the API detected profanity
+        return response.statusCode() == 200 && response.body().contains("true");
+    }
 
     // Create a new creation
     public boolean add(Creation creation) {
+        // Check for profanity in title and description
+        try {
+            if (containsProfanity(creation.getTitre()) || containsProfanity(creation.getDescription())) {
+                System.err.println("Creation contains profanity and was rejected");
+                return false;
+            }
+        } catch (IOException | InterruptedException e) {
+            System.err.println("Warning: Could not check for profanity: " + e.getMessage());
+            // Continue with the operation even if profanity check fails
+        }
+        
         // Validate creation before adding to database
         List<String> validationErrors = creation.validate();
         if (!validationErrors.isEmpty()) {
@@ -26,7 +76,6 @@ public class CreationService {
             }
             return false;
         }
-        //yabaath req lel bd
         
         String query = "INSERT INTO creation (utilisateur_id, titre, description, image, categorie, date_public, statut, nb_like) " +
                       "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -58,6 +107,17 @@ public class CreationService {
 
     // Update an existing creation
     public boolean update(Creation creation) {
+        // Check for profanity in title and description
+        try {
+            if (containsProfanity(creation.getTitre()) || containsProfanity(creation.getDescription())) {
+                System.err.println("Creation contains profanity and was rejected");
+                return false;
+            }
+        } catch (IOException | InterruptedException e) {
+            System.err.println("Warning: Could not check for profanity: " + e.getMessage());
+            // Continue with the operation even if profanity check fails
+        }
+        
         // Validate creation before updating in database
         List<String> validationErrors = creation.validate();
         if (!validationErrors.isEmpty()) {

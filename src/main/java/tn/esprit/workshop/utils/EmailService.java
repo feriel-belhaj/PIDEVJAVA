@@ -12,10 +12,7 @@ import java.security.cert.X509Certificate;
 public class EmailService {
     
     // Configuration du serveur SMTP
-    private static final String SMTP_HOST = "smtp.gmail.com";
-    private static final String SMTP_PORT = "587";
-    private static final String USERNAME = "anasallam02@gmail.com"; // Remplacez par votre email
-    private static final String PASSWORD = "tylz hkfz igfk kajl"; // Remplacez par votre mot de passe d'application
+  
     
     /**
      * Envoie un email de confirmation de paiement

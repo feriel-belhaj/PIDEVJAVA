@@ -1,6 +1,6 @@
 package tn.esprit.workshop.services;
 
-
+import org.jetbrains.annotations.NotNull;
 import tn.esprit.workshop.models.Candidature;
 import tn.esprit.workshop.models.Partenariat;
 import tn.esprit.workshop.utils.MyDbConnexion;
@@ -17,12 +17,11 @@ public class ServiceCandidature implements CRUDCandidature<Candidature> {
     }
 
     @Override
-    public void insert(Candidature candidature) throws SQLException {
-        String req = "INSERT INTO `candidature`(`date_postulation`, `cv`, `portfolio`, `motivation`, `type_collab`, `partenariat_id`,createur_id) " +
-                "VALUES (?, ?, ?, ?, ?, ?,?)";
+    public void insert(@NotNull Candidature candidature) throws SQLException {
+        String req = "INSERT INTO `candidature`(`date_postulation`, `cv`, `portfolio`, `motivation`, `type_collab`, `partenariat_id`) " +
+                "VALUES (?, ?, ?, ?, ?, ?)";
 
         PreparedStatement ps = cnx.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
-        int createurId =UserGetData.id;
 
         ps.setDate(1, new java.sql.Date(candidature.getDatePostulation().getTime()));
         ps.setString(2, candidature.getCv());
@@ -30,7 +29,6 @@ public class ServiceCandidature implements CRUDCandidature<Candidature> {
         ps.setString(4, candidature.getMotivation());
         ps.setString(5, candidature.getTypeCollab());
         ps.setInt(6, candidature.getPartenariat().getId());
-        ps.setInt(7, createurId);
 
         ps.executeUpdate();
 

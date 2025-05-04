@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="edd03da4-13ea-4a38-a43c-9a088bb56d6a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/workshop/gui/Utilisateur.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/workshop/gui/Utilisateur.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/workshop/gui/UtilisateurDashboard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/workshop/gui/UtilisateurDashboard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/workshop/services/ServiceUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/workshop/services/ServiceUser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/workshop/services/UserGetData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/workshop/services/UserGetData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/dashboardUser.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/dashboardUser.fxml" afterDir="false" />
-    </list>
+    <list default="true" id="edd03da4-13ea-4a38-a43c-9a088bb56d6a" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -148,7 +142,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/tn/esprit/workshop/services/ServiceCandidature.java</url>
-          <line>81</line>
+          <line>96</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>

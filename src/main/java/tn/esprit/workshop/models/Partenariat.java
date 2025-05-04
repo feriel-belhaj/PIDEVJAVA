@@ -116,6 +116,21 @@ public class Partenariat {
     public void setCandidatures(List<Candidature> candidatures) {
         this.candidatures = candidatures;
     }
+    // Méthode pour mettre à jour le statut en fonction des dates
+    public void updateStatut() {
+        Date today = new Date();
+        if (dateDebut == null || dateFin == null) {
+            this.statut = "Inconnu";
+            return;
+        }
+        if (today.after(dateFin)) {
+            this.statut = "Expiré";
+        } else if (today.before(dateDebut)) {
+            this.statut = "À venir";
+        } else {
+            this.statut = "EnCours";
+        }
+    }
 
     // Méthode utilitaire pour ajouter une candidature
     public void addCandidature(Candidature candidature) {

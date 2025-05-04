@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.Tooltip?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
+        <?import javafx.geometry.Insets?>
+        <?import javafx.scene.control.Button?>
+        <?import javafx.scene.control.Label?>
+        <?import javafx.scene.control.ScrollPane?>
+        <?import javafx.scene.control.TextArea?>
+        <?import javafx.scene.control.Tooltip?>
+        <?import javafx.scene.image.Image?>
+        <?import javafx.scene.image.ImageView?>
+        <?import javafx.scene.layout.AnchorPane?>
+        <?import javafx.scene.layout.HBox?>
+        <?import javafx.scene.layout.StackPane?>
+        <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="800.0" style="-fx-background-color: #F5F5F5;" stylesheets="@dashboardDesign.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.workshop.gui.DetailsPartenariatController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="800.0" style="-fx-background-color: #F5F5F5;" stylesheets="@../../../../../Downloads/dashboardDesign.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.workshop.gui.DetailsPartenariatController">
     <children>
         <VBox layoutX="0.0" layoutY="0.0" prefHeight="700.0" prefWidth="800.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-
                 <!-- Contenu principal -->
                 <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-padding: 0;" VBox.vgrow="ALWAYS">
                     <content>
@@ -44,7 +43,7 @@
                                                     <ImageView fx:id="imageView" fitHeight="200.0" fitWidth="300.0" preserveRatio="false" style="-fx-border-color: #E0E0E0; -fx-border-radius: 5;" />
 
                                                     <!-- Statut sur l'image en haut à droite -->
-                                                    <Label fx:id="statutLabel" style="-fx-background-color: #FFC107; -fx-text-fill: white; -fx-padding: 5 10; -fx-background-radius: 5; -fx-font-weight: bold;" text="en cours" StackPane.alignment="TOP_RIGHT">
+                                                    <Label fx:id="statutLabel" style="-fx-padding: 5 10; -fx-background-radius: 5; -fx-font-weight: bold;" StackPane.alignment="TOP_RIGHT">
                                                         <StackPane.margin>
                                                             <Insets right="10" top="10" />
                                                         </StackPane.margin>
@@ -84,7 +83,7 @@
                                                     <Button fx:id="btnSupprimer" style="-fx-background-color: transparent; -fx-padding: 0;">
                                                         <graphic>
                                                             <ImageView fitHeight="24.0" fitWidth="24.0" preserveRatio="true">
-                                                                <Image url="@images/trash-icon.png" />
+                                                                <Image url="@trash-icon.png" />
                                                             </ImageView>
                                                         </graphic>
                                                         <tooltip>

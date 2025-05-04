@@ -76,49 +76,40 @@ public class DetailsPartenariatController {
 
         // Mettre à jour les dates
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        dateDebutLabel.setText(dateFormat.format(partenariat.getDateDebut()));
-        dateFinLabel.setText(dateFormat.format(partenariat.getDateFin()));
+        String dateDebutStr = partenariat.getDateDebut() != null ? dateFormat.format(partenariat.getDateDebut()) : "N/A";
+        String dateFinStr = partenariat.getDateFin() != null ? dateFormat.format(partenariat.getDateFin()) : "N/A";
+        dateDebutLabel.setText(dateDebutStr);
+        dateFinLabel.setText(dateFinStr);
 
         // Colorer le statut en fonction de sa valeur
+        String styleStatut;
         switch (partenariat.getStatut()) {
             case "EnCours":
-                statutLabel.setStyle("-fx-background-color: #FFD700; -fx-text-fill: white; -fx-padding: 5 10; -fx-background-radius: 5; -fx-font-weight: bold;");
-                break;
-            case "Actif":
-                statutLabel.setStyle("-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-padding: 5 10; -fx-background-radius: 5; -fx-font-weight: bold;");
+                styleStatut = "-fx-background-color: #FFD700; -fx-text-fill: white; -fx-padding: 5 10; -fx-background-radius: 5; -fx-font-weight: bold;";
                 break;
             case "Expiré":
-                statutLabel.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-padding: 5 10; -fx-background-radius: 5; -fx-font-weight: bold;");
+                styleStatut = "-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-padding: 5 10; -fx-background-radius: 5; -fx-font-weight: bold;";
                 btnPostuler.setDisable(true); // Désactiver le bouton postuler si expiré
                 break;
+            case "À venir":
+                styleStatut = "-fx-background-color: #3498db; -fx-text-fill: white; -fx-padding: 5 10; -fx-background-radius: 5; -fx-font-weight: bold;";
+                break;
             default:
-                statutLabel.setStyle("-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-padding: 5 10; -fx-background-radius: 5; -fx-font-weight: bold;");
+                styleStatut = "-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-padding: 5 10; -fx-background-radius: 5; -fx-font-weight: bold;";
         }
-        String basePath = "C:\\xampp\\htdocs\\img";
-        String imagePath = partenariat.getImage();
-        // Charger l'image du partenariat
-        if (imagePath != null && !imagePath.isEmpty()) {
-            try {
-                File imageFile = new File(basePath, imagePath);
-                if (imageFile.exists()) {
-                    Image image = new Image(imageFile.toURI().toString());
-                    imageView.setImage(image);
+        statutLabel.setStyle(styleStatut);
 
-                    // Dimension standardisée
-                    imageView.setFitWidth(300.0);
-                    imageView.setFitHeight(200.0);
-                    imageView.setPreserveRatio(false); // Forcer l'image à respecter les dimensions
-                } else {
-                    // Image par défaut si le fichier n'existe pas
-                    imageView.setImage(new Image(getClass().getResourceAsStream("/images/default.png")));
-                }
-            } catch (Exception e) {
-                System.err.println("Erreur lors du chargement de l'image: " + e.getMessage());
-                // Image par défaut en cas d'erreur
+        // Charger l'image du partenariat depuis C:\xampp\htdocs\img
+        String imagePath = partenariat.getImage();
+        String basePath = "C:\\xampp\\htdocs\\img";
+        if (imagePath != null && !imagePath.isEmpty()) {
+            File imageFile = new File(basePath, imagePath);
+            if (imageFile.exists()) {
+                imageView.setImage(new Image(imageFile.toURI().toString()));
+            } else {
                 imageView.setImage(new Image(getClass().getResourceAsStream("/images/default.png")));
             }
         } else {
-            // Image par défaut si aucune image n'est spécifiée
             imageView.setImage(new Image(getClass().getResourceAsStream("/images/default.png")));
         }
 

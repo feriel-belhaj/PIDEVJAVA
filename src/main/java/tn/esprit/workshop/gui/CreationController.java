@@ -159,7 +159,7 @@ public class CreationController implements Initializable {
         likesLabel.setText(String.valueOf(creation.getNbLike()));
         descriptionArea.setText(creation.getDescription());
     }
-
+//RECHERCHE
     @FXML
     private void handleSearchAction() {
         String searchText = searchField.getText().trim().toLowerCase();
@@ -174,7 +174,7 @@ public class CreationController implements Initializable {
                     creation.getTitre().toLowerCase().contains(searchText) || 
                     creation.getDescription().toLowerCase().contains(searchText);
                 
-                boolean matchesCategory = "Tous".equals(category) || 
+                boolean matchesCategory = "Tous".equals(category) ||
                     (creation.getCategorie() != null && creation.getCategorie().equals(category));
                 
                 if (matchesSearch && matchesCategory) {

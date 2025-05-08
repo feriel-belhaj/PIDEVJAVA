@@ -13,7 +13,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
-
+//filtre KZ
 public class CreationService {
     private Connection connection;
     private static final String PROFANITY_API_URL = "https://vector.profanity.dev";

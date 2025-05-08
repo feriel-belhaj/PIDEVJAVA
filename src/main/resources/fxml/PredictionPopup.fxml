@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="15" styleClass="prediction-popup" stylesheets="@../styles/front.css"
+      xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.workshop.gui.PredictionPopupController">
+    
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- Titre -->
+    <Label text="Prédiction de Compatibilité" styleClass="prediction-title">
+        <font>
+            <Font name="System Bold" size="24"/>
+        </font>
+    </Label>
+
+    <!-- Score de compatibilité -->
+    <VBox spacing="10" styleClass="score-container">
+        <Label text="Score de Compatibilité:" styleClass="section-title"/>
+        <ProgressBar fx:id="scoreProgressBar" progress="0.0" prefWidth="300" styleClass="score-progress"/>
+        <Label fx:id="scoreLabel" styleClass="score-value"/>
+    </VBox>
+
+    <!-- Recommandations -->
+    <VBox spacing="10" styleClass="recommendations-container">
+        <Label text="Recommandations:" styleClass="section-title"/>
+        <VBox fx:id="recommendationsBox" spacing="5" styleClass="recommendations-list"/>
+    </VBox>
+
+    <!-- Risques -->
+    <VBox spacing="10" styleClass="risks-container">
+        <Label text="Risques potentiels:" styleClass="section-title"/>
+        <VBox fx:id="risquesBox" spacing="5" styleClass="risks-list"/>
+    </VBox>
+
+    <!-- Bouton Fermer -->
+    <Button text="Fermer" onAction="#handleClose" styleClass="close-button" 
+            alignment="CENTER" maxWidth="Infinity">
+        <VBox.margin>
+            <Insets top="10"/>
+        </VBox.margin>
+    </Button>
+</VBox> 

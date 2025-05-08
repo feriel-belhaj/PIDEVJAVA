@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="282.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.workshop.gui.ResetPwd">
+   <children>
+      <AnchorPane layoutY="-1.0" prefHeight="110.0" prefWidth="600.0" styleClass="left-form" stylesheets="@loginDesign.css">
+         <children>
+            <Label layoutX="126.0" layoutY="35.0" prefHeight="39.0" prefWidth="348.0" styleClass="h1" stylesheets="@loginDesign.css" text="Réinitialiser votre mot de passe" />
+            <Button layoutX="560.0" layoutY="10.0" mnemonicParsing="false" onAction="#close" styleClass="close" text="X" />
+            <Button fx:id="BackToLogin_btn" layoutX="529.0" layoutY="9.0" mnemonicParsing="false" onAction="#BackToLogin" styleClass="minus" text="&lt;-" />
+         </children>
+      </AnchorPane>
+      <TextField fx:id="User_ResetPwd_mail" layoutX="171.0" layoutY="167.0" prefHeight="30.0" prefWidth="220.0" promptText="email" styleClass="textfield" stylesheets="@loginDesign.css" />
+      <Label fx:id="User_CreateAccount" layoutX="29.0" layoutY="121.0" prefHeight="39.0" prefWidth="227.0" styleClass="h2" stylesheets="@loginDesign.css" text="Saisissez votre adresse email" underline="true" />
+      <Button fx:id="User_ResetPwd_btn" layoutX="171.0" layoutY="212.0" mnemonicParsing="false" onAction="#SendResetLink" prefHeight="40.0" prefWidth="220.0" styleClass="login-btn" stylesheets="@loginDesign.css" text="Envoyer le lien de réinitialisation" />
+   </children>
+</AnchorPane>

@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.web.WebView?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+
+<AnchorPane prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: #f8f8f8;" stylesheets="@../styles/front.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.workshop.gui.EvenementDetailController">
+   <children>
+      <BorderPane layoutX="14.0" layoutY="14.0" prefHeight="672.0" prefWidth="972.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
+         <top>
+            <HBox alignment="CENTER_LEFT" spacing="10.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button fx:id="btnRetour" mnemonicParsing="false" onAction="#handleRetour" style="-fx-background-color: #f0f0f0; -fx-border-color: #e0e0e0; -fx-border-radius: 4px;" styleClass="btn-secondary" text="← Retour aux événements" />
+               </children>
+               <padding>
+                  <Insets bottom="15.0" />
+               </padding>
+            </HBox>
+         </top>
+         <center>
+            <ScrollPane fitToWidth="true" pannable="true" style="-fx-background-color: transparent; -fx-background: transparent;" BorderPane.alignment="CENTER">
+               <content>
+                  <BorderPane>
+                     <center>
+                        <VBox spacing="30.0">
+                           <children>
+                              <HBox spacing="30.0">
+                                 <children>
+                                    <VBox alignment="TOP_CENTER" maxWidth="470.0" minWidth="300.0" spacing="10.0" HBox.hgrow="NEVER">
+                                       <children>
+                                          <ImageView fx:id="imgEvent" fitHeight="350.0" fitWidth="470.0" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);" />
+                                       </children>
+                                    </VBox>
+                                    <VBox spacing="15.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Label fx:id="lblTitre" style="-fx-font-size: 28px; -fx-text-fill: #333333;" styleClass="h1" text="Titre de l'événement" wrapText="true">
+                                             <font>
+                                                <Font name="System Bold" size="28.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="lblCategorie" style="-fx-text-fill: #666666; -fx-font-size: 16px;" styleClass="h3" text="Catégorie" />
+                                          <Separator prefWidth="200.0" />
+                                          
+                                          <VBox spacing="15.0" style="-fx-background-color: #ffffff; -fx-background-radius: 8px; -fx-border-color: #e0e0e0; -fx-border-radius: 8px; -fx-padding: 15px;">
+                                             <children>
+                                                <HBox spacing="20.0">
+                                                   <children>
+                                                      <VBox style="-fx-background-color: #f9f9f9; -fx-background-radius: 8px; -fx-border-color: #e0e0e0; -fx-border-radius: 8px;" styleClass="stat-box" HBox.hgrow="ALWAYS">
+                                                         <children>
+                                                            <Label text="Objectif" textFill="#757575">
+                                                               <font>
+                                                                  <Font size="12.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label fx:id="lblGoalAmount" style="-fx-font-weight: bold; -fx-text-fill: #333333;" styleClass="h2" text="3000,00 DT">
+                                                               <font>
+                                                                  <Font name="System Bold" size="18.0" />
+                                                               </font>
+                                                            </Label>
+                                                         </children>
+                                                         <padding>
+                                                            <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
+                                                         </padding>
+                                                      </VBox>
+                                                      <VBox style="-fx-background-color: #f9f9f9; -fx-background-radius: 8px; -fx-border-color: #e0e0e0; -fx-border-radius: 8px;" styleClass="stat-box" HBox.hgrow="ALWAYS">
+                                                         <children>
+                                                            <Label text="Collecté" textFill="#757575">
+                                                               <font>
+                                                                  <Font size="12.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label fx:id="lblCollectedAmount" style="-fx-font-weight: bold; -fx-text-fill: #333333;" styleClass="h2" text="0,00 DT">
+                                                               <font>
+                                                                  <Font name="System Bold" size="18.0" />
+                                                               </font>
+                                                            </Label>
+                                                         </children>
+                                                         <padding>
+                                                            <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
+                                                         </padding>
+                                                      </VBox>
+                                                   </children>
+                                                </HBox>
+                                                <HBox spacing="20.0">
+                                                   <children>
+                                                      <VBox style="-fx-background-color: #f9f9f9; -fx-background-radius: 8px; -fx-border-color: #e0e0e0; -fx-border-radius: 8px;" styleClass="stat-box" HBox.hgrow="ALWAYS">
+                                                         <children>
+                                                            <Label text="Progression" textFill="#757575">
+                                                               <font>
+                                                                  <Font size="12.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label fx:id="lblProgression" style="-fx-font-weight: bold; -fx-text-fill: #333333;" styleClass="h2" text="0,0%">
+                                                               <font>
+                                                                  <Font name="System Bold" size="18.0" />
+                                                               </font>
+                                                            </Label>
+                                                         </children>
+                                                         <padding>
+                                                            <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
+                                                         </padding>
+                                                      </VBox>
+                                                      <VBox style="-fx-background-color: #f9f9f9; -fx-background-radius: 8px; -fx-border-color: #e0e0e0; -fx-border-radius: 8px;" styleClass="stat-box" HBox.hgrow="ALWAYS">
+                                                         <children>
+                                                            <Label text="Jours restants" textFill="#757575">
+                                                               <font>
+                                                                  <Font size="12.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label fx:id="lblJoursRestants" style="-fx-font-weight: bold; -fx-text-fill: #333333;" styleClass="h2" text="0">
+                                                               <font>
+                                                                  <Font name="System Bold" size="18.0" />
+                                                               </font>
+                                                            </Label>
+                                                         </children>
+                                                         <padding>
+                                                            <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
+                                                         </padding>
+                                                      </VBox>
+                                                   </children>
+                                                </HBox>
+                                                <Button fx:id="btnFaireDon" defaultButton="true" mnemonicParsing="false" onAction="#handleFaireDon" prefHeight="45.0" prefWidth="200.0" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4px;" styleClass="primary-button" text="Faire un don" />
+                                             </children>
+                                          </VBox>
+                                          
+                                          <Separator prefWidth="200.0" />
+                                          <VBox spacing="20.0" style="-fx-background-color: #ffffff; -fx-background-radius: 8px; -fx-border-color: #e0e0e0; -fx-border-radius: 8px; -fx-padding: 15px;">
+                                             <children>
+                                                <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333333;" styleClass="h2" text="Calendrier">
+                                                   <font>
+                                                      <Font name="System Bold" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                                <HBox spacing="20.0">
+                                                   <children>
+                                                      <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                                                         <children>
+                                                            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                               <children>
+                                                                  <Label styleClass="icon" text="📅" />
+                                                                  <Label style="-fx-font-weight: bold; -fx-text-fill: #555555;" styleClass="h3" text="Date de début:">
+                                                                     <font>
+                                                                        <Font name="System Bold" size="14.0" />
+                                                                     </font>
+                                                                  </Label>
+                                                               </children>
+                                                            </HBox>
+                                                            <Label fx:id="lblStartDate" style="-fx-text-fill: #666666;" text="01/01/2023" />
+                                                         </children>
+                                                      </VBox>
+                                                      <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                                                         <children>
+                                                            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                               <children>
+                                                                  <Label styleClass="icon" text="📅" />
+                                                                  <Label style="-fx-font-weight: bold; -fx-text-fill: #555555;" styleClass="h3" text="Date de fin:">
+                                                                     <font>
+                                                                        <Font name="System Bold" size="14.0" />
+                                                                     </font>
+                                                                  </Label>
+                                                               </children>
+                                                            </HBox>
+                                                            <Label fx:id="lblEndDate" style="-fx-text-fill: #666666;" text="01/01/2023" />
+                                                         </children>
+                                                      </VBox>
+                                                   </children>
+                                                </HBox>
+                                                <VBox spacing="5.0">
+                                                   <children>
+                                                      <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                         <children>
+                                                            <Label styleClass="icon" text="📍" />
+                                                            <Label style="-fx-font-weight: bold; -fx-text-fill: #555555;" styleClass="h3" text="Localisation:">
+                                                               <font>
+                                                                  <Font name="System Bold" size="14.0" />
+                                                               </font>
+                                                            </Label>
+                                                         </children>
+                                                      </HBox>
+                                                      <Label fx:id="lblLocalisation" style="-fx-text-fill: #666666;" text="Paris, France" />
+                                                   </children>
+                                                </VBox>
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <VBox spacing="15.0" style="-fx-background-color: #ffffff; -fx-background-radius: 8px; -fx-border-color: #e0e0e0; -fx-border-radius: 8px; -fx-padding: 15px;">
+                                 <children>
+                                    <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333333;" styleClass="h2" text="À propos du projet">
+                                       <font>
+                                          <Font name="System Bold" size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="lblDescription" style="-fx-text-fill: #666666; -fx-font-size: 14px;" wrapText="true" />
+                                 </children>
+                              </VBox>
+                              
+                              <!-- Section de la carte OpenStreetMap et météo -->
+                              <HBox spacing="20.0">
+                                <children>
+                                  <VBox spacing="15.0" style="-fx-background-color: #ffffff; -fx-background-radius: 8px; -fx-border-color: #e0e0e0; -fx-border-radius: 8px; -fx-padding: 15px;" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                                     <children>
+                                        <HBox alignment="CENTER_LEFT" spacing="15.0">
+                                           <children>
+                                              <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333333;" styleClass="h2" text="Localisation">
+                                                 <font>
+                                                    <Font name="System Bold" size="18.0" />
+                                                 </font>
+                                              </Label>
+                                              <MenuButton fx:id="menuItineraire" mnemonicParsing="false" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 4px;" text="Calculer itinéraire">
+                                                <items>
+                                                  <MenuItem fx:id="menuItemPositionActuelle" mnemonicParsing="false" onAction="#handleItineraireDepuisPosition" text="Depuis ma position actuelle" />
+                                                  <MenuItem fx:id="menuItemPointCarte" mnemonicParsing="false" onAction="#handleItinerairePointCarte" text="Choisir un point sur la carte" />
+                                                </items>
+                                                 <HBox.margin>
+                                                    <Insets left="10.0" />
+                                                 </HBox.margin>
+                                                 <padding>
+                                                    <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+                                                 </padding>
+                                                 <font>
+                                                    <Font name="System Bold" size="12.0" />
+                                                 </font>
+                                              </MenuButton>
+                                           </children>
+                                        </HBox>
+                                        <WebView fx:id="mapWebView" minHeight="400.0" prefHeight="400.0" maxHeight="600.0" VBox.vgrow="ALWAYS" />
+                                     </children>
+                                  </VBox>
+                                  
+                                  <!-- Widget météo stylisé -->
+                                  <VBox fx:id="weatherBox" spacing="10.0" style="-fx-background-color: #ffffff; -fx-background-radius: 8px; -fx-border-color: #e0e0e0; -fx-border-radius: 8px; -fx-padding: 15px;" HBox.hgrow="NEVER" maxWidth="250.0" minWidth="250.0">
+                                     <children>
+                                        <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333333;" styleClass="h2" text="Météo locale">
+                                           <font>
+                                              <Font name="System Bold" size="18.0" />
+                                           </font>
+                                        </Label>
+                                        
+                                        <!-- Widget météo contenu dans une boîte bleue -->
+                                        <VBox fx:id="weatherWidget" style="-fx-background-color: #00558b; -fx-background-radius: 8px;">
+                                           <children>
+                                              <VBox spacing="5.0" style="-fx-padding: 10;">
+                                                 <children>
+                                                    <Label fx:id="weatherUpdateTime" style="-fx-text-fill: #ffffff; -fx-font-size: 12px; -fx-opacity: 0.9;" text="Mis à jour: 08/05 17:46">
+                                                       <VBox.margin>
+                                                          <Insets bottom="10.0" />
+                                                       </VBox.margin>
+                                                    </Label>
+                                                    
+                                                    <VBox alignment="CENTER" spacing="5.0">
+                                                       <children>
+                                                          <ImageView fx:id="weatherIcon" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" />
+                                                          <Label fx:id="weatherTemp" style="-fx-text-fill: #ffffff; -fx-font-size: 36px; -fx-font-weight: bold;" text="--°C">
+                                                             <VBox.margin>
+                                                                <Insets top="5.0" />
+                                                             </VBox.margin>
+                                                          </Label>
+                                                          <Label fx:id="weatherFeelsLike" style="-fx-text-fill: #ffffff; -fx-font-size: 14px; -fx-opacity: 0.9;" text="Ressenti: --°C">
+                                                             <VBox.margin>
+                                                                <Insets bottom="5.0" />
+                                                             </VBox.margin>
+                                                          </Label>
+                                                       </children>
+                                                       <VBox.margin>
+                                                          <Insets bottom="10.0" />
+                                                       </VBox.margin>
+                                                    </VBox>
+                                                    
+                                                    <VBox>
+                                                       <children>
+                                                          <Label fx:id="weatherLocation" style="-fx-text-fill: #ffffff; -fx-font-size: 20px; -fx-font-weight: bold;" text="---" />
+                                                          <Label fx:id="weatherDescription" style="-fx-text-fill: #ffffff; -fx-font-size: 16px;" text="Chargement..." />
+                                                       </children>
+                                                       <VBox.margin>
+                                                          <Insets bottom="10.0" />
+                                                       </VBox.margin>
+                                                    </VBox>
+                                                    
+                                                    <!-- Section de prévision pour le jour de l'événement -->
+                                                    <VBox fx:id="eventDayForecastBox" visible="false" managed="false">
+                                                       <children>
+                                                          <Label style="-fx-text-fill: #ffffff; -fx-font-size: 14px; -fx-font-weight: bold;" text="Prévision pour l'événement:">
+                                                             <VBox.margin>
+                                                                <Insets bottom="5.0" />
+                                                             </VBox.margin>
+                                                          </Label>
+                                                          <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                             <children>
+                                                                <ImageView fx:id="eventDayWeatherIcon" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" />
+                                                                <VBox>
+                                                                   <children>
+                                                                      <Label fx:id="eventDayDate" style="-fx-text-fill: #ffffff; -fx-font-size: 12px; -fx-opacity: 0.9;" text="Date de l'événement" />
+                                                                      <Label fx:id="eventDayTemp" style="-fx-text-fill: #ffffff; -fx-font-size: 16px; -fx-font-weight: bold;" text="--°C" />
+                                                                      <Label fx:id="eventDayDescription" style="-fx-text-fill: #ffffff; -fx-font-size: 12px;" text="Description" />
+                                                                   </children>
+                                                                </VBox>
+                                                             </children>
+                                                          </HBox>
+                                                       </children>
+                                                       <VBox.margin>
+                                                          <Insets bottom="10.0" top="5.0" />
+                                                       </VBox.margin>
+                                                       <padding>
+                                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                       </padding>
+                                                       <style>
+                                                          -fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 4px; -fx-border-radius: 4px;
+                                                       </style>
+                                                    </VBox>
+                                                    
+                                                    <Separator opacity="0.3" prefWidth="200.0">
+                                                       <VBox.margin>
+                                                          <Insets bottom="10.0" />
+                                                       </VBox.margin>
+                                                    </Separator>
+                                                    
+                                                    <GridPane hgap="10.0" vgap="8.0">
+                                                       <columnConstraints>
+                                                          <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="80.0" />
+                                                       </columnConstraints>
+                                                       <rowConstraints>
+                                                          <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                                                          <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                                                          <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                                                          <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                                                       </rowConstraints>
+                                                       <children>
+                                                          <Label style="-fx-text-fill: #ffffff; -fx-font-size: 12px;" text="Humidité:" />
+                                                          <Label fx:id="weatherHumidity" style="-fx-text-fill: #ffffff; -fx-font-size: 12px;" text="--%" GridPane.columnIndex="1" />
+                                                          
+                                                          <Label style="-fx-text-fill: #ffffff; -fx-font-size: 12px;" text="Lever du soleil:" GridPane.rowIndex="1" />
+                                                          <Label fx:id="weatherSunrise" style="-fx-text-fill: #ffffff; -fx-font-size: 12px;" text="--:--" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                          
+                                                          <Label style="-fx-text-fill: #ffffff; -fx-font-size: 12px;" text="Vent:" GridPane.rowIndex="2" />
+                                                          <Label fx:id="weatherWind" style="-fx-text-fill: #ffffff; -fx-font-size: 12px;" text="-- m/s" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                          
+                                                          <Label style="-fx-text-fill: #ffffff; -fx-font-size: 12px;" text="Coucher du soleil:" GridPane.rowIndex="3" />
+                                                          <Label fx:id="weatherSunset" style="-fx-text-fill: #ffffff; -fx-font-size: 12px;" text="--:--" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                                       </children>
+                                                    </GridPane>
+                                                 </children>
+                                              </VBox>
+                                           </children>
+                                        </VBox>
+                                     </children>
+                                  </VBox>
+                                </children>
+                                <VBox.margin>
+                                  <Insets bottom="20.0" />
+                                </VBox.margin>
+                              </HBox>
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" />
+                           </padding>
+                        </VBox>
+                     </center>
+                  </BorderPane>
+               </content>
+            </ScrollPane>
+         </center>
+      </BorderPane>
+   </children>
+</AnchorPane> 

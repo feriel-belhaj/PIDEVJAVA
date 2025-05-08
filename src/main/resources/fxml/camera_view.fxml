@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="tn.esprit.workshop.gui.CameraController"
+      spacing="10"
+      padding="10">
+
+    <ImageView fx:id="cameraView"
+               fitWidth="640"
+               fitHeight="480"
+               preserveRatio="true"/>
+
+    <Button fx:id="captureButton"
+            text="Capturer"
+            onAction="#handleCapture"
+            maxWidth="Infinity"/>
+
+    <Label fx:id="resultLabel"
+           wrapText="true"
+           maxWidth="640"/>
+
+</VBox> 

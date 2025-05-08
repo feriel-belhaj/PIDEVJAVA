@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="tn.esprit.workshop.gui.CommentaireController" stylesheets="@../styles/dashboardDesign.css">
+    <top>
+        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="top-form">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+            <Button text="Retour" onAction="#handleRetourAction" styleClass="logout"/>
+            <Label text="Commentaires" styleClass="h1"/>
+        </HBox>
+    </top>
+    
+    <center>
+        <VBox spacing="15" styleClass="white-bg">
+            <padding>
+                <Insets top="10" right="15" bottom="10" left="15"/>
+            </padding>
+            
+            <!-- Détails de la création -->
+            <TitledPane text="Détails de la création" expanded="true">
+                <VBox spacing="10">
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <ImageView fx:id="creationThumbnail" fitWidth="120" fitHeight="80" preserveRatio="true" styleClass="shadow">
+                            <Image url="@../images/dot-pattern.png" />
+                        </ImageView>
+                        <VBox spacing="5">
+                            <Label fx:id="creationTitreLabel" styleClass="h2"/>
+                            <Label fx:id="creationCategorieLabel" styleClass="label-info"/>
+                            <Label fx:id="creationDateLabel" styleClass="h3"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+            </TitledPane>
+            
+            <!-- Liste des commentaires -->
+            <TitledPane text="Liste des commentaires" expanded="true" VBox.vgrow="ALWAYS">
+                <content>
+                    <ScrollPane fitToWidth="true" fitToHeight="true" VBox.vgrow="ALWAYS">
+                        <content>
+                            <VBox fx:id="commentairesContainer" spacing="15" VBox.vgrow="ALWAYS" styleClass="white-bg">
+                                <!-- Les commentaires seront ajoutés ici dynamiquement -->
+                            </VBox>
+                        </content>
+                    </ScrollPane>
+                </content>
+            </TitledPane>
+            
+            <!-- Ajout d'un nouveau commentaire -->
+            <VBox spacing="10" styleClass="card">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+                <Label text="Ajouter un commentaire" styleClass="h2" style="-fx-text-fill: white;"/>
+                <TextArea fx:id="nouveauCommentaireArea" promptText="Écrivez votre commentaire ici..." prefHeight="80" wrapText="true" styleClass="textfield"/>
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <CheckBox fx:id="isAnonymousCheckbox" text="Commenter anonymement" style="-fx-text-fill: white;"/>
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Button text="Publier" onAction="#handlePublierCommentaire" styleClass="add-btn"/>
+                </HBox>
+            </VBox>
+            
+            <!-- Gestion des commentaires (admin) -->
+            <TitledPane text="Gestion des commentaires" expanded="false">
+                <VBox spacing="10">
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <ComboBox fx:id="commentFilterComboBox" promptText="Filtrer par statut" HBox.hgrow="ALWAYS"/>
+                        <Button text="Tout afficher" onAction="#handleAfficherTout" styleClass="import-btn"/>
+                    </HBox>
+                    
+                    <TableView fx:id="commentairesTable" VBox.vgrow="ALWAYS" styleClass="table-view">
+                        <columns>
+                            <TableColumn fx:id="commentIdColumn" text="ID" prefWidth="50"/>
+                            <TableColumn fx:id="commentUtilisateurColumn" text="Utilisateur" prefWidth="100"/>
+                            <TableColumn fx:id="commentContenuColumn" text="Contenu" prefWidth="200"/>
+                            <TableColumn fx:id="commentDateColumn" text="Date" prefWidth="120"/>
+                            <TableColumn fx:id="commentEtatColumn" text="État" prefWidth="80"/>
+                        </columns>
+                    </TableView>
+                    
+                    <HBox spacing="10" alignment="CENTER_RIGHT">
+                        <Button text="Approuver" onAction="#handleApprouverCommentaire" styleClass="update-btn"/>
+                        <Button text="Signaler" onAction="#handleSignalerCommentaire" styleClass="clear-btn"/>
+                        <Button text="Supprimer" onAction="#handleSupprimerCommentaire" styleClass="delete-btn"/>
+                    </HBox>
+                </VBox>
+            </TitledPane>
+        </VBox>
+    </center>
+</BorderPane>

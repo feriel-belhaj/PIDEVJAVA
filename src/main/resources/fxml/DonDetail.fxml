@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0" stylesheets="@../styles/front.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.workshop.gui.DonDetailController">
+   <children>
+      <Label styleClass="page-title" text="Détails du don" textFill="#2a2a2a">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <GridPane hgap="20.0" vgap="10.0">
+         <columnConstraints>
+            <javafx.scene.layout.ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" />
+            <javafx.scene.layout.ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <javafx.scene.layout.RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <javafx.scene.layout.RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <javafx.scene.layout.RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <javafx.scene.layout.RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <javafx.scene.layout.RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <javafx.scene.layout.RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Label styleClass="field-label" text="ID:" />
+            <Label styleClass="field-label" text="Événement:" GridPane.rowIndex="1" />
+            <Label styleClass="field-label" text="Utilisateur ID:" GridPane.rowIndex="2" />
+            <Label styleClass="field-label" text="Montant:" GridPane.rowIndex="3" />
+            <Label styleClass="field-label" text="Date:" GridPane.rowIndex="4" />
+            <Label styleClass="field-label" text="Message:" GridPane.rowIndex="5" />
+            
+            <Label fx:id="lblId" styleClass="field-value" text="123" GridPane.columnIndex="1" />
+            <Label fx:id="lblEvenement" styleClass="field-value" text="Nom de l'événement" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label fx:id="lblDonateur" styleClass="field-value" text="Utilisateur #456" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label fx:id="lblMontant" styleClass="field-value" text="100.00 DT" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label fx:id="lblDate" styleClass="field-value" text="01/01/2023 14:30" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label fx:id="lblMessage" styleClass="field-value" text="Message du donateur" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+         </children>
+      </GridPane>
+   </children>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+</VBox> 

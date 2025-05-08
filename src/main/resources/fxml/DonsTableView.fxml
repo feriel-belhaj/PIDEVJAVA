@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="600.0" prefWidth="900.0" stylesheets="@../styles/front.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.workshop.gui.DonsTableViewController">
+   <children>
+      <BorderPane layoutX="14.0" layoutY="14.0" prefHeight="572.0" prefWidth="874.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
+         <top>
+            <VBox spacing="15.0" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox alignment="CENTER_LEFT" spacing="10.0">
+                     <children>
+                        <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label styleClass="page-title" text="Gestion des dons" textFill="#2a2a2a">
+                                 <font>
+                                    <Font name="System Bold" size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label styleClass="page-subtitle" text="Vue tabulaire pour gérer les dons" textFill="#5a5a5a">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="10.0" top="10.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <Separator opacity="0.2" prefWidth="200.0" />
+                  <HBox alignment="CENTER_LEFT" spacing="15.0">
+                     <children>
+                        <TextField fx:id="tfSearch" onKeyReleased="#handleSearch" prefHeight="35.0" prefWidth="300.0" promptText="Rechercher..." styleClass="search-field">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </TextField>
+                        <ComboBox fx:id="cbEvenement" prefHeight="35.0" prefWidth="150.0" promptText="Événement" onAction="#handleEvenementFilter" />
+                        <ComboBox fx:id="cbTri" prefHeight="35.0" prefWidth="150.0" promptText="Trier par" onAction="#handleSort" />
+                        <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#refreshTable" styleClass="btn-secondary" text="Rafraîchir">
+                                 <padding>
+                                    <Insets bottom="8.0" left="15.0" right="15.0" top="8.0" />
+                                 </padding>
+                              </Button>
+                           </children>
+                        </HBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="10.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <Separator opacity="0.2" prefWidth="200.0" />
+               </children>
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
+            </VBox>
+         </top>
+         <center>
+            <ScrollPane fitToWidth="true" styleClass="transparent-scroll-pane" BorderPane.alignment="CENTER">
+               <content>
+                  <VBox fx:id="tableContainer" spacing="2.0">
+                     <!-- En-tête du tableau -->
+                     <HBox alignment="CENTER_LEFT" spacing="5.0" styleClass="table-header" style="-fx-padding: 10px;">
+                        <children>
+                           <Label minWidth="50.0" text="ID" textFill="WHITE" HBox.hgrow="NEVER">
+                              <font>
+                                 <Font name="System Bold" size="14.0" />
+                              </font>
+                              <HBox.margin>
+                                 <Insets left="5.0" right="10.0" />
+                              </HBox.margin>
+                           </Label>
+                           <Label minWidth="180.0" text="Événement" textFill="WHITE" HBox.hgrow="NEVER">
+                              <font>
+                                 <Font name="System Bold" size="14.0" />
+                              </font>
+                           </Label>
+                           <Label minWidth="120.0" text="Donateur" textFill="WHITE" HBox.hgrow="NEVER">
+                              <font>
+                                 <Font name="System Bold" size="14.0" />
+                              </font>
+                           </Label>
+                           <Label minWidth="100.0" text="Montant (DT)" textFill="WHITE" HBox.hgrow="NEVER">
+                              <font>
+                                 <Font name="System Bold" size="14.0" />
+                              </font>
+                           </Label>
+                           <Label minWidth="100.0" text="Date" textFill="WHITE" HBox.hgrow="NEVER">
+                              <font>
+                                 <Font name="System Bold" size="14.0" />
+                              </font>
+                           </Label>
+                           <Label maxWidth="1.7976931348623157E308" text="Message" textFill="WHITE" HBox.hgrow="ALWAYS">
+                              <font>
+                                 <Font name="System Bold" size="14.0" />
+                              </font>
+                           </Label>
+                           <Label minWidth="80.0" text="Actions" textFill="WHITE" HBox.hgrow="NEVER">
+                              <font>
+                                 <Font name="System Bold" size="14.0" />
+                              </font>
+                           </Label>
+                        </children>
+                     </HBox>
+                     <!-- Les lignes du tableau seront ajoutées dynamiquement ici -->
+                  </VBox>
+               </content>
+               <BorderPane.margin>
+                  <Insets top="10.0" />
+               </BorderPane.margin>
+            </ScrollPane>
+         </center>
+      </BorderPane>
+   </children>
+</AnchorPane> 

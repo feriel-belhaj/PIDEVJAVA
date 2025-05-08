@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="tn.esprit.workshop.gui.CreationController" stylesheets="@../styles/dashboardDesign.css">
+    <top>
+        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="top-form">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+            <Label text="Gestion des Créations" styleClass="h1"/>
+            <Region HBox.hgrow="ALWAYS" />
+            <Button text="Nouvelle Création" onAction="#showAddCreationForm" styleClass="add-btn"/>
+        </HBox>
+    </top>
+    
+    <center>
+        <SplitPane dividerPositions="0.7">
+            <VBox spacing="10" styleClass="white-bg">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+                
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <TextField fx:id="searchField" promptText="Rechercher..." HBox.hgrow="ALWAYS" styleClass="search"/>
+                    <ComboBox fx:id="categorieFilter" promptText="Catégorie"/>
+                    <Button text="Rechercher" onAction="#handleSearchAction" styleClass="add-btn"/>
+                </HBox>
+                
+                <TableView fx:id="creationsTable" VBox.vgrow="ALWAYS" styleClass="table-view">
+                    <!-- sembulder fih loption de tri -->
+                    <columns>
+                        <TableColumn fx:id="idColumn" text="ID" />
+                        <TableColumn fx:id="titreColumn" text="Titre" />
+                        <TableColumn fx:id="categorieColumn" text="Catégorie" />
+                        <TableColumn fx:id="dateColumn" text="Date" />
+                        <TableColumn fx:id="statutColumn" text="Statut" />
+                        <TableColumn fx:id="likesColumn" text="Likes" />
+                    </columns>
+                </TableView>
+                
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <Button text="Modifier" onAction="#handleEditAction" styleClass="update-btn"/>
+                    <Button text="Supprimer" onAction="#handleDeleteAction" styleClass="delete-btn"/>
+                    <Button text="Actualiser" onAction="#refreshTable" styleClass="import-btn"/>
+                </HBox>
+            </VBox>
+            
+            <ScrollPane fitToWidth="true">
+                <content>
+                    <VBox fx:id="creationDetailsPane" spacing="15" styleClass="white-bg">
+                        <padding>
+                            <Insets top="10" right="10" bottom="10" left="10"/>
+                        </padding>
+                        
+                        <ImageView fx:id="creationImage" fitWidth="300" fitHeight="200" preserveRatio="true" styleClass="shadow">
+                            <Image url="@../images/dot-pattern.png" />
+                        </ImageView>
+                        
+                        <Label fx:id="creationTitle" styleClass="h2"/>
+                        <Label fx:id="creationDate" styleClass="h3" />
+                        
+                        <GridPane hgap="10" vgap="10">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="NEVER" minWidth="100" />
+                                <ColumnConstraints hgrow="ALWAYS" />
+                            </columnConstraints>
+                            
+                            <Label text="Catégorie:" styleClass="label-info" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                            <Label fx:id="categorieLabel" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                            
+                            <Label text="Créateur:" styleClass="label-info" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                            <Label fx:id="createurLabel" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                            
+                            <Label text="Statut:" styleClass="label-info" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                            <Label fx:id="statutLabel" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                            
+                            <Label text="Likes:" styleClass="label-info" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                            <Label fx:id="likesLabel" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                        </GridPane>
+                        
+                        <Label text="Description:" styleClass="label-info"/>
+                        <TextArea fx:id="descriptionArea" editable="false" wrapText="true" prefHeight="100" styleClass="textfield"/>
+                        
+                        <Button text="Voir les commentaires" onAction="#showCommentaires" styleClass="add-btn"/>
+                        <Button text="Ajouter un like" onAction="#handleAddLike" styleClass="update-btn"/>
+                    </VBox>
+                </content>
+            </ScrollPane>
+        </SplitPane>
+    </center>
+</BorderPane>

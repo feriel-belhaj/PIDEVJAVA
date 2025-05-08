@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Carte Formation OpenLayers</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v7.4.0/ol.css">
+  <style>
+    html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; }
+    #map { width: 100vw; height: 100vh; min-height: 0; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <script src="https://cdn.jsdelivr.net/npm/ol@v7.4.0/dist/ol.js"></script>
+  <script>
+    function showMap(lon, lat, label) {
+      console.log("Coordonnées reçues JS:", lon, lat);
+      var map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.OSM()
+          })
+        ],
+        view: new ol.View({
+          center: ol.proj.fromLonLat([lon, lat]),
+          zoom: 15
+        })
+      });
+
+      // Style personnalisé pour le marqueur
+      var iconStyle = new ol.style.Style({
+        image: new ol.style.Icon({
+          anchor: [0.5, 1],
+          src: 'marker.jpeg',
+          scale: 0.07 // Ajuste la taille selon ton image
+        })
+      });
+
+      var marker = new ol.Feature({
+        geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
+      });
+      marker.setStyle(iconStyle);
+
+      var vectorSource = new ol.source.Vector({
+        features: [marker]
+      });
+      var markerVectorLayer = new ol.layer.Vector({
+        source: vectorSource
+      });
+      map.addLayer(markerVectorLayer);
+    }
+  </script>
+</body>
+</html>

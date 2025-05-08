@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+
+<GridPane alignment="CENTER" hgap="20" vgap="10" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.workshop.gui.ContactController">
+    <padding>
+        <Insets bottom="30" left="30" right="30" top="30" />
+    </padding>
+
+    <columnConstraints>
+        <ColumnConstraints halignment="CENTER" percentWidth="50" />
+        <ColumnConstraints halignment="CENTER" percentWidth="50" />
+    </columnConstraints>
+
+    <rowConstraints>
+        <RowConstraints vgrow="ALWAYS" />
+    </rowConstraints>
+
+    <!-- Left Side: Contact Form -->
+    <VBox alignment="TOP_LEFT" spacing="20" GridPane.columnIndex="0">
+        <Label styleClass="contact-title" text="Contactez-nous pour toute question !" />
+        <Label styleClass="contact-subtitle" text="Artizina est une plateforme web dédiée à l’artisanat tunisien." wrapText="true" />
+
+        <Label styleClass="contact-label" text="Nom" />
+        <TextField fx:id="nameField" promptText="Entrez votre nom" styleClass="contact-field" prefWidth="300" />
+
+        <Label styleClass="contact-label" text="Email" />
+        <TextField fx:id="emailField" promptText="Entrez votre email" styleClass="contact-field" prefWidth="300" />
+
+        <Label styleClass="contact-label" text="Message" />
+        <TextArea fx:id="messageArea" prefHeight="180" prefWidth="300" promptText="Écrivez votre message ici..." styleClass="contact-field" wrapText="true" />
+
+        <Button styleClass="contact-button" text="Envoyer" onAction="#handleSendButtonAction" prefWidth="100" />
+    </VBox>
+
+    <!-- Right Side: Contact Information -->
+    <VBox alignment="TOP_LEFT" spacing="20" GridPane.columnIndex="1">
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <ImageView fx:id="addressIcon" fitHeight="20" fitWidth="20">
+                <Image url="@/images/location-icon.png" />
+            </ImageView>
+            <Label styleClass="contact-info-label" text="Adresse" />
+        </HBox>
+        <Label styleClass="contact-info-text" text="1,2 rue André Ampère - 2083 - Pôle Technologique - El Ghazala" wrapText="true" prefWidth="250" />
+
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <ImageView fx:id="emailIcon" fitHeight="20" fitWidth="20">
+                <Image url="@/images/email-icon.png" />
+            </ImageView>
+            <Label styleClass="contact-info-label" text="Email" />
+        </HBox>
+        <Label styleClass="contact-info-text" text="Artizina@gmail.com" wrapText="true" />
+
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <ImageView fx:id="phoneIcon" fitHeight="20" fitWidth="20">
+                <Image url="@/images/phone-icon.png" />
+            </ImageView>
+            <Label styleClass="contact-info-label" text="Téléphone" />
+        </HBox>
+        <Label styleClass="contact-info-text" text="(+216) 31 548 795" wrapText="true" />
+    </VBox>
+</GridPane>

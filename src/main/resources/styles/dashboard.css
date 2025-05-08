@@ -1,0 +1,226 @@
+/* Styles pour le dashboard des événements et dons style Power BI */
+
+/* Fond et styles généraux */
+.dashboard-background {
+    -fx-background-color: #f5f6fa;
+}
+
+.dashboard-header {
+    -fx-padding: 15px 0px 25px 0px;
+    -fx-border-width: 0 0 1px 0;
+    -fx-border-color: #ebebeb;
+}
+
+.dashboard-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #252733;
+}
+
+.dashboard-subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: #6c757d;
+}
+
+/* Cartes de métriques */
+.metric-card {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 5);
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-min-width: 220px;
+    -fx-max-width: 220px;
+    -fx-padding: 20px;
+    -fx-spacing: 5;
+}
+
+.metric-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: normal;
+    -fx-text-fill: #6c757d;
+}
+
+.metric-value {
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #252733;
+}
+
+.metric-trend {
+    -fx-font-size: 12px;
+    -fx-text-fill: #28a745;
+}
+
+/* Conteneurs de graphiques */
+.chart-container {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 5);
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-padding: 15;
+    -fx-spacing: 10;
+    -fx-min-height: 300px;
+}
+
+.chart-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #252733;
+}
+
+/* Graphiques */
+.chart {
+    -fx-padding: 10;
+    -fx-background-color: transparent;
+    -fx-legend-visible: true;
+}
+
+.chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+.chart-vertical-grid-lines {
+    -fx-stroke: #ebebeb;
+    -fx-stroke-dash-array: 2 4;
+}
+
+.chart-horizontal-grid-lines {
+    -fx-stroke: #ebebeb;
+    -fx-stroke-dash-array: 2 4;
+}
+
+/* BarChart */
+.default-color0.chart-bar {
+    -fx-bar-fill: #4e73df;
+}
+
+.chart-bar {
+    -fx-background-radius: 3;
+}
+
+/* AreaChart */
+.default-color0.chart-series-area-line {
+    -fx-stroke: #4e73df;
+}
+.default-color0.chart-series-area-fill {
+    -fx-fill: rgba(78, 115, 223, 0.3);
+}
+
+.default-color1.chart-series-area-line {
+    -fx-stroke: #36b9cc;
+}
+.default-color1.chart-series-area-fill {
+    -fx-fill: rgba(54, 185, 204, 0.3);
+}
+
+.default-color2.chart-series-area-line {
+    -fx-stroke: #1cc88a;
+}
+.default-color2.chart-series-area-fill {
+    -fx-fill: rgba(28, 200, 138, 0.3);
+}
+
+.default-color3.chart-series-area-line {
+    -fx-stroke: #f6c23e;
+}
+.default-color3.chart-series-area-fill {
+    -fx-fill: rgba(246, 194, 62, 0.3);
+}
+
+.default-color4.chart-series-area-line {
+    -fx-stroke: #e74a3b;
+}
+.default-color4.chart-series-area-fill {
+    -fx-fill: rgba(231, 74, 59, 0.3);
+}
+
+/* PieChart */
+.chart-pie {
+    -fx-border-color: white;
+    -fx-border-width: 1px;
+}
+
+.data0.chart-pie { -fx-pie-color: #4e73df; }
+.data1.chart-pie { -fx-pie-color: #1cc88a; }
+.data2.chart-pie { -fx-pie-color: #36b9cc; }
+.data3.chart-pie { -fx-pie-color: #f6c23e; }
+.data4.chart-pie { -fx-pie-color: #e74a3b; }
+.data5.chart-pie { -fx-pie-color: #5a5c69; }
+.data6.chart-pie { -fx-pie-color: #858796; }
+
+.chart-pie-label {
+    -fx-fill: #6c757d;
+}
+
+.chart-pie-label-line {
+    -fx-stroke: #ebebeb;
+}
+
+/* Boutons */
+.refresh-button {
+    -fx-background-color: #4e73df;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-padding: 8 15 8 15;
+    -fx-cursor: hand;
+}
+
+.refresh-button:hover {
+    -fx-background-color: #375ccc;
+}
+
+.refresh-button:pressed {
+    -fx-background-color: #2e59d9;
+}
+
+/* Conteneur d'actions */
+.action-container {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 5);
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-padding: 15;
+}
+
+.action-button {
+    -fx-background-color: #4e73df;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-padding: 10 20 10 20;
+    -fx-cursor: hand;
+}
+
+.action-button:hover {
+    -fx-background-color: #375ccc;
+}
+
+.action-button:pressed {
+    -fx-background-color: #2e59d9;
+}
+
+/* Filtres et ComboBox */
+.combo-box {
+    -fx-background-color: white;
+    -fx-border-color: #ebebeb;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+}
+
+.combo-box:focused {
+    -fx-border-color: #4e73df;
+}
+
+.combo-box .list-cell {
+    -fx-text-fill: #6c757d;
+    -fx-padding: 4 8 4 8;
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.combo-box .arrow {
+    -fx-background-color: #6c757d;
+} 

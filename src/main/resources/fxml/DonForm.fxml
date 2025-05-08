@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@../styles/front.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.workshop.gui.DonFormController">
+   <children>
+      <VBox layoutX="10.0" layoutY="10.0" prefHeight="380.0" prefWidth="580.0" spacing="15.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+         <children>
+            <Label fx:id="lblTitreEvent" styleClass="h1" text="Faire un don pour : [Nom de l'événement]" wrapText="true">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Separator prefWidth="200.0" />
+            <HBox spacing="10.0">
+               <children>
+                  <VBox HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label styleClass="h3" text="Objectif :">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="lblObjectif" text="0.00 DT" />
+                     </children>
+                  </VBox>
+                  <VBox HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label styleClass="h3" text="Déjà collecté :">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="lblCollecte" text="0.00 DT" />
+                     </children>
+                  </VBox>
+                  <VBox HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label styleClass="h3" text="Progression :">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="lblProgression" text="0%" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <Separator prefWidth="200.0" />
+            <Label styleClass="h2" text="Votre don">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <HBox alignment="CENTER_LEFT" prefHeight="60.0" spacing="15.0">
+               <children>
+                  <VBox prefWidth="270.0" spacing="5.0">
+                     <children>
+                        <Label styleClass="h3" text="Montant du don :">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="tfMontant" promptText="Entrez le montant de votre don" />
+                     </children>
+                  </VBox>
+                  <VBox prefWidth="270.0" spacing="5.0">
+                     <children>
+                        <Label styleClass="h3" text="Référence de paiement :">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="tfReference" promptText="Entrez la référence du paiement" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <VBox prefHeight="100.0" spacing="5.0">
+               <children>
+                  <Label styleClass="h3" text="Message (optionnel) :">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <TextArea fx:id="taMessage" prefHeight="80.0" promptText="Laissez un message de soutien (optionnel)" wrapText="true" />
+               </children>
+            </VBox>
+            <HBox alignment="CENTER" spacing="15.0">
+               <children>
+                  <Button fx:id="btnAnnuler" cancelButton="true" mnemonicParsing="false" onAction="#handleAnnuler" prefHeight="40.0" prefWidth="150.0" styleClass="cancel-button" text="Annuler" />
+                  <Button fx:id="btnConfirmer" defaultButton="true" mnemonicParsing="false" onAction="#handleConfirmer" prefHeight="40.0" prefWidth="200.0" styleClass="confirm-button" text="Payer avec Stripe" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane> 

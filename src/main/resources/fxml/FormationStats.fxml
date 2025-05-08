@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.*?>
+
+<VBox spacing="15" styleClass="stats-container" xmlns:fx="http://javafx.com/fxml" fx:controller="tn.esprit.workshop.gui.FormationStatsController">
+    <padding>
+        <Insets top="15" right="15" bottom="15" left="15"/>
+    </padding>
+
+    <Label text="Statistiques des Formations" styleClass="stats-title"/>
+    
+    <HBox spacing="15">
+        <!-- Statistiques générales -->
+        <VBox spacing="10" styleClass="stats-box" HBox.hgrow="ALWAYS">
+            <Label text="Statistiques Générales" styleClass="stats-subtitle"/>
+            <Label fx:id="totalFormationsLabel" text="Total des formations: 0" styleClass="stats-label"/>
+            <Label fx:id="totalReservationsLabel" text="Total des réservations: 0" styleClass="stats-label"/>
+            <Label fx:id="tauxOccupationLabel" text="Taux d'occupation moyen: 0%" styleClass="stats-label"/>
+        </VBox>
+
+        <!-- Graphique du taux d'occupation -->
+        <PieChart fx:id="occupationChart" title="Taux d'Occupation" styleClass="stats-chart" HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <!-- Graphique des réservations par formation -->
+    <BarChart fx:id="reservationsChart" title="Réservations par Formation" styleClass="stats-chart" VBox.vgrow="ALWAYS">
+        <xAxis>
+            <CategoryAxis label="Formations"/>
+        </xAxis>
+        <yAxis>
+            <NumberAxis label="Nombre de réservations"/>
+        </yAxis>
+    </BarChart>
+
+    <!-- Tableau des statistiques détaillées -->
+    <TableView fx:id="statsTable" VBox.vgrow="ALWAYS" styleClass="stats-table">
+        <columns>
+            <TableColumn fx:id="formationCol" text="Formation" styleClass="stats-column"/>
+            <TableColumn fx:id="reservationsCol" text="Réservations" styleClass="stats-column"/>
+            <TableColumn fx:id="placesCol" text="Places" styleClass="stats-column"/>
+            <TableColumn fx:id="occupationCol" text="Taux d'occupation" styleClass="stats-column"/>
+        </columns>
+    </TableView>
+</VBox> 
